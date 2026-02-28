@@ -92,7 +92,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             </div>
                                         </div>
 
-                                        <!-- ==================== TAB FICHAS TÉCNICAS ==================== -->
+                                        <!-- ==================== TAB FICHAS TÉCNICAS ==================== agregue -->
                                         <div class="tab-pane fade" id="fichas" role="tabpanel">
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_fichas" width="100%" cellspacing="0">
