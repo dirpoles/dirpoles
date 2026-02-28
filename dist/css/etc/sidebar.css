@@ -1,0 +1,143 @@
+:root {
+    --dirpoles-blue: #0044FF;
+    /* azul rey pedido */
+    --dirpoles-blue-600: #0033CC;
+}
+
+/* --- Fondo Personalizado del Sidebar (Mezcla de blancos y azules) --- */
+.bg-sidebar-custom {
+    background: linear-gradient(180deg, #ffffff 10%, #f0f4ff 100%);
+    border-right: 1px solid #e3e6f0;
+}
+
+/* --- Brand Section (Logo area) --- */
+/* Hacer que coincida con el header blanco */
+.sidebar-brand-custom {
+    background-color: #ffffff;
+    color: var(--dirpoles-blue) !important;
+    border-bottom: 1px solid #e3e6f0; /* Separador sutil */
+    height: 4.375rem; /* Altura estándar de SB Admin 2 topbar */
+    text-decoration: none !important;
+}
+
+.sidebar-brand-custom .sidebar-brand-icon i {
+    color: var(--dirpoles-blue);
+}
+
+.sidebar-brand-custom .sidebar-brand-text {
+    color: var(--dirpoles-blue);
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 0.05rem;
+}
+
+/* --- Ajustes para modo Light del Sidebar --- */
+/* Textos principales */
+.sidebar-light .nav-item .nav-link {
+    color: #5a5c69;
+}
+.sidebar-light .nav-item .nav-link i {
+    color: #d1d3e2;
+}
+.sidebar-light .nav-item .nav-link:hover {
+    color: var(--dirpoles-blue);
+}
+.sidebar-light .nav-item .nav-link:hover i {
+    color: var(--dirpoles-blue);
+}
+.sidebar-light .nav-item.active .nav-link {
+    color: var(--dirpoles-blue);
+    font-weight: 700;
+}
+.sidebar-light .nav-item.active .nav-link i {
+    color: var(--dirpoles-blue);
+}
+
+/* Submenús */
+.sidebar-light .collapse-inner .collapse-item {
+    color: #3a3b45;
+}
+.sidebar-light .collapse-inner .collapse-item:hover {
+    background-color: #eaecf4;
+    color: var(--dirpoles-blue);
+}
+.sidebar-light .collapse-inner .collapse-item.active {
+    color: var(--dirpoles-blue);
+    background-color: #eaecf4;
+    font-weight: 700;
+}
+
+/* Divider */
+.sidebar-light hr.sidebar-divider {
+    border-top: 1px solid #eaecf4;
+}
+
+/* Toggler */
+.sidebar-light #sidebarToggle {
+    background-color: #eaecf4;
+}
+.sidebar-light #sidebarToggle::after {
+    color: #b7b9cc;
+}
+.sidebar-light #sidebarToggle:hover {
+    background-color: #d1d3e2;
+}
+
+/* --- Forzar que la "collapse-inner bg-white" no sea blanca --- */
+#accordionSidebar .collapse-inner.bg-white {
+    background: rgba(255,255,255,0.7) !important;
+    box-shadow: none !important;
+    padding: 0.25rem 0.25rem !important;
+}
+
+/* --- Estilos heredados y adaptados --- */
+/* Ajuste general nav-link */
+#accordionSidebar .nav-link {
+    transition: background .12s ease, color .12s ease;
+}
+
+#accordionSidebar .nav-link:hover,
+#accordionSidebar .nav-item:hover>.nav-link {
+    background: rgba(0, 68, 255, 0.05); /* leve azul */
+}
+
+/* Estilo para los items dentro del collapse (las "fichas") */
+#accordionSidebar .collapse-inner .collapse-item {
+    display: block;
+    text-decoration: none;
+    padding: 0.45rem 1rem;
+    margin: 0.18rem 0.5rem;
+    border-radius: 8px;
+    background: transparent;
+    transition: background .14s ease, transform .08s ease, box-shadow .12s ease;
+    font-size: .95rem;
+    border-left: 3px solid transparent;
+    box-shadow: none;
+}
+
+/* Hover suave para cada sub-item */
+#accordionSidebar .collapse-inner .collapse-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 68, 255, 0.1);
+}
+
+/* Estado activo del sub-item */
+#accordionSidebar .collapse-inner .collapse-item.active,
+#accordionSidebar .collapse-inner .collapse-item:focus {
+    background: rgba(0, 68, 255, 0.1);
+    color: var(--dirpoles-blue);
+    border-left-color: var(--dirpoles-blue);
+    padding-left: calc(1rem - 3px);
+    box-shadow: 0 8px 24px rgba(0, 68, 255, 0.15);
+}
+
+/* Caret / chevron */
+#accordionSidebar .nav-link .fa-chevron-down,
+#accordionSidebar .nav-link .submenu-caret {
+    transition: transform .18s ease;
+}
+
+#accordionSidebar .nav-link[aria-expanded="true"] .fa-chevron-down,
+#accordionSidebar .nav-link[aria-expanded="true"] .submenu-caret {
+    transform: rotate(180deg);
+}
