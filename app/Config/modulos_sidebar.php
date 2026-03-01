@@ -76,6 +76,14 @@ return [
             ['url' => 'consultar_inventario_mob', 'texto' => 'Consultar', 'permiso' => 2]
         ]
     ],
+    13 => [
+        'key' => 'transporte',
+        'icon' => 'fa-car',
+        'titulo' => 'Gestionar Transporte',
+        'subitems' => [
+            ['url' => 'transporte_consulta', 'texto' => 'Consultar', 'permiso' => 2]
+        ]
+    ],
     18 => [
         'key' => 'horario',
         'icon' => 'fa-clock',
