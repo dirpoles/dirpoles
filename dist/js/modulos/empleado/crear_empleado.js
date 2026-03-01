@@ -1,4 +1,98 @@
-document.addEventListener('DOMContentLoaded', function () {
+window.onload = function () {
+            document.getElementById('btn-ayuda').addEventListener('click', function () {
+                const driverObj = window.driver.js.driver({
+                    showProgress: true,
+                    nextBtnText: 'Siguiente',
+                    prevBtnText: 'Anterior',
+                    doneBtnText: 'Finalizar',
+                    popoverClass: 'mi-popover',
+                    // popoverOffset: 30,
+                    steps: [
+                        {
+                            element: '#cedula-input',
+                            popover: {
+                                title: 'Cédula',
+                                description: 'Selecciona V para venezolano o E para extranjero y escribe el número de cédula (máx. 8 dígitos).',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#nombre-input',
+                            popover: {
+                                title: 'Nombre',
+                                description: 'Ingresa el nombre completo del empleado.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#apellido-input',
+                            popover: {
+                                title: 'Apellido',
+                                description: 'Ingresa el apellido del empleado.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#correo-input',
+                            popover: {
+                                title: 'Correo Electrónico',
+                                description: 'Ingresa un correo válido (ejemplo: correo@gmail.com).',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#telefono-input',
+                            popover: {
+                                title: 'Teléfono',
+                                description: 'Selecciona el prefijo (0416, 0426, etc.) y escribe el número de 7 dígitos.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#tipo_empleado-input',
+                            popover: {
+                                title: 'Cargo',
+                                description: 'Selecciona el cargo del empleado de la lista desplegable.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#fecha_nacimiento-input',
+                            popover: {
+                                title: 'Fecha de Nacimiento',
+                                description: 'Selecciona la fecha de nacimiento del empleado.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#clave-input',
+                            popover: {
+                                title: 'Contraseña',
+                                description: 'Crea una contraseña segura para el empleado (máx. 50 caracteres).',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#estatus-input',
+                            popover: {
+                                title: 'Estatus',
+                                description: 'Selecciona Activo para empleados vigentes o Inactivo si es necesario.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#direccion-input',
+                            popover: {
+                                title: 'Dirección',
+                                description: 'Ingresa la dirección completa del empleado.',
+                                align: 'center'
+                            }
+                        }
+                    ]
+                });
+                driverObj.drive();
+            });
+          
     const form = document.getElementById('formulario-empleado');
     if (!form) return;
 
@@ -427,4 +521,4 @@ document.addEventListener('DOMContentLoaded', function () {
             AlertManager.error("Formulario incompleto", "Corrige los campos resaltados antes de continuar");
         }
     });
-});
+};
