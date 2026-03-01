@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titulo = "Crear Empleado";
 include BASE_PATH . '/app/Views/template/head.php';
 ?>
@@ -34,7 +34,9 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
                                                 Total de Empleados</div>
-                                            <div class="h5 mb-0 font-weight-bold text-white"><?= $total_empleados ?? 0; ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-white">
+                                                <?= $total_empleados ?? 0; ?>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-users fa-2x text-white"></i>
@@ -43,7 +45,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Empleados Activos -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card text-bg-success shadow h-100 py-2">
@@ -52,7 +54,9 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
                                                 Empleados Activos</div>
-                                            <div class="h5 mb-0 font-weight-bold text-white"><?= $empleados_act ?? 0; ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-white">
+                                                <?= $empleados_act ?? 0; ?>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-white"></i>
@@ -70,7 +74,9 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
                                                 Empleados Inactivos</div>
-                                            <div class="h5 mb-0 font-weight-bold text-white"><?= $empleados_inact ?? 0; ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-white">
+                                                <?= $empleados_inact ?? 0; ?>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-user-slash fa-2x text-white"></i>
@@ -89,7 +95,9 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="text-xs font-weight-bold text-white text-uppercase mb-1">
                                                 Nuevos Empleados (este mes)
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-white"><?= $empleados_nuevos_mes ?? 0; ?></div>
+                                            <div class="h5 mb-0 font-weight-bold text-white">
+                                                <?= $empleados_nuevos_mes ?? 0; ?>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-user-plus fa-2x text-white"></i>
@@ -105,54 +113,63 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Registrar Nuevo Empleado</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Registrar Nuevo Empleado <i
+                                            id="btn-ayuda" class="fa fa-question-circle float-right fa-lg"
+                                            data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i></h6>
                                 </div>
                                 <div class="card-body">
-                                    <form action="<?= BASE_URL ?>empleado_registrar" method="POST" autocomplete="off" id="formulario-empleado">
+                                    <form action="<?= BASE_URL ?>empleado_registrar" method="POST" autocomplete="off"
+                                        id="formulario-empleado">
                                         <div class="row">
                                             <!-- Cédula -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="cedula-input" class="col-md-6 mb-3">
                                                 <label for="cedula" class="form-label">Cédula</label>
                                                 <div class="input-group">
-                                                    <select class="form-select w-auto" id="tipo_cedula" name="tipo_cedula" style="max-width: 80px;">
+                                                    <select class="form-select w-auto" id="tipo_cedula"
+                                                        name="tipo_cedula" style="max-width: 80px;">
                                                         <option value="V">V</option>
                                                         <option value="E">E</option>
                                                     </select>
-                                                    <input type="text" name="cedula" id="cedula" class="form-control" placeholder="Número de cédula" maxlength="8" >
+                                                    <input type="text" name="cedula" id="cedula" class="form-control"
+                                                        placeholder="Número de cédula" maxlength="8">
                                                 </div>
                                                 <div id="cedulaError" class="form-text text-danger"></div>
                                             </div>
 
                                             <!-- Nombre -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="nombre-input" class="col-md-6 mb-3">
                                                 <label for="nombre" class="form-label">Nombre</label>
-                                                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre del empleado" >
+                                                <input type="text" name="nombre" id="nombre" class="form-control"
+                                                    placeholder="Nombre del empleado">
                                                 <div id="nombreError" class="form-text text-danger"></div>
                                             </div>
                                         </div>
 
                                         <div class="row">
                                             <!-- Apellido -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="apellido-input" class="col-md-6 mb-3">
                                                 <label for="apellido" class="form-label">Apellido</label>
-                                                <input type="text" name="apellido" id="apellido" class="form-control" placeholder="Apellido del empleado">
+                                                <input type="text" name="apellido" id="apellido" class="form-control"
+                                                    placeholder="Apellido del empleado">
                                                 <div id="apellidoError" class="form-text text-danger"></div>
                                             </div>
 
                                             <!-- Correo -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="correo-input" class="col-md-6 mb-3">
                                                 <label for="correo" class="form-label">Correo Electrónico</label>
-                                                <input type="email" name="correo" id="correo" class="form-control" placeholder="correo@gmail.com">
+                                                <input type="email" name="correo" id="correo" class="form-control"
+                                                    placeholder="correo@gmail.com">
                                                 <div id="correoError" class="form-text text-danger"></div>
                                             </div>
                                         </div>
 
                                         <div class="row">
                                             <!-- Teléfono -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="telefono-input" class="col-md-6 mb-3">
                                                 <label for="telefono" class="form-label">Teléfono</label>
                                                 <div class="input-group">
-                                                    <select name="telefono_prefijo" id="telefono_prefijo" class="form-select w-auto" style="max-width: 100px;">
+                                                    <select name="telefono_prefijo" id="telefono_prefijo"
+                                                        class="form-select w-auto" style="max-width: 100px;">
                                                         <option value="" disabled selected>Prefijo</option>
                                                         <option value="0416">0416</option>
                                                         <option value="0426">0426</option>
@@ -161,21 +178,26 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                         <option value="0412">0412</option>
                                                         <option value="0422">0422</option>
                                                     </select>
-                                                    <input type="text" name="telefono_numero" id="telefono_numero" class="form-control" placeholder="Número" maxlength="7">
-                                                    <div id="telefono_numeroError" class="form-text text-danger"></div>
+                                                    <input type="text" name="telefono_numero" id="telefono_numero"
+                                                        class="form-control" placeholder="Número" maxlength="7">
+                                                    <div id="telefono_numeroError" class="form-text text-danger">
+                                                    </div>
                                                 </div>
                                                 <div id="telefonoError" class="form-text text-danger"></div>
                                             </div>
 
                                             <!-- Tipo de Empleado -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="tipo_empleado-input" class="col-md-6 mb-3">
                                                 <label for="id_tipo_empleado" class="form-label">Cargo</label>
-                                                <select name="id_tipo_empleado" id="id_tipo_empleado" class="select2" data-placeholder="Seleccione un cargo">
+                                                <select name="id_tipo_empleado" id="id_tipo_empleado" class="select2"
+                                                    data-placeholder="Seleccione un cargo">
                                                     <option value="" disabled selected></option>
-                                                    <?php 
-                                                    foreach ($tipos_empleado as $tipo): 
-                                                    ?>
-                                                        <option value="<?= $tipo['id_tipo_emp'] ?>"><?= htmlspecialchars($tipo['tipo']) ?></option>
+                                                    <?php
+                                                    foreach ($tipos_empleado as $tipo):
+                                                        ?>
+                                                        <option value="<?= $tipo['id_tipo_emp'] ?>">
+                                                            <?= htmlspecialchars($tipo['tipo']) ?>
+                                                        </option>
                                                     <?php endforeach; ?>
                                                 </select>
                                                 <div id="id_tipo_empleadoError" class="form-text text-danger"></div>
@@ -184,21 +206,25 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                                         <div class="row">
                                             <!-- Fecha de Nacimiento -->
-                                            <div class="col-md-4 mb-3">
-                                                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
-                                                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento">
+                                            <div id="fecha_nacimiento-input" class="col-md-4 mb-3">
+                                                <label for="fecha_nacimiento" class="form-label">Fecha de
+                                                    Nacimiento</label>
+                                                <input type="date" class="form-control" id="fecha_nacimiento"
+                                                    name="fecha_nacimiento">
                                                 <div id="fecha_nacimientoError" class="form-text text-danger"></div>
                                             </div>
 
                                             <!-- Clave -->
-                                            <div class="col-md-4 mb-3">
+                                            <div id="clave-input" class="col-md-4 mb-3">
                                                 <label for="clave" class="form-label">Contraseña</label>
-                                                <input type="password" class="form-control" id="clave" name="clave" autocomplete="false" placeholder="Escribe una contraseña" maxlength="50">
+                                                <input type="password" class="form-control" id="clave" name="clave"
+                                                    autocomplete="false" placeholder="Escribe una contraseña"
+                                                    maxlength="50">
                                                 <div id="claveError" class="form-text text-danger"></div>
                                             </div>
 
                                             <!-- Estatus (Oculto) -->
-                                            <div class="col-md-4 mb-3">
+                                            <div id="estatus-input" class="col-md-4 mb-3">
                                                 <label for="estatus" class="form-label">Estatus</label>
                                                 <select class="form-select" id="estatus" name="estatus">
                                                     <option value="" disabled selected>Seleccionar</option>
@@ -211,9 +237,10 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                                         <div class="row">
                                             <!-- Dirección -->
-                                            <div class="col-12 mb-3">
+                                            <div id="direccion-input" class="col-12 mb-3">
                                                 <label for="direccion" class="form-label">Dirección</label>
-                                                <textarea class="form-control" id="direccion" name="direccion" placeholder="Dirección completa" rows="3"></textarea>
+                                                <textarea class="form-control" id="direccion" name="direccion"
+                                                    placeholder="Dirección completa" rows="3"></textarea>
                                                 <div id="direccionError" class="form-text text-danger"></div>
                                             </div>
                                         </div>
@@ -221,8 +248,10 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="d-flex justify-content-end gap-2">
-                                                    <button type="reset" class="btn btn-secondary">Limpiar Formulario</button>
-                                                    <button type="submit" id="btnRegistrar" class="btn btn-primary">Registrar Empleado</button>
+                                                    <button type="reset" class="btn btn-secondary">Limpiar
+                                                        Formulario</button>
+                                                    <button type="submit" id="btnRegistrar"
+                                                        class="btn btn-primary">Registrar Empleado</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,8 +281,9 @@ include BASE_PATH . '/app/Views/template/head.php';
         const BASE_URL = '<?= BASE_URL ?>';
     </script>
 
-   <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
-   <script src="<?= BASE_URL ?>dist/js/modulos/empleado/crear_empleado.js"></script>
+    <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
+    <script src="<?= BASE_URL ?>dist/js/modulos/empleado/crear_empleado.js"></script>
 
 </body>
+
 </html>
