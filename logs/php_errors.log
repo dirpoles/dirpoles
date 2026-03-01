@@ -11696,3 +11696,18 @@ Stack trace:
 [28-Feb-2026 23:43:19 Europe/Berlin] SSE: Cliente 1 desconectado
 [28-Feb-2026 23:43:27 Europe/Berlin] SSE: Cliente 1 desconectado
 [01-Mar-2026 00:43:36 Europe/Berlin] SSE: Límite de tiempo alcanzado para usuario 1
+[01-Mar-2026 00:49:25 Europe/Berlin] SSE: Cliente 1 desconectado
+[01-Mar-2026 00:49:30 Europe/Berlin] SSE: Cliente 1 desconectado
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Warning:  Undefined variable $total_mobiliarios in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 32
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 32
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Warning:  Undefined variable $total_equipos in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 52
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 52
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Warning:  Undefined variable $fichas_tecnicas in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 72
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 72
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Warning:  Undefined variable $inventario_mes in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 92
+[01-Mar-2026 00:58:02 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\DIRPOLES_4\app\Views\inventario_mobiliario\crear_inventario_mob.php on line 92
+[01-Mar-2026 00:58:20 Europe/Berlin] SSE: Cliente 1 desconectado
+[01-Mar-2026 01:01:26 Europe/Berlin] SSE: Cliente 1 desconectado
+[01-Mar-2026 01:01:28 Europe/Berlin] SSE: Cliente 1 desconectado
+[01-Mar-2026 01:01:30 Europe/Berlin] SSE: Cliente 1 desconectado
+[01-Mar-2026 01:01:33 Europe/Berlin] SSE: Cliente 1 desconectado
