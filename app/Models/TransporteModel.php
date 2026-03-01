@@ -90,9 +90,6 @@ class TransporteModel extends BusinessModel
         switch ($action) {
             case 'Crear':
                 return [
-                    'Vehiculos' => $this->obtener_vehiculos(),
-                    'Proveedores' => $this->obtener_proveedores(),
-                    'Rutas' => $this->obtener_rutas(),
                     'Asignaciones' => $this->asignaciones_para_calendario(),
                     'Repuestos' => $this->obtener_repuestos(),
                     'Mantenimientos' => $this->obtener_mantenimientos(),
@@ -104,21 +101,26 @@ class TransporteModel extends BusinessModel
                 ];
                 break;
 
+            case 'Consultar_vehiculos':
+                return $this->obtener_vehiculos();
+
+            case 'Consultar_proveedores':
+                return $this->obtener_proveedores();
+
+            case 'Consultar_rutas':
+                return $this->obtener_rutas();
+
             case 'Registrar_vehiculo':
                 return $this->registrar_vehiculo();
-                break;
 
             case 'Validar_placa':
                 return $this->validar_placa();
-                break;
 
             case 'Registrar_proveedor':
                 return $this->registrar_proveedor();
-                break;
 
             case 'Registrar_ruta':
                 return $this->registrar_ruta();
-                break;
 
             case 'Registrar_asignacion':
                 return $this->asignar_recursos();
@@ -442,7 +444,9 @@ class TransporteModel extends BusinessModel
     {
         try {
 
-            $query = "SELECT * FROM proveedores";
+            $query = "SELECT *,
+            CONCAT(tipo_documento, ' - ', num_documento) as documento
+            FROM proveedores";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);

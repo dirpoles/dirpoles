@@ -41,6 +41,14 @@ function transporte_consulta()
     }
 }
 
+function vehiculos_data_json()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Consultar_vehiculos');
+    echo json_encode($data);
+}
+
 function vehiculos_registrar()
 {
     header('Content-Type: application/json');
@@ -175,6 +183,14 @@ function vehiculos_validar_placa()
     exit;
 }
 
+function proveedores_data_json()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Consultar_proveedores');
+    echo json_encode($data);
+}
+
 function proveedor_registrar()
 {
     header('Content-Type: application/json');
@@ -279,6 +295,14 @@ function proveedor_registrar()
             'message' => $e->getMessage()
         ]);
     }
+}
+
+function rutas_data_json()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Consultar_rutas');
+    echo json_encode($data);
 }
 
 function ruta_registrar()

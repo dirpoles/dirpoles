@@ -147,5 +147,9 @@ class PDFCustomizer {
     static forInventarioMob() {
         return this.getConfig('LISTADO DE MOVIMIENTOS DEL INVENTARIO DE MOBILIARIO', 'mobiliario');
     }
+
+    static forTransporte() {
+        return this.getConfig('LISTADO DE MOVIMIENTOS DEL MODULO DE TRANSPORTE', 'transporte');
+    }
     // Agrega más métodos estáticos para otros módulos
 }

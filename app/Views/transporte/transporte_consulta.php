@@ -321,6 +321,10 @@ include BASE_PATH . '/app/Views/template/head.php';
     <!-- End of Page Wrapper -->
 
     <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
+    <script>
+        const BASE_URL = '<?= BASE_URL ?>';
+    </script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/transporte/consultar_general.js"></script>
 
 
     <!-- Modal Genérico -->
