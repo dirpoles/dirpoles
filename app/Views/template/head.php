@@ -18,6 +18,6 @@
   <link rel="stylesheet" href="<?= BASE_URL ?>dist/css/select-2-bootstrap-5/select2-bootstrap-5-theme.min.css">
   <link href="<?= BASE_URL ?>dist/css/dashboard/sb-admin-2.min.css" rel="stylesheet">
   <link href="<?= BASE_URL ?>dist/css/etc/sidebar.css" rel="stylesheet">
-  <link href="<?= BASE_URL ?>node_modules\driver.js\dist\driver.css" rel="stylesheet">
+  <link href="<?= BASE_URL ?>node_modules/driver.js/dist/driver.css" rel="stylesheet">
   <link href="<?= BASE_URL ?>dist/css/driver.js-personalizado/temaDriverPersonalizado.css" rel="stylesheet">
 </head>

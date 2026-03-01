@@ -35,10 +35,10 @@
 <script src="<?= BASE_URL ?>dist/js/perfil/editarPerfil.js"></script>
 <script src="<?= BASE_URL ?>dist/js/core/PDFCustomizer.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
 
 <!-- Driver.js -->
-<script src="<?= BASE_URL ?>node_modules\driver.js\dist\driver.js.iife.js"></script>
+<script src="<?= BASE_URL ?>node_modules/driver.js/dist/driver.js.iife.js"></script>
