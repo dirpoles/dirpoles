@@ -38,7 +38,9 @@ $('#tabla_historial_mantenimientos').DataTable({
                     text: '<i class="fas fa-plus"></i> Crear Mantenimiento',
                     className: 'btn btn-info',
                     action: function () {
-                        AlertManager.info("Modal que se abre para crear mantenimientos");
+                        TransporteLoader.cargar('mantenimientos', 'crear', function () {
+                            abrirModalCrearMantenimiento();
+                        });
                     }
                 }
             ]
@@ -107,13 +109,13 @@ $('#tabla_historial_mantenimientos').DataTable({
                                 <button class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
-                                        title="Editar repuesto">
+                                        title="Editar mantenimiento">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
-                                        title="Eliminar repuesto">
+                                        title="Eliminar mantenimiento">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -143,43 +145,38 @@ $('#tabla_historial_mantenimientos').DataTable({
 });
 
 /**
-     * Asigna eventos a los botones de acción de la tabla
-     * Usa delegación de eventos para manejar elementos dinámicos
-     */
+ * Asigna eventos a los botones de acción de la tabla de mantenimientos
+ * Usa delegación de eventos con scope al contenedor de la tabla
+ */
 function asignarEventosBotones() {
+    const $tabla = $('#tabla_historial_mantenimientos');
+
     // Eliminar eventos anteriores para evitar duplicados
-    $(document).off('click', '.btn-ver');
-    $(document).off('click', '.btn-editar');
-    $(document).off('click', '.btn-eliminar');
+    $tabla.off('click', '.btn-ver');
+    $tabla.off('click', '.btn-editar');
+    $tabla.off('click', '.btn-eliminar');
 
-    // Asignar nuevos eventos con delegación
-    $(document).on('click', '.btn-ver', function () {
+    // Ver detalles del mantenimiento
+    $tabla.on('click', '.btn-ver', function () {
         const id = $(this).data('id');
-        if (typeof verAsignacion !== 'undefined') {
-            verAsignacion(id);
-        } else {
-            console.error('Función verAsignacion no está definida');
-            alert('Función de visualización no disponible');
-        }
+        TransporteLoader.cargar('mantenimientos', 'ver', function () {
+            verMantenimiento(id);
+        });
     });
 
-    $(document).on('click', '.btn-editar', function () {
+    // Editar mantenimiento
+    $tabla.on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        if (typeof editarAsignacion !== 'undefined') {
-            editarAsignacion(id);
-        } else {
-            console.error('Función editarAsignacion no está definida');
-            alert('Función de edición no disponible');
-        }
+        TransporteLoader.cargar('mantenimientos', ['editar', 'validar_editar'], function () {
+            editarMantenimiento(id);
+        });
     });
 
-    $(document).on('click', '.btn-eliminar', function () {
+    // Eliminar mantenimiento
+    $tabla.on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (typeof eliminarAsignacion !== 'undefined') {
-            eliminarAsignacion(id);
-        } else {
-            console.error('Función eliminarAsignacion no está definida');
-            alert('Función de eliminación no disponible');
-        }
+        TransporteLoader.cargar('mantenimientos', 'eliminar', function () {
+            eliminarMantenimiento(id);
+        });
     });
 }

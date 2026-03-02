@@ -38,7 +38,9 @@ $('#tabla_asignar_recursos').DataTable({
                     text: '<i class="fas fa-plus"></i> Crear Asignación',
                     className: 'btn btn-info',
                     action: function () {
-                        AlertManager.info("Modal que se abre para crear asignaciones");
+                        TransporteLoader.cargar('asignar_recursos', 'crear', function () {
+                            abrirModalCrearAsignacion();
+                        });
                     }
                 }
             ]
@@ -150,43 +152,38 @@ $('#tabla_asignar_recursos').DataTable({
 });
 
 /**
-     * Asigna eventos a los botones de acción de la tabla
-     * Usa delegación de eventos para manejar elementos dinámicos
-     */
+ * Asigna eventos a los botones de acción de la tabla de asignaciones
+ * Usa delegación de eventos con scope al contenedor de la tabla
+ */
 function asignarEventosBotones() {
+    const $tabla = $('#tabla_asignar_recursos');
+
     // Eliminar eventos anteriores para evitar duplicados
-    $(document).off('click', '.btn-ver');
-    $(document).off('click', '.btn-editar');
-    $(document).off('click', '.btn-eliminar');
+    $tabla.off('click', '.btn-ver');
+    $tabla.off('click', '.btn-editar');
+    $tabla.off('click', '.btn-eliminar');
 
-    // Asignar nuevos eventos con delegación
-    $(document).on('click', '.btn-ver', function () {
+    // Ver detalles de la asignación
+    $tabla.on('click', '.btn-ver', function () {
         const id = $(this).data('id');
-        if (typeof verAsignacion !== 'undefined') {
+        TransporteLoader.cargar('asignar_recursos', 'ver', function () {
             verAsignacion(id);
-        } else {
-            console.error('Función verAsignacion no está definida');
-            alert('Función de visualización no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-editar', function () {
+    // Editar asignación
+    $tabla.on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        if (typeof editarAsignacion !== 'undefined') {
+        TransporteLoader.cargar('asignar_recursos', ['editar', 'validar_editar'], function () {
             editarAsignacion(id);
-        } else {
-            console.error('Función editarAsignacion no está definida');
-            alert('Función de edición no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-eliminar', function () {
+    // Eliminar asignación
+    $tabla.on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (typeof eliminarAsignacion !== 'undefined') {
+        TransporteLoader.cargar('asignar_recursos', 'eliminar', function () {
             eliminarAsignacion(id);
-        } else {
-            console.error('Función eliminarAsignacion no está definida');
-            alert('Función de eliminación no disponible');
-        }
+        });
     });
 }

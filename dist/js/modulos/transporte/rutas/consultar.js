@@ -38,7 +38,9 @@ $('#tabla_rutas').DataTable({
                     text: '<i class="fas fa-plus"></i> Crear Ruta',
                     className: 'btn btn-info',
                     action: function () {
-                        AlertManager.info("Modal que se abre para crear rutas");
+                        TransporteLoader.cargar('rutas', 'crear', function () {
+                            abrirModalCrearRuta();
+                        });
                     }
                 }
             ]
@@ -143,43 +145,38 @@ $('#tabla_rutas').DataTable({
 });
 
 /**
-     * Asigna eventos a los botones de acción de la tabla
-     * Usa delegación de eventos para manejar elementos dinámicos
-     */
+ * Asigna eventos a los botones de acción de la tabla de rutas
+ * Usa delegación de eventos con scope al contenedor de la tabla
+ */
 function asignarEventosBotones() {
+    const $tabla = $('#tabla_rutas');
+
     // Eliminar eventos anteriores para evitar duplicados
-    $(document).off('click', '.btn-ver');
-    $(document).off('click', '.btn-editar');
-    $(document).off('click', '.btn-eliminar');
+    $tabla.off('click', '.btn-ver');
+    $tabla.off('click', '.btn-editar');
+    $tabla.off('click', '.btn-eliminar');
 
-    // Asignar nuevos eventos con delegación
-    $(document).on('click', '.btn-ver', function () {
+    // Ver detalles de la ruta
+    $tabla.on('click', '.btn-ver', function () {
         const id = $(this).data('id');
-        if (typeof verRuta !== 'undefined') {
+        TransporteLoader.cargar('rutas', 'ver', function () {
             verRuta(id);
-        } else {
-            console.error('Función verRuta no está definida');
-            alert('Función de visualización no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-editar', function () {
+    // Editar ruta
+    $tabla.on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        if (typeof editarRuta !== 'undefined') {
+        TransporteLoader.cargar('rutas', ['editar', 'validar_editar'], function () {
             editarRuta(id);
-        } else {
-            console.error('Función editarRuta no está definida');
-            alert('Función de edición no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-eliminar', function () {
+    // Eliminar ruta
+    $tabla.on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (typeof eliminarRuta !== 'undefined') {
+        TransporteLoader.cargar('rutas', 'eliminar', function () {
             eliminarRuta(id);
-        } else {
-            console.error('Función eliminarRuta no está definida');
-            alert('Función de eliminación no disponible');
-        }
+        });
     });
 }

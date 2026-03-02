@@ -38,7 +38,9 @@ $('#tabla_vehiculos').DataTable({
                     text: '<i class="fas fa-plus"></i> Crear Vehiculo',
                     className: 'btn btn-info',
                     action: function () {
-                        AlertManager.info("Modal que se abre para crear vehiculos");
+                        TransporteLoader.cargar('vehiculos', 'crear', function () {
+                            abrirModalCrearVehiculo();
+                        });
                     }
                 }
             ]
@@ -161,43 +163,38 @@ $('#tabla_vehiculos').DataTable({
 });
 
 /**
-     * Asigna eventos a los botones de acción de la tabla
-     * Usa delegación de eventos para manejar elementos dinámicos
-     */
+ * Asigna eventos a los botones de acción de la tabla de vehículos
+ * Usa delegación de eventos con scope al contenedor de la tabla
+ */
 function asignarEventosBotones() {
+    const $tabla = $('#tabla_vehiculos');
+
     // Eliminar eventos anteriores para evitar duplicados
-    $(document).off('click', '.btn-ver');
-    $(document).off('click', '.btn-editar');
-    $(document).off('click', '.btn-eliminar');
+    $tabla.off('click', '.btn-ver');
+    $tabla.off('click', '.btn-editar');
+    $tabla.off('click', '.btn-eliminar');
 
-    // Asignar nuevos eventos con delegación
-    $(document).on('click', '.btn-ver', function () {
+    // Ver detalles del vehículo
+    $tabla.on('click', '.btn-ver', function () {
         const id = $(this).data('id');
-        if (typeof verVehiculo !== 'undefined') {
+        TransporteLoader.cargar('vehiculos', 'ver', function () {
             verVehiculo(id);
-        } else {
-            console.error('Función verVehiculo no está definida');
-            alert('Función de visualización no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-editar', function () {
+    // Editar vehículo
+    $tabla.on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        if (typeof editarVehiculo !== 'undefined') {
+        TransporteLoader.cargar('vehiculos', ['editar', 'validar_editar'], function () {
             editarVehiculo(id);
-        } else {
-            console.error('Función editarVehiculo no está definida');
-            alert('Función de edición no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-eliminar', function () {
+    // Eliminar vehículo
+    $tabla.on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (typeof eliminarVehiculo !== 'undefined') {
+        TransporteLoader.cargar('vehiculos', 'eliminar', function () {
             eliminarVehiculo(id);
-        } else {
-            console.error('Función eliminarVehiculo no está definida');
-            alert('Función de eliminación no disponible');
-        }
+        });
     });
 }

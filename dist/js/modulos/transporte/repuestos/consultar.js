@@ -38,7 +38,9 @@ $('#tabla_repuestos').DataTable({
                     text: '<i class="fas fa-plus"></i> Crear Repuesto',
                     className: 'btn btn-info',
                     action: function () {
-                        AlertManager.info("Modal que se abre para crear repuestos");
+                        TransporteLoader.cargar('repuestos', 'crear', function () {
+                            abrirModalCrearRepuesto();
+                        });
                     }
                 }
             ]
@@ -170,43 +172,38 @@ $('#tabla_repuestos').DataTable({
 });
 
 /**
-     * Asigna eventos a los botones de acción de la tabla
-     * Usa delegación de eventos para manejar elementos dinámicos
-     */
+ * Asigna eventos a los botones de acción de la tabla de repuestos
+ * Usa delegación de eventos con scope al contenedor de la tabla
+ */
 function asignarEventosBotones() {
+    const $tabla = $('#tabla_repuestos');
+
     // Eliminar eventos anteriores para evitar duplicados
-    $(document).off('click', '.btn-ver');
-    $(document).off('click', '.btn-editar');
-    $(document).off('click', '.btn-eliminar');
+    $tabla.off('click', '.btn-ver');
+    $tabla.off('click', '.btn-editar');
+    $tabla.off('click', '.btn-eliminar');
 
-    // Asignar nuevos eventos con delegación
-    $(document).on('click', '.btn-ver', function () {
+    // Ver detalles del repuesto
+    $tabla.on('click', '.btn-ver', function () {
         const id = $(this).data('id');
-        if (typeof verAsignacion !== 'undefined') {
-            verAsignacion(id);
-        } else {
-            console.error('Función verAsignacion no está definida');
-            alert('Función de visualización no disponible');
-        }
+        TransporteLoader.cargar('repuestos', 'ver', function () {
+            verRepuesto(id);
+        });
     });
 
-    $(document).on('click', '.btn-editar', function () {
+    // Editar repuesto
+    $tabla.on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        if (typeof editarAsignacion !== 'undefined') {
-            editarAsignacion(id);
-        } else {
-            console.error('Función editarAsignacion no está definida');
-            alert('Función de edición no disponible');
-        }
+        TransporteLoader.cargar('repuestos', ['editar', 'validar_editar'], function () {
+            editarRepuesto(id);
+        });
     });
 
-    $(document).on('click', '.btn-eliminar', function () {
+    // Eliminar repuesto
+    $tabla.on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (typeof eliminarAsignacion !== 'undefined') {
-            eliminarAsignacion(id);
-        } else {
-            console.error('Función eliminarAsignacion no está definida');
-            alert('Función de eliminación no disponible');
-        }
+        TransporteLoader.cargar('repuestos', 'eliminar', function () {
+            eliminarRepuesto(id);
+        });
     });
 }

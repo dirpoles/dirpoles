@@ -38,7 +38,9 @@ $('#tabla_proveedores').DataTable({
                     text: '<i class="fas fa-plus"></i> Crear Proveedor',
                     className: 'btn btn-info',
                     action: function () {
-                        AlertManager.info("Modal que se abre para crear proveedores");
+                        TransporteLoader.cargar('proveedores', 'crear', function () {
+                            abrirModalCrearProveedor();
+                        });
                     }
                 }
             ]
@@ -143,43 +145,38 @@ $('#tabla_proveedores').DataTable({
 });
 
 /**
-     * Asigna eventos a los botones de acción de la tabla
-     * Usa delegación de eventos para manejar elementos dinámicos
-     */
+ * Asigna eventos a los botones de acción de la tabla de proveedores
+ * Usa delegación de eventos con scope al contenedor de la tabla
+ */
 function asignarEventosBotones() {
+    const $tabla = $('#tabla_proveedores');
+
     // Eliminar eventos anteriores para evitar duplicados
-    $(document).off('click', '.btn-ver');
-    $(document).off('click', '.btn-editar');
-    $(document).off('click', '.btn-eliminar');
+    $tabla.off('click', '.btn-ver');
+    $tabla.off('click', '.btn-editar');
+    $tabla.off('click', '.btn-eliminar');
 
-    // Asignar nuevos eventos con delegación
-    $(document).on('click', '.btn-ver', function () {
+    // Ver detalles del proveedor
+    $tabla.on('click', '.btn-ver', function () {
         const id = $(this).data('id');
-        if (typeof verProveedor !== 'undefined') {
+        TransporteLoader.cargar('proveedores', 'ver', function () {
             verProveedor(id);
-        } else {
-            console.error('Función verProveedor no está definida');
-            alert('Función de visualización no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-editar', function () {
+    // Editar proveedor
+    $tabla.on('click', '.btn-editar', function () {
         const id = $(this).data('id');
-        if (typeof editarProveedor !== 'undefined') {
+        TransporteLoader.cargar('proveedores', ['editar', 'validar_editar'], function () {
             editarProveedor(id);
-        } else {
-            console.error('Función editarProveedor no está definida');
-            alert('Función de edición no disponible');
-        }
+        });
     });
 
-    $(document).on('click', '.btn-eliminar', function () {
+    // Eliminar proveedor
+    $tabla.on('click', '.btn-eliminar', function () {
         const id = $(this).data('id');
-        if (typeof eliminarProveedor !== 'undefined') {
+        TransporteLoader.cargar('proveedores', 'eliminar', function () {
             eliminarProveedor(id);
-        } else {
-            console.error('Función eliminarProveedor no está definida');
-            alert('Función de eliminación no disponible');
-        }
+        });
     });
 }
