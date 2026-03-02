@@ -91,15 +91,11 @@ class TransporteModel extends BusinessModel
             case 'Crear':
                 return [
                     'Asignaciones' => $this->asignaciones_para_calendario(),
-                    'Repuestos' => $this->obtener_repuestos(),
-                    'Mantenimientos' => $this->obtener_mantenimientos(),
                     'Choferes' => $this->obtener_choferes(),
                     'Vehiculos_mant' => $this->obtener_vehiculos_sin_mantenimiento(),
                     'Inventario_repuestos' => $this->obtener_inventario_repuestos(),
-                    'Rutas_asignadas' => $this->obtener_asignaciones_rutas(),
                     'Vehiculos_activos' => $this->obtener_vehiculos_activos()
                 ];
-                break;
 
             case 'Consultar_vehiculos':
                 return $this->obtener_vehiculos();
@@ -109,6 +105,15 @@ class TransporteModel extends BusinessModel
 
             case 'Consultar_rutas':
                 return $this->obtener_rutas();
+
+            case 'Consultar_asignaciones_rutas':
+                return $this->obtener_asignaciones_rutas();
+
+            case 'Consultar_repuestos':
+                return $this->obtener_repuestos();
+
+            case 'Consultar_mantenimientos':
+                return $this->obtener_mantenimientos();
 
             case 'Registrar_vehiculo':
                 return $this->registrar_vehiculo();
@@ -819,7 +824,7 @@ class TransporteModel extends BusinessModel
         }
     }
 
-    public function obtener_mantenimientos()
+    private function obtener_mantenimientos()
     {
 
         try {

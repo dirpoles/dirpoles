@@ -410,6 +410,14 @@ function ruta_registrar()
     }
 }
 
+function asignaciones_rutas_data_json()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Consultar_asignaciones_rutas');
+    echo json_encode($data);
+}
+
 function asignar_recursos()
 {
     $modelo = new TransporteModel();
@@ -571,6 +579,14 @@ function obtener_detalles_ruta()
         ]);
     }
     exit;
+}
+
+function repuestos_data_json()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Consultar_repuestos');
+    echo json_encode($data);
 }
 
 function repuestos_registrar()
@@ -777,6 +793,14 @@ function repuestos_entrada()
             'message' => $e->getMessage()
         ]);
     }
+}
+
+function mantenimientos_data_json()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Consultar_mantenimientos');
+    echo json_encode($data);
 }
 
 function registrar_mantenimiento_vehiculo()
