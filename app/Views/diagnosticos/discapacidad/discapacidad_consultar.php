@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titulo = "Discapacidad";
 include 'app/Views/template/head.php';
 $es_admin = in_array($_SESSION['tipo_empleado'], ['Administrador', 'Superusuario']);
@@ -12,7 +12,7 @@ $es_admin = in_array($_SESSION['tipo_empleado'], ['Administrador', 'Superusuario
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-         <?php include 'app/Views/template/sidebar.php'; ?>
+        <?php include 'app/Views/template/sidebar.php'; ?>
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -71,14 +71,16 @@ $es_admin = in_array($_SESSION['tipo_empleado'], ['Administrador', 'Superusuario
     </div>
     <!-- End of Page Wrapper -->
 
-   <?php include 'app/Views/template/script.php'; ?>
-   <!-- Script principal de la página -->
+    <?php include 'app/Views/template/script.php'; ?>
+    <!-- Script principal de la página -->
     <script src="<?= BASE_URL ?>dist/js/modulos/diagnosticos/discapacidad/consultar/consultar_discapacidad.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/diagnosticos/discapacidad/consultar/verDiagnostico.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/diagnosticos/discapacidad/consultar/editarDiagnostico.js"></script>
-    <script src="<?= BASE_URL ?>dist/js/modulos/diagnosticos/discapacidad/consultar/validarEditarDiagnostico.js"></script>
+    <script
+        src="<?= BASE_URL ?>dist/js/modulos/diagnosticos/discapacidad/consultar/validarEditarDiagnostico.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/diagnosticos/discapacidad/consultar/eliminarDiagnostico.js"></script>
-    
-    
+
+
 </body>
+
 </html>

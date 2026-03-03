@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titulo = "Crear Citas";
 include BASE_PATH . '/app/Views/template/head.php';
 ?>
@@ -45,7 +45,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Citas Pendientes -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card text-bg-warning shadow h-100 py-2">
@@ -112,21 +112,28 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Registrar Nueva Cita</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Registrar Nueva Cita <i id="btn-ayuda"
+                                            class="fa fa-question-circle float-right fa-lg" data-toggle="tooltip"
+                                            title="Ayuda" style="cursor: pointer;"></i></h6>
                                 </div>
                                 <div class="card-body">
-                                    <form action="<?= BASE_URL ?>cita_registrar" method="POST" autocomplete="off" id="formulario-cita">
+                                    <form action="<?= BASE_URL ?>cita_registrar" method="POST" autocomplete="off"
+                                        id="formulario-cita">
                                         <div class="row">
                                             <!-- Beneficiario -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="beneficiario-input" class="col-md-6 mb-3">
                                                 <label for="beneficiario" class="form-label">Beneficiario</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="beneficiario_nombre" placeholder="Seleccione un beneficiario" readonly>
+                                                    <input type="text" class="form-control" id="beneficiario_nombre"
+                                                        placeholder="Seleccione un beneficiario" readonly>
                                                     <input type="hidden" name="id_beneficiario" id="id_beneficiario">
-                                                    <button class="btn btn-outline-danger" type="button" id="btnEliminarBeneficiario">
+                                                    <button class="btn btn-outline-danger" type="button"
+                                                        id="btnEliminarBeneficiario">
                                                         <i class="fa-solid fa-x"></i>
                                                     </button>
-                                                    <button class="btn btn-outline-secondary" type="button" id="btnSeleccionarBeneficiario" data-bs-toggle="modal" data-bs-target="#modalSeleccionarBeneficiario">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        id="btnSeleccionarBeneficiario" data-bs-toggle="modal"
+                                                        data-bs-target="#modalSeleccionarBeneficiario">
                                                         <i class="fas fa-search"></i>
                                                     </button>
                                                 </div>
@@ -134,15 +141,19 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             </div>
 
                                             <!-- Psicólogo (Empleado) -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="psicologo-input" class="col-md-6 mb-3">
                                                 <label for="psicologo" class="form-label">Psicólogo</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="psicologo_nombre" placeholder="Seleccione un psicólogo" readonly>
+                                                    <input type="text" class="form-control" id="psicologo_nombre"
+                                                        placeholder="Seleccione un psicólogo" readonly>
                                                     <input type="hidden" name="id_empleado" id="id_empleado">
-                                                    <button class="btn btn-outline-danger" type="button" id="btnEliminarPsicologo">
+                                                    <button class="btn btn-outline-danger" type="button"
+                                                        id="btnEliminarPsicologo">
                                                         <i class="fa-solid fa-x"></i>
                                                     </button>
-                                                    <button class="btn btn-outline-secondary" type="button" id="btnSeleccionarPsicologo" data-bs-toggle="modal" data-bs-target="#modalSeleccionarPsicologo">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        id="btnSeleccionarPsicologo" data-bs-toggle="modal"
+                                                        data-bs-target="#modalSeleccionarPsicologo">
                                                         <i class="fas fa-search"></i>
                                                     </button>
                                                 </div>
@@ -152,16 +163,16 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                                         <div class="row">
                                             <!-- Fecha -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="fecha-input" class="col-md-6 mb-3">
                                                 <label for="fecha" class="form-label">Fecha</label>
                                                 <input type="date" name="fecha" id="fecha" class="form-control">
                                                 <div id="fechaError" class="form-text text-danger"></div>
                                             </div>
 
                                             <!-- Hora -->
-                                            <div class="col-md-6 mb-3">
+                                            <div id="hora-input" class="col-md-6 mb-3">
                                                 <label for="hora" class="form-label">Hora</label>
-                                                <input type="time" name="hora" id="hora"  class="form-control">
+                                                <input type="time" name="hora" id="hora" class="form-control">
                                                 <div id="horaError" class="form-text text-danger"></div>
                                             </div>
                                         </div>
@@ -189,7 +200,8 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary" id="titulo-horarios">Horario del Psicólogo</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary" id="titulo-horarios">Horario del
+                                        Psicólogo</h6>
                                 </div>
                                 <div class="card-body">
                                     <div id="tabla-horarios-container">
@@ -214,8 +226,9 @@ include BASE_PATH . '/app/Views/template/head.php';
     </div>
     <!-- End of Page Wrapper -->
 
-   <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
-   <script src="<?= BASE_URL ?>dist/js/modulos/citas/crear_cita.js"></script>
+    <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
+    <script src="<?= BASE_URL ?>dist/js/modulos/citas/crear_cita.js"></script>
 
 </body>
+
 </html>

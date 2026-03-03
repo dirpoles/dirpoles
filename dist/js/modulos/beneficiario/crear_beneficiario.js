@@ -1,4 +1,98 @@
-document.addEventListener('DOMContentLoaded', function () {
+window.onload = function () {
+            document.getElementById('btn-ayuda').addEventListener('click', function () {
+                const driverObj = window.driver.js.driver({
+                    showProgress: true,
+                    nextBtnText: 'Siguiente',
+                    prevBtnText: 'Anterior',
+                    doneBtnText: 'Finalizar',
+                    popoverClass: 'mi-popover',
+                    // popoverOffset: 30,
+                    steps: [
+                        {
+                            element: '#cedula-input',
+                            popover: {
+                                title: 'Cédula',
+                                description: 'Selecciona V para venezolano o E para extranjero y escribe el número de cédula (máx. 8 dígitos).',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#nombre-input',
+                            popover: {
+                                title: 'Nombre',
+                                description: 'Ingresa el nombre completo del beneficiario.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#apellido-input',
+                            popover: {
+                                title: 'Apellido',
+                                description: 'Ingresa el apellido del beneficiario.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#correo-input',
+                            popover: {
+                                title: 'Correo Electrónico',
+                                description: 'Ingresa un correo válido (ejemplo: correo@gmail.com).',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#telefono-input',
+                            popover: {
+                                title: 'Teléfono',
+                                description: 'Selecciona el prefijo (0416, 0426, etc.) y escribe el número de 7 dígitos.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#genero-input',
+                            popover: {
+                                title: 'Genero',
+                                description: 'Selecciona un genero (Masculino o Femenino).',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#fecha_nacimiento-input',
+                            popover: {
+                                title: 'Fecha de Nacimiento',
+                                description: 'Selecciona la fecha de nacimiento del beneficiario.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#seccion-input',
+                            popover: {
+                                title: 'Sección ',
+                                description: 'Escriba el numero de la seccion y seleccione el nucleo al que pertenece el beneficiario.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#pnf-input',
+                            popover: {
+                                title: 'PNF',
+                                description: 'Selecciona el PNF al que pertenece el beneficiario.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#direccion-input',
+                            popover: {
+                                title: 'Dirección',
+                                description: 'Ingresa la dirección completa del beneficiario.',
+                                align: 'center'
+                            }
+                        }
+                    ]
+                });
+                driverObj.drive();
+            });
+
     const form = document.getElementById('formulario-beneficiario');
     if (!form) return;
 
@@ -455,4 +549,4 @@ document.addEventListener('DOMContentLoaded', function () {
             AlertManager.error("Formulario incompleto", "Corrige los campos resaltados antes de continuar");
         }
     });
-});
+};

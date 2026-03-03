@@ -1,4 +1,50 @@
-document.addEventListener('DOMContentLoaded', function () {
+window.onload = function () {
+            document.getElementById('btn-ayuda').addEventListener('click', function () {
+                const driverObj = window.driver.js.driver({
+                    showProgress: true,
+                    nextBtnText: 'Siguiente',
+                    prevBtnText: 'Anterior',
+                    doneBtnText: 'Finalizar',
+                    popoverClass: 'mi-popover',
+                    // popoverOffset: 30,
+                    steps: [
+                        {
+                            element: '#beneficiario-input',
+                            popover: {
+                                title: 'Beneficiario',
+                                description: 'Selecciona el beneficiario al cual se le agendará la cita.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#psicologo-input',
+                            popover: {
+                                title: 'Psicologo',
+                                description: 'Selecciona el psicologo al cual se le agendará la cita.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#fecha-input',
+                            popover: {
+                                title: 'Fecha',
+                                description: 'Ingresa la fecha en la cual se agendará la cita.',
+                                align: 'center'
+                            }
+                        },
+                        {
+                            element: '#hora-input',
+                            popover: {
+                                title: 'Hora',
+                                description: 'Ingresa la hora en la cual se agendará la cita.',
+                                align: 'center'
+                            }
+                        }
+                    ]
+                });
+                driverObj.drive();
+            });
+
     const form = document.getElementById('formulario-cita');
     if (!form) return;
 
@@ -600,4 +646,4 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleBotonEliminar();
 
     console.log('Módulo de citas cargado correctamente');
-});
+};
