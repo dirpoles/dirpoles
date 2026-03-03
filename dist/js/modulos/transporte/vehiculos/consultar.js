@@ -38,7 +38,7 @@ $('#tabla_vehiculos').DataTable({
                     text: '<i class="fas fa-plus"></i> Crear Vehiculo',
                     className: 'btn btn-info',
                     action: function () {
-                        TransporteLoader.cargar('vehiculos', 'crear', function () {
+                        TransporteLoader.cargar('vehiculos', ['crear', 'validar_crear'], function () {
                             abrirModalCrearVehiculo();
                         });
                     }
@@ -86,7 +86,7 @@ $('#tabla_vehiculos').DataTable({
                 // 2. Si DataTables pide el valor para "display" (mostrar en pantalla)
                 if (type === 'display') {
                     // Formato: DD/MM/YYYY hh:mm A (Ej: 15/11/2023 03:30 PM)
-                    return moment(data).format('DD/MM/YYYY hh:mm A');
+                    return moment(data).format('DD/MM/YYYY');
                 }
 
                 return data;

@@ -37,3 +37,16 @@ Router::get('mantenimientos_data_json', function () {
     load_controller('transporteController.php');
     mantenimientos_data_json();
 });
+
+//========================== (Vehiculos) ================================
+Router::post('vehiculos_validar_placa', function () {
+    load_controller('transporteController.php');
+    vehiculos_validar_placa();
+});
+
+Router::post('vehiculos_registrar', function () {
+    load_controller('transporteController.php');
+    vehiculos_registrar();
+});
+
+//==========================(Proveedores)==============================

@@ -12384,3 +12384,108 @@ Stack trace:
 [03-Mar-2026 01:07:43 Europe/Berlin] SSE: Cliente 1 desconectado
 [03-Mar-2026 01:07:57 Europe/Berlin] SSE: Cliente 1 desconectado
 [03-Mar-2026 01:55:07 Europe/Berlin] SSE: Límite de tiempo alcanzado para usuario 1
+[03-Mar-2026 04:55:42 Europe/Berlin] PHP Warning:  Undefined array key "estado" in C:\xampp\htdocs\DIRPOLES_4\app\Controllers\loginController.php on line 99
+[03-Mar-2026 04:55:42 Europe/Berlin] Error al registrar en la bitácora: Bitácora registrada
+[03-Mar-2026 04:55:44 Europe/Berlin] Módulos permitidos para rol 6: Array
+(
+    [0] => 1
+    [1] => 2
+    [2] => 3
+    [3] => 4
+    [4] => 5
+    [5] => 6
+    [6] => 7
+    [7] => 8
+    [8] => 9
+    [9] => 10
+    [10] => 11
+    [11] => 12
+    [12] => 13
+    [13] => 14
+    [14] => 15
+    [15] => 16
+    [16] => 17
+    [17] => 18
+)
+
+[03-Mar-2026 04:56:04 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 04:56:06 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 04:56:11 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 04:56:13 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 04:56:33 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 04:56:50 Europe/Berlin] Error SSE: SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[03-Mar-2026 04:56:52 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 12:47:45 Europe/Berlin] PHP Warning:  Undefined array key "estado" in C:\xampp\htdocs\DIRPOLES_4\app\Controllers\loginController.php on line 99
+[03-Mar-2026 12:47:45 Europe/Berlin] Error al registrar en la bitácora: Bitácora registrada
+[03-Mar-2026 12:47:47 Europe/Berlin] Módulos permitidos para rol 6: Array
+(
+    [0] => 1
+    [1] => 2
+    [2] => 3
+    [3] => 4
+    [4] => 5
+    [5] => 6
+    [6] => 7
+    [7] => 8
+    [8] => 9
+    [9] => 10
+    [10] => 11
+    [11] => 12
+    [12] => 13
+    [13] => 14
+    [14] => 15
+    [15] => 16
+    [16] => 17
+    [17] => 18
+)
+
+[03-Mar-2026 12:48:08 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 12:48:09 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 12:54:35 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 13:10:29 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 13:18:16 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 13:19:12 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 13:19:14 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 13:43:45 Europe/Berlin] Error SSE: SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[03-Mar-2026 17:42:01 Europe/Berlin] PHP Warning:  Undefined array key "estado" in C:\xampp\htdocs\DIRPOLES_4\app\Controllers\loginController.php on line 99
+[03-Mar-2026 17:42:01 Europe/Berlin] Error al registrar en la bitácora: Bitácora registrada
+[03-Mar-2026 17:42:03 Europe/Berlin] Módulos permitidos para rol 6: Array
+(
+    [0] => 1
+    [1] => 2
+    [2] => 3
+    [3] => 4
+    [4] => 5
+    [5] => 6
+    [6] => 7
+    [7] => 8
+    [8] => 9
+    [9] => 10
+    [10] => 11
+    [11] => 12
+    [12] => 13
+    [13] => 14
+    [14] => 15
+    [15] => 16
+    [16] => 17
+    [17] => 18
+)
+
+[03-Mar-2026 17:42:25 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 17:43:40 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 17:47:35 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 17:48:00 Europe/Berlin] PHP Warning:  Undefined array key "status" in C:\xampp\htdocs\DIRPOLES_4\app\Controllers\transporteController.php on line 124
+[03-Mar-2026 17:48:00 Europe/Berlin] PHP Warning:  Undefined array key "msj" in C:\xampp\htdocs\DIRPOLES_4\app\Controllers\transporteController.php on line 125
+[03-Mar-2026 17:48:00 Europe/Berlin] Error al registrar en al bitácora: 
+[03-Mar-2026 17:48:00 Europe/Berlin] Error en notificación: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'tipo' cannot be null
+[03-Mar-2026 17:48:00 Europe/Berlin] PHP Warning:  Undefined array key "status" in C:\xampp\htdocs\DIRPOLES_4\app\Controllers\transporteController.php on line 141
+[03-Mar-2026 17:48:00 Europe/Berlin] Error al registrar la notificación: Error de base de datos: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'tipo' cannot be null
+[03-Mar-2026 17:49:04 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 17:51:49 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 18:07:35 Europe/Berlin] Error en validar_cedula: Valor inválido para cedula
+[03-Mar-2026 18:07:36 Europe/Berlin] Error en validar_cedula: Valor inválido para cedula
+[03-Mar-2026 18:07:36 Europe/Berlin] Error en validar_cedula: Valor inválido para cedula
+[03-Mar-2026 18:07:39 Europe/Berlin] Error en validar_cedula: Valor inválido para cedula
+[03-Mar-2026 18:07:40 Europe/Berlin] Error en validar_cedula: Valor inválido para cedula
+[03-Mar-2026 18:07:47 Europe/Berlin] SSE: Cliente 1 desconectado
+[03-Mar-2026 19:31:02 Europe/Berlin] SSE: Cliente 1 desconectado
