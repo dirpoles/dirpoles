@@ -91,10 +91,8 @@ class TransporteModel extends BusinessModel
             case 'Crear':
                 return [
                     'Asignaciones' => $this->asignaciones_para_calendario(),
-                    'Choferes' => $this->obtener_choferes(),
                     'Vehiculos_mant' => $this->obtener_vehiculos_sin_mantenimiento(),
                     'Inventario_repuestos' => $this->obtener_inventario_repuestos(),
-                    'Vehiculos_activos' => $this->obtener_vehiculos_activos()
                 ];
 
             case 'Consultar_vehiculos':
@@ -129,7 +127,12 @@ class TransporteModel extends BusinessModel
 
             case 'Registrar_asignacion':
                 return $this->asignar_recursos();
-                break;
+
+            case 'Vehiculos_activos':
+                return $this->obtener_vehiculos_activos();
+
+            case 'obtener_choferes':
+                return $this->obtener_choferes();
 
             case 'Asignaciones_calendario':
                 return $this->asignaciones_para_calendario();

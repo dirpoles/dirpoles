@@ -54,3 +54,31 @@ Router::post('proveedor_registrar', function () {
     load_controller('transporteController.php');
     proveedor_registrar();
 });
+
+//==========================(Rutas)==============================
+Router::post('ruta_registrar', function () {
+    load_controller('transporteController.php');
+    ruta_registrar();
+});
+
+Router::get('obtener_choferes_activos', function () {
+    load_controller('transporteController.php');
+    obtener_choferes_activos();
+});
+
+Router::get('obtener_rutas_activas', function () {
+    load_controller('transporteController.php');
+    obtener_rutas_activas();
+});
+
+Router::get('obtener_vehiculos_activos', function () {
+    load_controller('transporteController.php');
+    obtener_vehiculos_activos();
+});
+
+Router::post('asignar_recursos_registrar', function () {
+    load_controller('transporteController.php');
+    asignar_recursos();
+});
+
+//===========================(Repuestos)==============================

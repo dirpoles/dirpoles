@@ -305,6 +305,30 @@ function rutas_data_json()
     echo json_encode($data);
 }
 
+function obtener_rutas_activas()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Consultar_rutas');
+    echo json_encode($data);
+}
+
+function obtener_vehiculos_activos()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Vehiculos_activos');
+    echo json_encode($data);
+}
+
+function obtener_choferes_activos()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('obtener_choferes');
+    echo json_encode($data);
+}
+
 function ruta_registrar()
 {
     header('Content-Type: application/json');
