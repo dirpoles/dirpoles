@@ -265,16 +265,18 @@ function inicializarValidacionesProveedor() {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const validaciones = [
+        // Ejecutar todas las validaciones (algunas son async y retornan Promises)
+        const resultados = await Promise.all([
             validarTipoDocumento(),
             validarDocumento(),
             validarNombre(),
             validarCorreo(),
             validarTelefono(),
             validarDireccion()
-        ];
+        ]);
 
-        if (validaciones.every(r => r === true)) {
+        // Solo enviar si TODAS retornaron true
+        if (resultados.every(r => r === true)) {
             enviarFormularioProveedor(form);
         } else {
             AlertManager.warning('Atención', 'Por favor, corrige los errores en el formulario.');
@@ -291,7 +293,7 @@ async function enviarFormularioProveedor(form) {
         btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
 
         const formData = new FormData(form);
-        const response = await fetch('proveedores_registrar', {
+        const response = await fetch('proveedor_registrar', {
             method: 'POST',
             body: formData,
             headers: {

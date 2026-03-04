@@ -50,3 +50,7 @@ Router::post('vehiculos_registrar', function () {
 });
 
 //==========================(Proveedores)==============================
+Router::post('proveedor_registrar', function () {
+    load_controller('transporteController.php');
+    proveedor_registrar();
+});
