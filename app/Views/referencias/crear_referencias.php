@@ -103,7 +103,7 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Registrar Nueva Referencia</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Registrar Nueva Referencia <i id="btn-ayuda" class="fa fa-question-circle float-right fa-lg text-primary" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i></h6>
                                 </div>
                                 <div class="card-body">
                                     <form action="<?= BASE_URL ?>referencia_registrar" method="POST" autocomplete="off" id="formulario-referencia">
@@ -111,7 +111,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         <h6 class="text-secondary mb-3 pl-2" style="border-left: 4px solid #4e73df;">Datos del Beneficiario</h6>
                                         
                                         <div class="row mb-4">
-                                            <div class="col-md-12">
+                                            <div id="input-beneficiario" class="col-md-12">
                                                 <label for="beneficiario_nombre" class="form-label">Seleccionar Beneficiario</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control bg-light" id="beneficiario_nombre" 
@@ -138,7 +138,7 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                                         <div class="row">
                                             <div class="col-md-6 border-end">
-                                                <div class="mb-3">
+                                                <div id="input-servicio-origen" class="mb-3">
                                                     <label for="id_servicio_origen" class="form-label font-weight-bold">Servicio de Origen</label>
                                                     <?php 
                                                         $es_admin = in_array($_SESSION['tipo_empleado'], ['Administrador', 'Superusuario']);
@@ -160,7 +160,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                     <div id="id_servicio_origenError" class="form-text text-danger"></div>
                                                 </div>
                                                 
-                                                <div class="mb-3">
+                                                <div id="input-empleado-origen" class="mb-3">
                                                     <label for="id_empleado_origen" class="form-label">Empleado que Refiere</label>
                                                     <select name="id_empleado_origen" id="id_empleado_origen" class="form-select select2" <?= !$es_admin ? 'readonly' : '' ?>>
                                                         <option value="<?= $_SESSION['id_empleado'] ?? '' ?>" selected>
@@ -183,7 +183,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             </script>
 
                                             <div class="col-md-6">
-                                                <div class="mb-3">
+                                                <div id="input-servicio-destino" class="mb-3">
                                                     <label for="id_servicio_destino" class="form-label font-weight-bold text-primary">Servicio de Destino</label>
                                                     <select name="id_servicio_destino" id="id_servicio_destino" class="form-select select2">
                                                         <option value="" disabled selected>Seleccione a dónde se refiere</option>
@@ -194,7 +194,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                     <div id="id_servicio_destinoError" class="form-text text-danger"></div>
                                                 </div>
 
-                                                <div class="mb-3">
+                                                <div id="input-empleado-destino" class="mb-3">
                                                     <label for="id_empleado_destino" class="form-label">Empleado Destino</label>
                                                     <select name="id_empleado_destino" id="id_empleado_destino" class="form-select select2">
                                                         <option value="" selected disabled>Cualquier especialista disponible</option>
@@ -209,14 +209,14 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         <h6 class="text-secondary mb-3 pl-2" style="border-left: 4px solid #4e73df;">Detalles de la Referencia</h6>
 
                                         <div class="row">
-                                            <div class="col-md-12 mb-3">
+                                            <div id="input-motivo" class="col-md-12 mb-3">
                                                 <label for="motivo" class="form-label">Motivo de la Referencia <span class="text-danger">*</span></label>
                                                 <input type="text" name="motivo" id="motivo" class="form-control" 
                                                     placeholder="Ej: Evaluación psicológica requerida, Valoración médica, etc." maxlength="255">
                                                 <div id="motivoError" class="form-text text-danger"></div>
                                             </div>
 
-                                            <div class="col-md-12 mb-3">
+                                            <div id="input-observaciones" class="col-md-12 mb-3">
                                                 <label for="observaciones" class="form-label">Observaciones / Informe Breve</label>
                                                 <textarea class="form-control" id="observaciones" name="observaciones" rows="4" 
                                                         placeholder="Detalles adicionales sobre el caso..."></textarea>
