@@ -130,7 +130,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                             <div class="row no-gutters align-items-center">
                                                                 <div class="col mr-2">
                                                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                                                        Repuestos en estado crítico</div>
+                                                                        Repuestos con poco stock</div>
                                                                     <div class="h5 mb-0 font-weight-bold text-gray-800" id="card_count_repuestos">0</div>
                                                                 </div>
                                                                 <div class="col-auto">
@@ -164,16 +164,16 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                             <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-bolt me-2"></i> Accesos Rápidos</h6>
                                                         </div>
                                                         <div class="card-body">
-                                                            <button class="btn btn-outline-primary btn-block mb-3 text-start" onclick="console.log('Abrir modal asignar')">
+                                                            <button class="btn btn-outline-primary btn-block mb-3 text-start" onclick="cambiarTabTransporte('asignar_recursos')">
                                                                 <i class="fas fa-user-check fa-fw me-2"></i> Nueva Asignación a Ruta
                                                             </button>
-                                                            <button class="btn btn-outline-success btn-block mb-3 text-start" onclick="console.log('Abrir modal vehículo')">
+                                                            <button class="btn btn-outline-success btn-block mb-3 text-start" onclick="cambiarTabTransporte('vehiculos')">
                                                                 <i class="fas fa-car fa-fw me-2"></i> Registrar Vehículo
                                                             </button>
-                                                            <button class="btn btn-outline-warning btn-block mb-3 text-start" onclick="console.log('Abrir modal mantenimiento')">
+                                                            <button class="btn btn-outline-warning btn-block mb-3 text-start" onclick="cambiarTabTransporte('mantenimientos')">
                                                                 <i class="fas fa-wrench fa-fw me-2"></i> Registrar Mantenimiento
                                                             </button>
-                                                            <button class="btn btn-outline-info btn-block mb-3 text-start" onclick="console.log('Abrir entrada/salida')">
+                                                            <button class="btn btn-outline-info btn-block mb-3 text-start" onclick="cambiarTabTransporte('repuestos')">
                                                                 <i class="fas fa-boxes fa-fw me-2"></i> Entrada de Repuestos
                                                             </button>
                                                         </div>
@@ -325,6 +325,7 @@ include BASE_PATH . '/app/Views/template/head.php';
         const BASE_URL = '<?= BASE_URL ?>';
     </script>
     <script src="<?= BASE_URL ?>dist/js/modulos/transporte/consultar_general.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/transporte/estadisticas_transporte.js"></script>
 
 
     <!-- Modal Genérico -->

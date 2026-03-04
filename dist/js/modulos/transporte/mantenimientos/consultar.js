@@ -56,21 +56,21 @@ $('#tabla_historial_mantenimientos').DataTable({
     },
     columns: [
         {
-            data: 'nombre',
+            data: 'tipo_mantenimiento',
             deferRender: true,
             render: function (data, type, row) {
                 return data || '<span class="text-muted">No especificado</span>';
             }
         },
         {
-            data: 'placa',
+            data: 'nombre_vehiculo',
             deferRender: true,
             render: function (data) {
                 return data || '<span class="text-muted">No especificado</span>';
             }
         },
         {
-            data: 'tipo_mantenimiento',
+            data: 'placa_vehiculo',
             deferRender: true,
             render: function (data) {
                 return data || '<span class="text-muted">No especificado</span>';

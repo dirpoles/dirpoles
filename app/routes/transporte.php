@@ -8,6 +8,11 @@ Router::get('transporte_consulta', function () {
     transporte_consulta();
 });
 
+Router::get('transporte_estadisticas', function () {
+    load_controller('transporteController.php');
+    transporte_estadisticas();
+});
+
 Router::get('vehiculos_data_json', function () {
     load_controller('transporteController.php');
     vehiculos_data_json();
@@ -82,3 +87,13 @@ Router::post('asignar_recursos_registrar', function () {
 });
 
 //===========================(Repuestos)==============================
+Router::post('repuesto_registrar', function () {
+    load_controller('transporteController.php');
+    repuestos_registrar();
+});
+
+//==============================(Mantenimientos)==============================
+Router::post('mantenimiento_registrar', function () {
+    load_controller('transporteController.php');
+    registrar_mantenimiento_vehiculo();
+});

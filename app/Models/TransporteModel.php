@@ -113,6 +113,9 @@ class TransporteModel extends BusinessModel
             case 'Consultar_mantenimientos':
                 return $this->obtener_mantenimientos();
 
+            case 'Consultar_estadisticas_dashboard':
+                return $this->obtener_estadisticas_dashboard();
+
             case 'Registrar_vehiculo':
                 return $this->registrar_vehiculo();
 
@@ -208,6 +211,49 @@ class TransporteModel extends BusinessModel
             case 'Eliminar_repuesto':
                 return $this->eliminar_repuesto();
                 break;
+        }
+    }
+
+    public function obtener_estadisticas_dashboard()
+    {
+        try {
+            $estadisticas = [
+                'total_vehiculos' => 0,
+                'rutas_activas' => 0,
+                'en_mantenimiento' => 0,
+                'repuestos_criticos' => 0
+            ];
+
+            // 1. Total Vehículos
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM vehiculos");
+            $stmt->execute();
+            $estadisticas['total_vehiculos'] = $stmt->fetchColumn();
+
+            // 2. Rutas Activas
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM rutas WHERE estatus IN ('Activa', 'Activo')");
+            $stmt->execute();
+            $estadisticas['rutas_activas'] = $stmt->fetchColumn();
+
+            // 3. En Mantenimiento
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM vehiculos WHERE estado = 'Mantenimiento'");
+            $stmt->execute();
+            $estadisticas['en_mantenimiento'] = $stmt->fetchColumn();
+
+            // 4. Repuestos Críticos (Asumiendo <= 5 como crítico)
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM repuestos_vehiculos WHERE cantidad <= 5");
+            $stmt->execute();
+            $estadisticas['repuestos_criticos'] = $stmt->fetchColumn();
+
+            return [
+                'status' => true,
+                'data' => $estadisticas
+            ];
+        } catch (Throwable $e) {
+            error_log("Error al obtener estadísticas de transporte: " . $e->getMessage());
+            return [
+                'status' => false,
+                'mensaje' => 'Error al obtener las estadísticas: ' . $e->getMessage()
+            ];
         }
     }
 
@@ -831,7 +877,7 @@ class TransporteModel extends BusinessModel
     {
 
         try {
-            $query = "SELECT mv.*, mv.tipo AS tipo_mantenimiento, v.*, modelo.*
+            $query = "SELECT mv.*, mv.tipo AS tipo_mantenimiento, v.modelo AS nombre_vehiculo, v.placa AS placa_vehiculo
                     FROM mantenimiento_vehiculos mv
                     JOIN vehiculos v ON mv.id_vehiculo = v.id_vehiculo
                     LEFT JOIN vehiculos modelo ON mv.id_vehiculo = modelo.id_vehiculo";

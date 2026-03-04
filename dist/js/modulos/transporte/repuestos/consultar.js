@@ -42,6 +42,26 @@ $('#tabla_repuestos').DataTable({
                             abrirModalCrearRepuesto();
                         });
                     }
+                },
+                {
+                    text: '<i class="fas fa-plus"></i> Agregar Entrada',
+                    className: 'btn btn-success',
+                    action: function () {
+                        AlertManager.info('Funcionalidad en desarrollo');
+                        // TransporteLoader.cargar('repuestos', 'agregar_entrada', function () {
+                        //     abrirModalAgregarEntrada();
+                        // });
+                    }
+                },
+                {
+                    text: '<i class="fas fa-exchange-alt"></i> Movimientos del Inventario',
+                    className: 'btn btn-warning',
+                    action: function () {
+                        AlertManager.info('Funcionalidad en desarrollo');
+                        // TransporteLoader.cargar('repuestos', 'movimientos', function () {
+                        //     abrirModalMovimientos();
+                        // });
+                    }
                 }
             ]
         },
@@ -93,7 +113,7 @@ $('#tabla_repuestos').DataTable({
             data: 'cantidad',
             deferRender: true,
             render: function (data) {
-                return data || '<span class="text-muted">No especificado</span>';
+                return data || '<span class="text-muted">0</span>';
             }
         },
         {

@@ -41,6 +41,34 @@ function transporte_consulta()
     }
 }
 
+function transporte_estadisticas()
+{
+    header('Content-Type: application/json');
+    $modelo = new TransporteModel();
+
+    try {
+        $resultado = $modelo->manejarAccion('Consultar_estadisticas_dashboard');
+
+        if ($resultado['status']) {
+            echo json_encode([
+                'exito' => true,
+                'data' => $resultado['data']
+            ]);
+        } else {
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => $resultado['mensaje']
+            ]);
+        }
+    } catch (Exception $e) {
+        echo json_encode([
+            'exito' => false,
+            'mensaje' => $e->getMessage()
+        ]);
+    }
+    exit;
+}
+
 function vehiculos_data_json()
 {
     $modelo = new TransporteModel();
