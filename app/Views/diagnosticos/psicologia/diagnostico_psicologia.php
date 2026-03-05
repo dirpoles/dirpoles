@@ -36,8 +36,8 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     <h6 class="m-0 font-weight-bold text-primary">
                                         <i class="fas fa-user-injured me-2"></i>Datos del Beneficiario
                                     </h6>
-                                    <i id="btn-ayuda" class="fa fa-question-circle fa-lg text-primary" data-toggle="tooltip"
-                                        title="Ayuda" style="cursor: pointer;"></i>
+                                    <i id="btn-ayuda" class="fa fa-question-circle fa-lg text-primary"
+                                        data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">

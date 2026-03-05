@@ -1,384 +1,528 @@
-document.addEventListener('DOMContentLoaded', function () {
-    form = document.getElementById('formulario-referencia');
+window.onload = function () {
+  document.getElementById("btn-ayuda").addEventListener("click", function () {
+    const driverObj = window.driver.js.driver({
+      showProgress: true,
+      nextBtnText: "Siguiente",
+      prevBtnText: "Anterior",
+      doneBtnText: "Finalizar",
+      popoverClass: "mi-popover",
+      // popoverOffset: 30,
+      steps: [
+        // Sección: Datos del Beneficiario
+        {
+          element: "#input-beneficiario",
+          popover: {
+            title: "Selección de Beneficiario",
+            description:
+              "Busca y selecciona el beneficiario que será referido a otro servicio. Este campo es obligatorio.",
+            align: "center",
+          },
+        },
 
-    const elements = {
-        id_beneficiario: document.getElementById('id_beneficiario'),
-        beneficiario_nombre: document.getElementById('beneficiario_nombre'),
-        id_servicio_origen: document.getElementById('id_servicio_origen'),
-        id_empleado_origen: document.getElementById('id_empleado_origen'),
-        id_servicio_destino: document.getElementById('id_servicio_destino'),
-        id_empleado_destino: document.getElementById('id_empleado_destino'),
-        motivo: document.getElementById('motivo'),
-        observaciones: document.getElementById('observaciones'),
-        limpiar_form: document.getElementById('limpiar_form')
-    };
+        // Sección: Datos del Traslado - Origen
+        {
+          element: "#input-servicio-origen",
+          popover: {
+            title: "Servicio de Origen",
+            description:
+              "Servicio desde donde se realiza la referencia. Para administradores puede ser modificable.",
+            align: "center",
+          },
+        },
+        {
+          element: "#input-empleado-origen",
+          popover: {
+            title: "Empleado que Refiere",
+            description:
+              "Profesional que realiza la referencia. Por defecto eres tú como usuario actual.",
+            align: "center",
+          },
+        },
 
-    const showError = (field, msg) => {
-        const errorElement = document.getElementById(`${field.id}Error`);
-        if (errorElement) errorElement.textContent = msg;
+        // Sección: Datos del Traslado - Destino
+        {
+          element: "#input-servicio-destino",
+          popover: {
+            title: "Servicio de Destino",
+            description:
+              "Selecciona el servicio al cual se está refiriendo al beneficiario. Campo obligatorio.",
+            align: "center",
+          },
+        },
+        {
+          element: "#input-empleado-destino",
+          popover: {
+            title: "Empleado Destino",
+            description:
+              "Selecciona un especialista específico o déjalo en 'Cualquier especialista disponible'.",
+            align: "center",
+          },
+        },
 
-        field.classList.add("is-invalid");
-        field.classList.remove("is-valid");
+        // Sección: Detalles de la Referencia
+        {
+          element: "#input-motivo",
+          popover: {
+            title: "Motivo de la Referencia",
+            description:
+              "Indica el motivo principal por el cual se realiza la referencia. Ej: Evaluación psicológica, Valoración médica, etc.",
+            align: "center",
+          },
+        },
+        {
+          element: "#input-observaciones",
+          popover: {
+            title: "Observaciones",
+            description:
+              "Agrega detalles adicionales sobre el caso, informe breve o consideraciones importantes para el servicio destino.",
+            align: "center",
+          },
+        },
+      ],
+    });
+    driverObj.drive();
+  });
 
-        // Si es Select2, aplicar al contenedor visible
-        if ($(field).hasClass('select2')) {
-            $(field).next('.select2-container').find('.select2-selection')
-                .addClass('is-invalid')
-                .removeClass('is-valid');
-        }
-    };
+  form = document.getElementById("formulario-referencia");
 
-    const clearError = (field) => {
-        const errorElement = document.getElementById(`${field.id}Error`);
-        if (errorElement) errorElement.textContent = "";
+  const elements = {
+    id_beneficiario: document.getElementById("id_beneficiario"),
+    beneficiario_nombre: document.getElementById("beneficiario_nombre"),
+    id_servicio_origen: document.getElementById("id_servicio_origen"),
+    id_empleado_origen: document.getElementById("id_empleado_origen"),
+    id_servicio_destino: document.getElementById("id_servicio_destino"),
+    id_empleado_destino: document.getElementById("id_empleado_destino"),
+    motivo: document.getElementById("motivo"),
+    observaciones: document.getElementById("observaciones"),
+    limpiar_form: document.getElementById("limpiar_form"),
+  };
 
-        field.classList.remove("is-invalid");
-        field.classList.add("is-valid");
+  const showError = (field, msg) => {
+    const errorElement = document.getElementById(`${field.id}Error`);
+    if (errorElement) errorElement.textContent = msg;
 
-        // Si es Select2, aplicar al contenedor visible
-        if ($(field).hasClass('select2')) {
-            $(field).next('.select2-container').find('.select2-selection')
-                .removeClass('is-invalid')
-                .addClass('is-valid');
-        }
-    };
+    field.classList.add("is-invalid");
+    field.classList.remove("is-valid");
 
-    function inicializarDataTableBeneficiarios() {
-        $('#tablaBeneficiariosModal').DataTable({
-            ajax: {
-                url: 'beneficiarios_activos_data_json',
-                dataSrc: 'data'
-            },
-            searching: true,
-            pageLength: 10,
-            language: {
-                url: 'plugins/DataTables/js/languaje.json'
-            },
-            columns: [
-                { data: 'cedula_completa' },
-                { data: 'nombre_completo' },
-                { data: 'nombre_pnf' },
-                { data: 'seccion' },
-                {
-                    data: 'id_beneficiario',
-                    orderable: false,
-                    searchable: false,
-                    render: function (data, type, row) {
-                        return `
+    // Si es Select2, aplicar al contenedor visible
+    if ($(field).hasClass("select2")) {
+      $(field)
+        .next(".select2-container")
+        .find(".select2-selection")
+        .addClass("is-invalid")
+        .removeClass("is-valid");
+    }
+  };
+
+  const clearError = (field) => {
+    const errorElement = document.getElementById(`${field.id}Error`);
+    if (errorElement) errorElement.textContent = "";
+
+    field.classList.remove("is-invalid");
+    field.classList.add("is-valid");
+
+    // Si es Select2, aplicar al contenedor visible
+    if ($(field).hasClass("select2")) {
+      $(field)
+        .next(".select2-container")
+        .find(".select2-selection")
+        .removeClass("is-invalid")
+        .addClass("is-valid");
+    }
+  };
+
+  function inicializarDataTableBeneficiarios() {
+    $("#tablaBeneficiariosModal").DataTable({
+      ajax: {
+        url: "beneficiarios_activos_data_json",
+        dataSrc: "data",
+      },
+      searching: true,
+      pageLength: 10,
+      language: {
+        url: "plugins/DataTables/js/languaje.json",
+      },
+      columns: [
+        { data: "cedula_completa" },
+        { data: "nombre_completo" },
+        { data: "nombre_pnf" },
+        { data: "seccion" },
+        {
+          data: "id_beneficiario",
+          orderable: false,
+          searchable: false,
+          render: function (data, type, row) {
+            return `
                             <button class="btn btn-sm btn-primary btn-seleccionar-beneficiario" 
                                     data-id="${data}" 
                                     data-nombre="${row.nombre_completo}">
                                 <i class="fas fa-check"></i> Seleccionar
                             </button>
                         `;
-                    }
-                }
-            ],
-            initComplete: function () {
-                $(document).on('click', '.btn-seleccionar-beneficiario', function () {
-                    const id = $(this).data('id');
-                    const nombre = $(this).data('nombre');
+          },
+        },
+      ],
+      initComplete: function () {
+        $(document).on("click", ".btn-seleccionar-beneficiario", function () {
+          const id = $(this).data("id");
+          const nombre = $(this).data("nombre");
 
-                    elements.id_beneficiario.value = id;
-                    elements.beneficiario_nombre.value = nombre;
-                    clearError(elements.id_beneficiario);
-                    clearError(elements.beneficiario_nombre);
-                    toggleBotonEliminar();
+          elements.id_beneficiario.value = id;
+          elements.beneficiario_nombre.value = nombre;
+          clearError(elements.id_beneficiario);
+          clearError(elements.beneficiario_nombre);
+          toggleBotonEliminar();
 
-                    $('#modalSeleccionarBeneficiario').modal('hide');
-                    validarBeneficiario();
-                });
-            }
+          $("#modalSeleccionarBeneficiario").modal("hide");
+          validarBeneficiario();
         });
+      },
+    });
+  }
+
+  function limpiarFormulario() {
+    form.reset();
+
+    // Limpiar campos de beneficiario y ocultar botón 'X'
+    elements.id_beneficiario.value = "";
+    elements.beneficiario_nombre.value = "";
+    toggleBotonEliminar();
+
+    // Lógica de reseteo basada en el rol
+    if (USER_SESSION.es_admin) {
+      $(elements.id_servicio_origen).val("").trigger("change");
+      $(elements.id_empleado_origen)
+        .html(
+          '<option value="" disabled selected>Seleccione servicio primero</option>',
+        )
+        .trigger("change");
+    } else {
+      // Si es empleado, restaurar sus datos por defecto
+      $(elements.id_servicio_origen)
+        .val(USER_SESSION.id_servicio)
+        .trigger("change");
+      $(elements.id_empleado_origen)
+        .val(USER_SESSION.id_empleado)
+        .trigger("change");
     }
 
-    function limpiarFormulario() {
-        form.reset();
+    // Limpiar campos de destino
+    $(elements.id_servicio_destino).val("").trigger("change");
+    $(elements.id_empleado_destino)
+      .html(
+        '<option value="" selected disabled>Cualquier especialista disponible</option>',
+      )
+      .trigger("change");
 
-        // Limpiar campos de beneficiario y ocultar botón 'X'
-        elements.id_beneficiario.value = '';
-        elements.beneficiario_nombre.value = '';
-        toggleBotonEliminar();
+    // Limpiar campos de texto
+    elements.motivo.value = "";
+    elements.observaciones.value = "";
 
-        // Lógica de reseteo basada en el rol
-        if (USER_SESSION.es_admin) {
-            $(elements.id_servicio_origen).val('').trigger('change');
-            $(elements.id_empleado_origen).html('<option value="" disabled selected>Seleccione servicio primero</option>').trigger('change');
-        } else {
-            // Si es empleado, restaurar sus datos por defecto
-            $(elements.id_servicio_origen).val(USER_SESSION.id_servicio).trigger('change');
-            $(elements.id_empleado_origen).val(USER_SESSION.id_empleado).trigger('change');
-        }
+    // Campos a limpiar clases (incluyendo el input de beneficiario)
+    const fields = [
+      elements.id_beneficiario,
+      elements.id_servicio_origen,
+      elements.id_empleado_origen,
+      elements.id_servicio_destino,
+      elements.id_empleado_destino,
+      elements.motivo,
+      elements.observaciones,
+      elements.beneficiario_nombre,
+    ];
 
-        // Limpiar campos de destino
-        $(elements.id_servicio_destino).val('').trigger('change');
-        $(elements.id_empleado_destino).html('<option value="" selected disabled>Cualquier especialista disponible</option>').trigger('change');
+    fields.forEach((field) => {
+      if (!field) return;
 
-        // Limpiar campos de texto
-        elements.motivo.value = '';
-        elements.observaciones.value = '';
+      // Remover clases de validación de Bootstrap
+      field.classList.remove("is-valid", "is-invalid");
 
-        // Campos a limpiar clases (incluyendo el input de beneficiario)
-        const fields = [
-            elements.id_beneficiario,
-            elements.id_servicio_origen,
-            elements.id_empleado_origen,
-            elements.id_servicio_destino,
-            elements.id_empleado_destino,
-            elements.motivo,
-            elements.observaciones,
-            elements.beneficiario_nombre
-        ];
+      // Limpiar mensaje de error y ocultarlo
+      const errorElement = document.getElementById(`${field.id}Error`);
+      if (errorElement) {
+        errorElement.textContent = "";
+        errorElement.style.display = "none";
+      }
 
-        fields.forEach(field => {
-            if (!field) return;
+      // Manejar clases específicas de Select2 si aplica
+      if ($(field).hasClass("select2")) {
+        $(field)
+          .next(".select2-container")
+          .find(".select2-selection")
+          .removeClass("is-invalid")
+          .removeClass("is-valid");
+      }
+    });
+  }
 
-            // Remover clases de validación de Bootstrap
-            field.classList.remove('is-valid', 'is-invalid');
+  function validarBeneficiario() {
+    const beneficiario_nombre = elements.beneficiario_nombre.value;
 
-            // Limpiar mensaje de error y ocultarlo
-            const errorElement = document.getElementById(`${field.id}Error`);
-            if (errorElement) {
-                errorElement.textContent = "";
-                errorElement.style.display = 'none';
-            }
+    if (beneficiario_nombre === "") {
+      showError(elements.id_beneficiario, "El beneficiario es obligatorio");
+      showError(elements.beneficiario_nombre, "El beneficiario es obligatorio");
+      return false;
+    }
 
-            // Manejar clases específicas de Select2 si aplica
-            if ($(field).hasClass('select2')) {
-                $(field).next('.select2-container').find('.select2-selection')
-                    .removeClass('is-invalid')
-                    .removeClass('is-valid');
-            }
+    clearError(elements.id_beneficiario);
+    clearError(elements.beneficiario_nombre);
+    toggleBotonEliminar();
+    return true;
+  }
+
+  function toggleBotonEliminar() {
+    if (
+      elements.id_beneficiario &&
+      elements.id_beneficiario.value &&
+      elements.btnEliminarBeneficiario
+    ) {
+      elements.btnEliminarBeneficiario.style.display = "block";
+    } else if (elements.btnEliminarBeneficiario) {
+      elements.btnEliminarBeneficiario.style.display = "none";
+    }
+  }
+
+  async function loadEmployees(idServicio, targetSelect) {
+    try {
+      $(targetSelect).prop("disabled", true);
+
+      const response = await $.ajax({
+        url: "obtener_empleados_servicio",
+        type: "POST",
+        data: { id_servicios: idServicio },
+        dataType: "json",
+      });
+
+      const $select = $(targetSelect);
+      $select.empty();
+
+      if (response.exito && response.data.length > 0) {
+        $select.append(
+          '<option value="" selected>Seleccione un especialista...</option>',
+        );
+        response.data.forEach((emp) => {
+          const isCurrentUser = emp.id_empleado == USER_SESSION.id_empleado;
+          const selected = isCurrentUser ? "selected" : "";
+          $select.append(
+            `<option value="${emp.id_empleado}" ${selected}>${emp.nombre_completo}  ${emp.cedula_completa}</option>`,
+          );
         });
+      } else {
+        $select.append(
+          '<option value="" selected>No hay especialistas disponibles</option>',
+        );
+      }
+
+      $select.prop("disabled", false).trigger("change");
+    } catch (error) {
+      console.error("Error cargando empleados:", error);
+      $(targetSelect)
+        .html('<option value="" selected>Error al cargar</option>')
+        .prop("disabled", false)
+        .trigger("change");
+    }
+  }
+
+  function validarServicioOrigen() {
+    const servicio_origen = elements.id_servicio_origen.value;
+    if (servicio_origen === "") {
+      showError(
+        elements.id_servicio_origen,
+        "El servicio de origen es obligatorio",
+      );
+      return false;
+    }
+    clearError(elements.id_servicio_origen);
+    return true;
+  }
+
+  function validarServicioDestino() {
+    const servicio_destino = elements.id_servicio_destino.value;
+    if (servicio_destino === "") {
+      showError(
+        elements.id_servicio_destino,
+        "El servicio de destino es obligatorio",
+      );
+      return false;
+    }
+    clearError(elements.id_servicio_destino);
+    return true;
+  }
+
+  function validarServiciosDiferentes() {
+    const origen = elements.id_servicio_origen.value;
+    const destino = elements.id_servicio_destino.value;
+
+    if (origen && destino && origen === destino) {
+      showError(
+        elements.id_servicio_destino,
+        "No se puede referir al mismo servicio de origen",
+      );
+      return false;
+    } else if (destino) {
+      clearError(elements.id_servicio_destino);
+    }
+    return true;
+  }
+
+  function validarObservaciones() {
+    const observaciones = elements.observaciones.value.trim();
+
+    if (observaciones === "") {
+      showError(elements.observaciones, "Las observaciones son obligatorias");
+      return false;
     }
 
-    function validarBeneficiario() {
-        const beneficiario_nombre = elements.beneficiario_nombre.value;
+    if (observaciones.length < 5) {
+      showError(
+        elements.observaciones,
+        "Las observaciones deben tener al menos 5 caracteres",
+      );
+      return false;
+    }
+    clearError(elements.observaciones);
+    return true;
+  }
 
-        if (beneficiario_nombre === "") {
-            showError(elements.id_beneficiario, "El beneficiario es obligatorio");
-            showError(elements.beneficiario_nombre, "El beneficiario es obligatorio");
-            return false;
-        }
+  function validarMotivo() {
+    const motivo = elements.motivo.value.trim();
 
-        clearError(elements.id_beneficiario);
-        clearError(elements.beneficiario_nombre);
-        toggleBotonEliminar();
-        return true;
+    if (motivo === "") {
+      showError(elements.motivo, "El motivo es obligatorio");
+      return false;
     }
 
-    function toggleBotonEliminar() {
-        if (elements.id_beneficiario && elements.id_beneficiario.value && elements.btnEliminarBeneficiario) {
-            elements.btnEliminarBeneficiario.style.display = 'block';
-        } else if (elements.btnEliminarBeneficiario) {
-            elements.btnEliminarBeneficiario.style.display = 'none';
-        }
+    if (motivo.length < 5) {
+      showError(elements.motivo, "El motivo debe tener al menos 5 caracteres");
+      return false;
     }
+    clearError(elements.motivo);
+    return true;
+  }
 
-    async function loadEmployees(idServicio, targetSelect) {
-        try {
-            $(targetSelect).prop('disabled', true);
+  function validarEmpleadoDestino() {
+    const id_empleado_destino = elements.id_empleado_destino.value.trim();
 
-            const response = await $.ajax({
-                url: 'obtener_empleados_servicio',
-                type: 'POST',
-                data: { id_servicios: idServicio },
-                dataType: 'json'
-            });
-
-            const $select = $(targetSelect);
-            $select.empty();
-
-            if (response.exito && response.data.length > 0) {
-                $select.append('<option value="" selected>Seleccione un especialista...</option>');
-                response.data.forEach(emp => {
-                    const isCurrentUser = emp.id_empleado == USER_SESSION.id_empleado;
-                    const selected = isCurrentUser ? 'selected' : '';
-                    $select.append(`<option value="${emp.id_empleado}" ${selected}>${emp.nombre_completo}  ${emp.cedula_completa}</option>`);
-                });
-            } else {
-                $select.append('<option value="" selected>No hay especialistas disponibles</option>');
-            }
-
-            $select.prop('disabled', false).trigger('change');
-
-        } catch (error) {
-            console.error('Error cargando empleados:', error);
-            $(targetSelect).html('<option value="" selected>Error al cargar</option>').prop('disabled', false).trigger('change');
-        }
+    if (id_empleado_destino === "") {
+      showError(
+        elements.id_empleado_destino,
+        "El empleado destino es obligatorio",
+      );
+      return false;
     }
+    clearError(elements.id_empleado_destino);
+    return true;
+  }
 
-    function validarServicioOrigen() {
-        const servicio_origen = elements.id_servicio_origen.value;
-        if (servicio_origen === "") {
-            showError(elements.id_servicio_origen, "El servicio de origen es obligatorio");
-            return false;
-        }
-        clearError(elements.id_servicio_origen);
-        return true;
+  function validarEmpleadoOrigen() {
+    const id_empleado_origen = elements.id_empleado_origen.value.trim();
+
+    if (id_empleado_origen === "") {
+      showError(
+        elements.id_empleado_origen,
+        "El empleado origen es obligatorio",
+      );
+      return false;
     }
+    clearError(elements.id_empleado_origen);
+    return true;
+  }
 
-    function validarServicioDestino() {
-        const servicio_destino = elements.id_servicio_destino.value;
-        if (servicio_destino === "") {
-            showError(elements.id_servicio_destino, "El servicio de destino es obligatorio");
-            return false;
-        }
-        clearError(elements.id_servicio_destino);
-        return true;
-    }
-
-    function validarServiciosDiferentes() {
-        const origen = elements.id_servicio_origen.value;
-        const destino = elements.id_servicio_destino.value;
-
-        if (origen && destino && origen === destino) {
-            showError(elements.id_servicio_destino, "No se puede referir al mismo servicio de origen");
-            return false;
-        } else if (destino) {
-            clearError(elements.id_servicio_destino);
-        }
-        return true;
-    }
-
-    function validarObservaciones() {
-        const observaciones = elements.observaciones.value.trim();
-
-        if (observaciones === "") {
-            showError(elements.observaciones, "Las observaciones son obligatorias");
-            return false;
-        }
-
-        if (observaciones.length < 5) {
-            showError(elements.observaciones, "Las observaciones deben tener al menos 5 caracteres");
-            return false;
-        }
-        clearError(elements.observaciones);
-        return true;
-    }
-
-    function validarMotivo() {
-        const motivo = elements.motivo.value.trim();
-
-        if (motivo === "") {
-            showError(elements.motivo, "El motivo es obligatorio");
-            return false;
-        }
-
-        if (motivo.length < 5) {
-            showError(elements.motivo, "El motivo debe tener al menos 5 caracteres");
-            return false;
-        }
-        clearError(elements.motivo);
-        return true;
-    }
-
-    function validarEmpleadoDestino() {
-        const id_empleado_destino = elements.id_empleado_destino.value.trim();
-
-        if (id_empleado_destino === "") {
-            showError(elements.id_empleado_destino, "El empleado destino es obligatorio");
-            return false;
-        }
-        clearError(elements.id_empleado_destino);
-        return true;
-    }
-
-    function validarEmpleadoOrigen() {
-        const id_empleado_origen = elements.id_empleado_origen.value.trim();
-
-        if (id_empleado_origen === "") {
-            showError(elements.id_empleado_origen, "El empleado origen es obligatorio");
-            return false;
-        }
-        clearError(elements.id_empleado_origen);
-        return true;
-    }
-
-    function Listeners() {
-        // Al cambiar servicio de destino
-        $(elements.id_servicio_destino).on('change', function () {
-            const idServicio = $(this).val();
-            if (idServicio) {
-                loadEmployees(idServicio, elements.id_empleado_destino);
-            } else {
-                $(elements.id_empleado_destino).html('<option value="" selected>Cualquier especialista disponible</option>').trigger('change');
-            }
-            validarServiciosDiferentes();
-        });
-
-        // Al cambiar servicio de origen (solo para Admin)
-        if (USER_SESSION.es_admin) {
-            $(elements.id_servicio_origen).on('change', function () {
-                const idServicio = $(this).val();
-                if (idServicio) {
-                    loadEmployees(idServicio, elements.id_empleado_origen);
-                } else {
-                    $(elements.id_empleado_origen).html('<option value="" disabled selected>Seleccione servicio primero</option>').trigger('change');
-                }
-                validarServiciosDiferentes();
-            });
-        }
-    }
-
-    elements.id_beneficiario.addEventListener('input', validarBeneficiario);
-    $(elements.id_servicio_origen).on('change', validarServicioOrigen);
-    $(elements.id_servicio_destino).on('change', validarServicioDestino);
-    elements.observaciones.addEventListener('input', validarObservaciones);
-    elements.motivo.addEventListener('input', validarMotivo);
-    $(elements.id_empleado_origen).on('change', validarEmpleadoOrigen);
-    $(elements.id_empleado_destino).on('change', validarEmpleadoDestino);
-    elements.limpiar_form.addEventListener('click', limpiarFormulario);
-
-    form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-
-        const validaciones = [
-            validarBeneficiario(),
-            validarServiciosDiferentes(),
-            validarObservaciones(),
-            validarMotivo(),
-            validarEmpleadoOrigen(),
-            validarEmpleadoDestino(),
-            validarServicioOrigen(),
-            validarServicioDestino()
-        ]
-
-        if (validaciones.every(v => v === true)) {
-            try {
-                const formData = new FormData(form);
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                AlertManager.close();
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    if (data.exito) {
-                        AlertManager.success("Registro exitoso", data.mensaje).then(() => {
-                            window.location.reload();
-                        });
-                    } else {
-                        AlertManager.error("Error", data.error || data.mensaje || "Error desconocido");
-                    }
-                } else {
-                    AlertManager.error("Error", "Error en la petición al servidor");
-                }
-
-
-            } catch (error) {
-                AlertManager.close();
-                console.error(error);
-                AlertManager.error("Error", "Ocurrió un error inesperado");
-            }
-        } else {
-            AlertManager.warning("Formulario incompleto", "Corrige los campos resaltados antes de continuar");
-        }
+  function Listeners() {
+    // Al cambiar servicio de destino
+    $(elements.id_servicio_destino).on("change", function () {
+      const idServicio = $(this).val();
+      if (idServicio) {
+        loadEmployees(idServicio, elements.id_empleado_destino);
+      } else {
+        $(elements.id_empleado_destino)
+          .html(
+            '<option value="" selected>Cualquier especialista disponible</option>',
+          )
+          .trigger("change");
+      }
+      validarServiciosDiferentes();
     });
 
-    Listeners();
-    inicializarDataTableBeneficiarios();
-});
+    // Al cambiar servicio de origen (solo para Admin)
+    if (USER_SESSION.es_admin) {
+      $(elements.id_servicio_origen).on("change", function () {
+        const idServicio = $(this).val();
+        if (idServicio) {
+          loadEmployees(idServicio, elements.id_empleado_origen);
+        } else {
+          $(elements.id_empleado_origen)
+            .html(
+              '<option value="" disabled selected>Seleccione servicio primero</option>',
+            )
+            .trigger("change");
+        }
+        validarServiciosDiferentes();
+      });
+    }
+  }
+
+  elements.id_beneficiario.addEventListener("input", validarBeneficiario);
+  $(elements.id_servicio_origen).on("change", validarServicioOrigen);
+  $(elements.id_servicio_destino).on("change", validarServicioDestino);
+  elements.observaciones.addEventListener("input", validarObservaciones);
+  elements.motivo.addEventListener("input", validarMotivo);
+  $(elements.id_empleado_origen).on("change", validarEmpleadoOrigen);
+  $(elements.id_empleado_destino).on("change", validarEmpleadoDestino);
+  elements.limpiar_form.addEventListener("click", limpiarFormulario);
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const validaciones = [
+      validarBeneficiario(),
+      validarServiciosDiferentes(),
+      validarObservaciones(),
+      validarMotivo(),
+      validarEmpleadoOrigen(),
+      validarEmpleadoDestino(),
+      validarServicioOrigen(),
+      validarServicioDestino(),
+    ];
+
+    if (validaciones.every((v) => v === true)) {
+      try {
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: formData,
+        });
+
+        AlertManager.close();
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data.exito) {
+            AlertManager.success("Registro exitoso", data.mensaje).then(() => {
+              window.location.reload();
+            });
+          } else {
+            AlertManager.error(
+              "Error",
+              data.error || data.mensaje || "Error desconocido",
+            );
+          }
+        } else {
+          AlertManager.error("Error", "Error en la petición al servidor");
+        }
+      } catch (error) {
+        AlertManager.close();
+        console.error(error);
+        AlertManager.error("Error", "Ocurrió un error inesperado");
+      }
+    } else {
+      AlertManager.warning(
+        "Formulario incompleto",
+        "Corrige los campos resaltados antes de continuar",
+      );
+    }
+  });
+
+  Listeners();
+  inicializarDataTableBeneficiarios();
+};

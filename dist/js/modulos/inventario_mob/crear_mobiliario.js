@@ -1,4 +1,142 @@
-document.addEventListener('DOMContentLoaded', function () {
+window.onload = function () {
+  document.getElementById("btn-ayuda").addEventListener("click", function () {
+    // Variables locales dentro del evento
+    let driverActual = null;
+    
+    function crearDriverConSteps(steps) {
+        return window.driver.js.driver({
+            showProgress: true,
+            nextBtnText: "Siguiente",
+            prevBtnText: "Anterior",
+            doneBtnText: "Finalizar",
+            popoverClass: "mi-popover",
+            steps: steps,
+            onDestroy: function() {
+                console.log('Tour destruido');
+                driverActual = null;
+            }
+        });
+    }
+
+    // Función para destruir el driver actual si existe
+    function destruirDriverActual() {
+        if (driverActual) {
+            try {
+                if (driverActual.isActive) {
+                    driverActual.destroy();
+                }
+            } catch(e) {
+                console.log('Error al destruir driver:', e);
+            }
+            driverActual = null;
+        }
+    }
+
+    // Steps para Mobiliario
+    const mobiliarioSteps = [
+        {
+            element: "#input_nombre_mobiliario",
+            popover: {
+                title: "Nombre del Mobiliario",
+                description: "Ingresa el nombre del mobiliario a registrar.",
+                align: "center"
+            }
+        },
+        {
+            element: "#input_tipo_mobiliario",
+            popover: {
+                title: "Tipo de Mobiliario",
+                description: "Selecciona el tipo de mobiliario.",
+                align: "center"
+            }
+        },
+        {
+            element: "#input_cantidad_mobiliario",
+            popover: {
+                title: "Cantidad",
+                description: "Especifica la cantidad disponible.",
+                align: "center"
+            }
+        },
+        {
+            element: "#input_estado_mobiliario",
+            popover: {
+                title: "Estado del Mobiliario",
+                description: "Indica el estado actual: Nuevo, Bueno, Regular, Malo.",
+                align: "center"
+            }
+        }
+    ];
+
+    // Steps para Equipo
+    const equipoSteps = [
+        {
+            element: "#input_nombre_equipo",
+            popover: {
+                title: "Nombre del Equipo",
+                description: "Ingresa el nombre del equipo médico a registrar.",
+                align: "center"
+            }
+        },
+        {
+            element: "#input_marca_equipo",
+            popover: {
+                title: "Marca",
+                description: "Especifica la marca del equipo.",
+                align: "center"
+            }
+        },
+        {
+            element: "#input_modelo_equipo",
+            popover: {
+                title: "Modelo",
+                description: "Indica el modelo del equipo.",
+                align: "center"
+            }
+        },
+        {
+            element: "#input_serie_equipo",
+            popover: {
+                title: "Número de Serie",
+                description: "Registra el número de serie del equipo.",
+                align: "center"
+            }
+        },
+        {
+            element: "#input_fecha_calibracion",
+            popover: {
+                title: "Fecha de Calibración",
+                description: "Indica la última fecha de calibración del equipo.",
+                align: "center"
+            }
+        }
+    ];
+
+    // Función para iniciar el tour según la pestaña activa
+    function iniciarTourSegunTab() {
+        // Destruir el driver actual si existe
+        destruirDriverActual();
+
+        // Pequeño delay para asegurar que todo esté listo
+        setTimeout(() => {
+            // Determinar qué pestaña está activa
+            if ($('#mobiliario-tab').hasClass('active')) {
+                console.log('Iniciando tour de Mobiliario');
+                driverActual = crearDriverConSteps(mobiliarioSteps);
+                driverActual.drive();
+            } 
+            else if ($('#equipo-tab').hasClass('active')) {
+                console.log('Iniciando tour de Equipo');
+                driverActual = crearDriverConSteps(equipoSteps);
+                driverActual.drive();
+            }
+        }, 300);
+    }
+
+    // Llamar a la función para iniciar el tour
+    iniciarTourSegunTab();
+});
+
     const form = document.getElementById('form-mobiliario');
     const container = document.getElementById('items-container-mobiliario');
     let rowCount = 1;
@@ -408,4 +546,4 @@ document.addEventListener('DOMContentLoaded', function () {
             AlertManager.warning("Formulario incompleto", "Por favor, rellene todos los campos obligatorios correctamente");
         }
     });
-});
+};

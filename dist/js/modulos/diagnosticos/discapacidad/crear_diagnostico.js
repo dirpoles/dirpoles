@@ -22,7 +22,7 @@ window.onload = function () {
           popover: {
             title: "Tipo de Discapacidad",
             description:
-              "Selecciona el tipo principal de discapacidad del beneficiario (Física, Sensorial, Intelectual, etc.).",
+              "Selecciona el tipo principal de discapacidad del beneficiario.",
             align: "center",
           },
         },
@@ -31,7 +31,7 @@ window.onload = function () {
           popover: {
             title: "Discapacidad Específica",
             description:
-              "Especifica la discapacidad con mayor detalle, por ejemplo: Parálisis cerebral, Autismo, Sordera.",
+              "Especifica la discapacidad con mayor detalle de ser necesario.",
             align: "center",
           },
         },
@@ -39,8 +39,7 @@ window.onload = function () {
           element: "#diagnostico-input",
           popover: {
             title: "Diagnóstico Médico",
-            description:
-              "Ingresa el diagnóstico clínico formal según CIE-10. Este campo es obligatorio.",
+            description: "Ingresa el diagnóstico clínico.",
             align: "center",
           },
         },
@@ -67,7 +66,7 @@ window.onload = function () {
           popover: {
             title: "Habilidades Funcionales",
             description:
-              "Describe las capacidades del beneficiario para realizar actividades diarias. Este campo es obligatorio.",
+              "Describe las capacidades del beneficiario para realizar actividades diarias.",
             align: "center",
           },
         },

@@ -96,13 +96,14 @@ include BASE_PATH . '/app/Views/template/head.php';
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <h6 class="m-0 font-weight-bold text-primary">Registrar Nueva Jornada Médica</h6>
+                                    <i id="btn-ayuda" class="fa fa-question-circle fa-lg text-primary" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
                                 </div>
                                 <div class="card-body">
                                     <form action="<?= BASE_URL ?>registrar_jornada" method="POST" autocomplete="off" id="formulario-jornada" novalidate>
 
                                         <h6 class="text-secondary mb-3 pl-2" style="border-left: 4px solid #4e73df;">Información General</h6>
                                         <div class="row mb-4">
-                                            <div class="col-md-7">
+                                            <div id="input_nombre_jornada" class="col-md-7">
                                                 <label for="nombre_jornada" class="form-label font-weight-bold">Nombre de la Jornada <span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light"><i class="fas fa-heading text-primary"></i></span>
@@ -110,7 +111,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                 </div>
                                                 <div id="nombre_jornadaError" class="form-text text-danger"></div>
                                             </div>
-                                            <div class="col-md-5">
+                                            <div id="input_tipo_jornada" class="col-md-5">
                                                 <label for="tipo_jornada" class="form-label font-weight-bold">Tipo de Jornada</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light"><i class="fas fa-list-ul text-primary"></i></span>
@@ -131,7 +132,7 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                                         <h6 class="text-secondary mb-3 pl-2" style="border-left: 4px solid #4e73df;">Logística y Capacidad</h6>
                                         <div class="row mb-4">
-                                            <div class="col-md-8">
+                                            <div id="input_ubicacion" class="col-md-8">
                                                 <label for="ubicacion" class="form-label font-weight-bold">Ubicación / Dirección <span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt text-danger"></i></span>
@@ -139,7 +140,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                 </div>
                                                 <div id="ubicacionError" class="form-text text-danger"></div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div id="input_aforo_maximo" class="col-md-4">
                                                 <label for="aforo_maximo" class="form-label font-weight-bold">Aforo Máximo (Personas)</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light"><i class="fas fa-users text-primary"></i></span>
@@ -154,7 +155,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         <h6 class="text-secondary mb-3 pl-2" style="border-left: 4px solid #4e73df;">Cronograma del Evento</h6>
                                         <div class="row">
                                             <div class="col-md-6 border-end">
-                                                <div class="mb-3">
+                                                <div id="input_fecha_inicio" class="mb-3">
                                                     <label class="form-label font-weight-bold">Fecha y Hora de Inicio <span class="text-danger">*</span></label>
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text bg-light"><i class="fas fa-calendar-alt"></i></span>
@@ -166,7 +167,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="mb-3">
+                                                <div id="input_fecha_fin" class="mb-3">
                                                     <label class="form-label font-weight-bold">Fecha y Hora de Fin <span class="text-danger">*</span></label>
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text bg-light"><i class="fas fa-calendar-check"></i></span>
@@ -183,7 +184,7 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                                         <h6 class="text-secondary mb-3 pl-2" style="border-left: 4px solid #4e73df;">Descripción del Operativo</h6>
                                         <div class="row mb-4">
-                                            <div class="col-md-12">
+                                            <div id="input_descripcion" class="col-md-12">
                                                 <textarea class="form-control" name="descripcion" id="descripcion" rows="4"
                                                     placeholder="Describa los servicios médicos que se ofrecerán, requerimientos especiales o información relevante para el personal..."></textarea>
                                                 <div id="descripcionError" class="form-text text-danger"></div>
