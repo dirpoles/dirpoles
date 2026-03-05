@@ -501,14 +501,7 @@ class ReportesModel extends BusinessModel
          LEFT JOIN beneficiario b ON ss.id_beneficiario = b.id_beneficiario
          LEFT JOIN pnf ON b.id_pnf = pnf.id_pnf";
 
-            if ($this->__get('startDate') && $this->__get('endDate')) {
-                $query .= " WHERE fm.fecha_creacion 
-         BETWEEN :startDate AND :endDate";
-            }
-
             $stmt = $this->conn->prepare($query);
-            $stmt->bindValue(":startDate", $this->__get('startDate'));
-            $stmt->bindValue(":endDate", $this->__get('endDate'));
 
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -530,8 +523,6 @@ class ReportesModel extends BusinessModel
 
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bindValue(":startDate", $this->__get('startDate'));
-            $stmt->bindValue(":endDate", $this->__get('endDate'));
 
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -549,15 +540,7 @@ class ReportesModel extends BusinessModel
          LEFT JOIN beneficiario b ON ss.id_beneficiario = b.id_beneficiario
          LEFT JOIN pnf ON b.id_pnf = pnf.id_pnf";
 
-            if ($this->__get('startDate') && $this->__get('endDate')) {
-                $query .= " WHERE d.fecha_creacion 
-         BETWEEN :startDate AND :endDate";
-            }
-
             $stmt = $this->conn->prepare($query);
-            $stmt->bindValue(":startDate", $this->__get('startDate'));
-            $stmt->bindValue(":endDate", $this->__get('endDate'));
-
 
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

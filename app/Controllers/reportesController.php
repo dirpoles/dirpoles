@@ -225,6 +225,249 @@ function reportes_medicina_inventario_data()
         exit();
     }
 }
+
+function reportes_orientacion()
+{
+    $permisos = new PermisosModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        require_once BASE_PATH . '/app/Views/reportes/orientacion.php';
+    } catch (Throwable $e) {
+        if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+            require_once BASE_PATH . '/app/Views/errors/access_denied.php';
+        } else {
+            echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        }
+    }
+}
+
+function reportes_orientacion_data()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $resultado = $modelo->manejarAccion('reporteOrientacion');
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        exit();
+    }
+}
+
+function reportes_trabajo_social()
+{
+    $permisos = new PermisosModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        require_once BASE_PATH . '/app/Views/reportes/trabajo_social.php';
+    } catch (Throwable $e) {
+        if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+            require_once BASE_PATH . '/app/Views/errors/access_denied.php';
+        } else {
+            echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        }
+    }
+}
+
+function reportes_becas_data()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $resultado = $modelo->manejarAccion('reporteBecas');
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        exit();
+    }
+}
+
+function reportes_exoneracion_data()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $resultado = $modelo->manejarAccion('reporteEx');
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        exit();
+    }
+}
+
+function reportes_fames_data()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $resultado = $modelo->manejarAccion('reporteFames');
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        exit();
+    }
+}
+
+function reportes_embarazo_data()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $resultado = $modelo->manejarAccion('reporteEmb');
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        exit();
+    }
+}
+
+function reportes_discapacidad()
+{
+    $permisos = new PermisosModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        require_once BASE_PATH . '/app/Views/reportes/discapacidad.php';
+    } catch (Throwable $e) {
+        if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+            require_once BASE_PATH . '/app/Views/errors/access_denied.php';
+        } else {
+            echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        }
+    }
+}
+
+function reportes_discapacidad_data()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $resultado = $modelo->manejarAccion('reporteDiscapacidad');
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        exit();
+    }
+}
 /*
 function reportesEmpleados()
 {

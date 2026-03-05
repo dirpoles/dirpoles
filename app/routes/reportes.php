@@ -42,3 +42,48 @@ Router::get('reportes_medicina_inventario_data', function () {
     load_controller('reportesController.php');
     reportes_medicina_inventario_data();
 });
+
+Router::get('reportes_orientacion', function () {
+    load_controller('reportesController.php');
+    reportes_orientacion();
+});
+
+Router::get('reportes_orientacion_data', function () {
+    load_controller('reportesController.php');
+    reportes_orientacion_data();
+});
+
+Router::get('reportes_trabajo_social', function () {
+    load_controller('reportesController.php');
+    reportes_trabajo_social();
+});
+
+Router::get('reportes_becas_data', function () {
+    load_controller('reportesController.php');
+    reportes_becas_data();
+});
+
+Router::get('reportes_exoneracion_data', function () {
+    load_controller('reportesController.php');
+    reportes_exoneracion_data();
+});
+
+Router::get('reportes_fames_data', function () {
+    load_controller('reportesController.php');
+    reportes_fames_data();
+});
+
+Router::get('reportes_embarazo_data', function () {
+    load_controller('reportesController.php');
+    reportes_embarazo_data();
+});
+
+Router::get('reportes_discapacidad', function () {
+    load_controller('reportesController.php');
+    reportes_discapacidad();
+});
+
+Router::get('reportes_discapacidad_data', function () {
+    load_controller('reportesController.php');
+    reportes_discapacidad_data();
+});
