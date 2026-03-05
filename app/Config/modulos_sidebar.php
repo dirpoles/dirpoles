@@ -104,5 +104,18 @@ return [
             ['url' => 'crear_permisos', 'texto' => 'Permisos Empleados', 'permiso' => 2]
         ]
     ],
+    15 => [
+        'key' => 'reportes',
+        'icon' => 'fa-chart-pie',
+        'titulo' => 'Reportes Estadísticos',
+        'subitems' => [
+            ['url' => 'reportes_general', 'texto' => 'General', 'permiso' => 2],
+            ['url' => 'reportes_psicologia', 'texto' => 'Psicología', 'permiso' => 2],
+            ['url' => 'reportes_medicina', 'texto' => 'Medicina', 'permiso' => 2],
+            ['url' => 'reportes_orientacion', 'texto' => 'Orientación', 'permiso' => 2],
+            ['url' => 'reportes_trabajo_social', 'texto' => 'Trabajo Social', 'permiso' => 2],
+            ['url' => 'reportes_discapacidad', 'texto' => 'Discapacidad', 'permiso' => 2],
+        ]
+    ],
     // Agrega los demás módulos...
 ];
