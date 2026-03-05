@@ -138,79 +138,74 @@ class TransporteModel extends BusinessModel
                 return $this->obtener_choferes();
 
             case 'Asignaciones_calendario':
-                return $this->asignaciones_para_calendario();
-                break;
+                return $this->asignaciones_para_calendario();;
 
             case 'Detalles_ruta':
                 return $this->obtener_detalles_ruta();
-                break;
 
             case 'Registrar_repuesto':
                 return $this->registrar_repuesto();
-                break;
 
             case 'Registrar_entrada_repuesto':
                 return $this->registrar_entrada_repuesto();
-                break;
 
             case 'Registrar_mantenimiento':
                 return $this->registrar_mantenimiento();
-                break;
+
 
             case 'Editar_vehiculo':
                 return $this->obtener_vehiculos_id();
-                break;
+
 
             case 'Actualizar_vehiculo':
                 return $this->actualizar_vehiculo();
-                break;
+
 
             case 'Eliminar_vehiculo':
                 return $this->eliminar_vehiculo();
-                break;
+
 
             case 'Editar_proveedor':
                 return $this->obtener_proveedorID();
-                break;
+
 
             case 'Actualizar_proveedor':
                 return $this->actualizar_proveedor();
-                break;
+
 
             case 'Eliminar_proveedor':
                 return $this->eliminar_proveedor();
-                break;
+
 
             case 'Editar_ruta':
                 return $this->obtener_rutaID();
-                break;
+
 
             case 'Actualizar_ruta':
                 return $this->ruta_actualizar();
-                break;
+
 
             case 'Eliminar_ruta':
                 return $this->ruta_eliminar();
-                break;
+
 
             case 'Eliminar_asignacion':
                 return $this->Eliminar_asignacion();
-                break;
+
 
             case 'Editar_repuesto':
                 return [
                     'ID' => $this->obtener_repuestoID(),
                     'Proveedores' => $this->obtener_proveedores()
                 ];
-                break;
+
 
             case 'Actualizar_repuesto':
                 return $this->actualizar_repuesto();
-                break;
+
 
             case 'Eliminar_repuesto':
                 return $this->eliminar_repuesto();
-                break;
         }
     }
 

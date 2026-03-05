@@ -41,78 +41,78 @@ class ReportesModel extends BusinessModel
         switch ($action) {
             case 'reporteGeneral':
                 return $this->getReportDataGeneral();
-                break;
 
-            //------------Empleados------------------
+
+                //------------Empleados------------------
             case 'reporteEmpleados':
                 return $this->getReportDataEmp();
-                break;
 
-            //------------Beneficiarios------------------
+
+                //------------Beneficiarios------------------
             case 'reporteBeneficiarios':
                 return $this->getReportDataBenef();
-                break;
 
-            //------------ Psicologia-----------------
+
+                //------------ Psicologia-----------------
             case 'morbilidad':
                 return $this->getReportDataPs();
-                break;
+
 
             case 'citas':
                 return $this->getReportDataPsCit();
-                break;
 
-            //------------------------------------------------
-            //--------------Medicina--------------------------
+
+                //------------------------------------------------
+                //--------------Medicina--------------------------
 
             case 'reporteMed':
                 return $this->getReportDataMed();
-                break;
+
 
             case 'reporteInvMed':
                 return $this->getReportInvMed();
-                break;
-            //---------------------------------------------------
 
-            //------------Orientacion----------------------
+                //---------------------------------------------------
+
+                //------------Orientacion----------------------
 
             case 'reporteOrientacion':
                 return $this->getReportDataOr();
-                break;
 
-            //--------TrabajoSocial---------------------------------
+
+                //--------TrabajoSocial---------------------------------
             case 'reporteBecas':
                 return $this->getReportDataBecas();
-                break;
+
 
             case 'reporteEx':
                 return $this->getReportDataEx();
-                break;
+
 
             case 'reporteFames':
                 return $this->getReportDataFames();
-                break;
+
 
             case 'reporteEmb':
                 return $this->getReportDataEmb();
-                break;
 
-            //--------------------------------------------------
 
-            //---------------Discapacidad------------------------
+                //--------------------------------------------------
+
+                //---------------Discapacidad------------------------
 
             case 'reporteDiscapacidad':
                 return $this->getReportDataD();
-                break;
-            //----------------------------------------------------
-            //---------------Referencias--------------------------
+
+                //----------------------------------------------------
+                //---------------Referencias--------------------------
 
             case 'reporteReferencia':
                 return $this->reporteReferencia();
-                break;
 
-            //----------------------------------------------------
-            //---------------Mobiliario--------------------------
+
+                //----------------------------------------------------
+                //---------------Mobiliario--------------------------
             case 'dataMob':
                 return [
                     'servicio' => $this->getDataMob('servicio'),
@@ -120,7 +120,7 @@ class ReportesModel extends BusinessModel
                     'marca' => $this->getDataMob('marca'),
                     'modelo' => $this->getDataMob('modelo'),
                 ];
-                break;
+
 
             case 'dataEq':
                 return [
@@ -130,17 +130,17 @@ class ReportesModel extends BusinessModel
                     'modelo' => $this->getDataEq('modelo'),
                     'serial' => $this->getDataEq('serial')
                 ];
-                break;
+
 
             case 'reporteMob':
                 return $this->getReportDataMob();
-                break;
+
 
             case 'reporteEq':
                 return $this->getReportDataEq();
-                break;
 
-            //---------------Transporte--------------------------
+
+                //---------------Transporte--------------------------
 
             case 'dataTrans':
                 return [
@@ -149,13 +149,12 @@ class ReportesModel extends BusinessModel
                     'rutas' => $this->getReportDataTransp('getRutas'),
                     'repuestos' => $this->getReportDataTransp('getRepuestos'),
                 ];
-                break;
 
-            //---------------Jornada--------------------------
+
+                //---------------Jornada--------------------------
 
             case 'dataJornada':
                 return $this->getDataJorn();
-                break;
         }
     }
 
@@ -378,10 +377,6 @@ class ReportesModel extends BusinessModel
          LEFT JOIN pnf ON b.id_pnf = pnf.id_pnf";
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bindValue(":startDate", $this->__get('startDate'));
-            $stmt->bindValue(":endDate", $this->__get('endDate'));
-
-
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Throwable $e) {
@@ -394,15 +389,11 @@ class ReportesModel extends BusinessModel
         try {
             $query = "SELECT ct.*, b.id_beneficiario, b.nombres, b.apellidos, b.cedula, pnf.nombre_pnf, b.genero
          FROM cita ct
-         LEFT JOIN empleado e ON ct.id_empleado = e.id_empleado
+         LEFT JOIN dirpoles_security.empleado e ON ct.id_empleado = e.id_empleado
          LEFT JOIN beneficiario b ON ct.id_beneficiario = b.id_beneficiario
          LEFT JOIN pnf ON b.id_pnf = pnf.id_pnf";
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bindValue(":startDate", $this->__get('startDate'));
-            $stmt->bindValue(":endDate", $this->__get('endDate'));
-
-
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Throwable $e) {
