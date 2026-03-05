@@ -87,3 +87,13 @@ Router::get('reportes_discapacidad_data', function () {
     load_controller('reportesController.php');
     reportes_discapacidad_data();
 });
+
+Router::get('reportes_referencias', function () {
+    load_controller('reportesController.php');
+    reportes_referencias();
+});
+
+Router::get('reportes_referencias_data', function () {
+    load_controller('reportesController.php');
+    reportes_referencias_data();
+});

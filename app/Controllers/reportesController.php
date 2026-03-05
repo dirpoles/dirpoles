@@ -468,6 +468,59 @@ function reportes_discapacidad_data()
         exit();
     }
 }
+
+function reportes_referencias()
+{
+    $permisos = new PermisosModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        require_once BASE_PATH . '/app/Views/reportes/referencias.php';
+    } catch (Throwable $e) {
+        if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+            require_once BASE_PATH . '/app/Views/errors/access_denied.php';
+        } else {
+            echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        }
+    }
+}
+
+function reportes_referencias_data()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $resultado = $modelo->manejarAccion('reporteReferencia');
+
+        header('Content-Type: application/json');
+        echo json_encode($resultado);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['exito' => false, 'mensaje' => $e->getMessage()]);
+        exit();
+    }
+}
 /*
 function reportesEmpleados()
 {

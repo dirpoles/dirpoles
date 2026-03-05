@@ -549,7 +549,7 @@ class ReportesModel extends BusinessModel
         }
     }
 
-    private function reporteReferencia()
+    public function reporteReferencia()
     {
         try {
             $query = "SELECT 
@@ -581,7 +581,7 @@ class ReportesModel extends BusinessModel
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Throwable $e) {
-            throw new Exception('Error en la consulta: ' . $e->getMessage());
+            throw new Exception('Error en la base de datos: ' . $e->getMessage());
         }
     }
 

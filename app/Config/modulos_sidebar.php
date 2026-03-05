@@ -115,6 +115,10 @@ return [
             ['url' => 'reportes_orientacion', 'texto' => 'Orientación', 'permiso' => 2],
             ['url' => 'reportes_trabajo_social', 'texto' => 'Trabajo Social', 'permiso' => 2],
             ['url' => 'reportes_discapacidad', 'texto' => 'Discapacidad', 'permiso' => 2],
+            ['url' => 'reportes_referencias', 'texto' => 'Referencias', 'permiso' => 2],
+            ['url' => 'reportes_jornadas', 'texto' => 'Jornadas', 'permiso' => 2],
+            ['url' => 'reportes_mobiliario', 'texto' => 'Mobiliario', 'permiso' => 2],
+            ['url' => 'reportes_transporte', 'texto' => 'Transporte', 'permiso' => 2]
         ]
     ],
     // Agrega los demás módulos...
