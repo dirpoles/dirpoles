@@ -11,20 +11,20 @@ function abrirModalCrearMantenimiento() {
         <form id="formCrearMantenimiento" novalidate>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-4 mb-3">
+                    <div id="vehiculoMA" class="col-md-4 mb-3">
                         <label for="id_vehiculo_mantenimiento" class="font-weight-bold">Vehículo</label>
                         <select name="id_vehiculo_mantenimiento" id="id_vehiculo_mantenimiento" class="form-control select2">
                             <option value="" disabled selected>Cargando vehículos...</option>
                         </select>
                         <div id="id_vehiculo_mantenimientoError" class="invalid-feedback"></div>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div id="fechaMA" class="col-md-4 mb-3">
                         <label for="fecha_mantenimiento" class="font-weight-bold">Fecha</label>
                         <input type="date" name="fecha_mantenimiento" id="fecha_mantenimiento" 
                                class="form-control" min="${fechaHoy}" value="${fechaHoy}">
                         <div id="fecha_mantenimientoError" class="invalid-feedback"></div>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div id="tipoMA" class="col-md-4 mb-3">
                         <label for="tipo_mantenimiento" class="font-weight-bold">Tipo</label>
                         <select name="tipo_mantenimiento" id="tipo_mantenimiento" class="form-control">
                             <option value="" disabled selected>Seleccione...</option>
@@ -36,7 +36,7 @@ function abrirModalCrearMantenimiento() {
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 mb-3">
+                    <div id="descripcionMA" class="col-md-12 mb-3">
                         <label for="descripcion_mant" class="font-weight-bold">Descripción</label>
                         <textarea name="descripcion_mant" id="descripcion_mant" class="form-control" rows="2"
                                   placeholder="Trabajo realizado..." maxlength="255"></textarea>
@@ -45,7 +45,7 @@ function abrirModalCrearMantenimiento() {
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 mb-3">
+                    <div id="repuestosMA" class="col-md-12 mb-3">
                         <label for="uso_repuestos" class="font-weight-bold">¿Usar repuestos del inventario?</label>
                         <select class="form-control" id="uso_repuestos" name="uso_repuestos">
                             <option value="0" selected>No</option>

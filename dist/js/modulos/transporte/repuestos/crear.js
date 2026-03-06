@@ -10,14 +10,14 @@ function abrirModalCrearRepuesto() {
         <form id="formCrearRepuesto" novalidate>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div id="nombreRE" class="col-md-6 mb-3">
                         <label for="nombre_repuesto" class="form-label font-weight-bold">Nombre del Repuesto</label>
                         <input type="text" name="nombre_repuesto" id="nombre_repuesto" class="form-control" 
                                placeholder="Ej: Filtro de aceite" maxlength="100">
                         <div id="nombre_repuestoError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div id="proveedorRE" class="col-md-6 mb-3">
                         <label for="id_proveedor" class="form-label font-weight-bold">Proveedor</label>
                         <select name="id_proveedor" id="id_proveedor" class="form-control select2">
                             <option value="" disabled selected>Cargando proveedores...</option>
@@ -27,7 +27,7 @@ function abrirModalCrearRepuesto() {
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 mb-3">
+                    <div id="descripcionRE" class="col-md-12 mb-3">
                         <label for="descripcion" class="form-label font-weight-bold">Descripción</label>
                         <textarea name="descripcion" id="descripcion" class="form-control" rows="3" 
                                   maxlength="255" placeholder="Especificaciones técnicas del repuesto..."></textarea>
@@ -36,14 +36,14 @@ function abrirModalCrearRepuesto() {
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div id="fechaRE" class="col-md-6 mb-3">
                         <label for="fecha_creacion" class="form-label font-weight-bold">Fecha de Registro</label>
                         <input type="date" name="fecha_creacion" id="fecha_creacion" 
                                class="form-control" max="${fechaHoy}" value="${fechaHoy}">
                         <div id="fecha_creacionError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div id="estatusRE" class="col-md-6 mb-3">
                         <label for="estatus_repuesto" class="form-label font-weight-bold">Estado Actual</label>
                         <select name="estatus_repuesto" id="estatus_repuesto" class="form-control">
                             <option value="" selected disabled>Seleccione un estado</option>

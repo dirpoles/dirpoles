@@ -8,21 +8,21 @@ function abrirModalCrearVehiculo() {
         <form id="formCrearVehiculo" novalidate>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-4 mb-3">
+                    <div id="placaV" class="col-md-4 mb-3">
                         <label for="placa" class="form-label font-weight-bold">Placa</label>
                         <input type="text" name="placa" id="placa" class="form-control" 
                                placeholder="Ej: ABC1234" maxlength="7">
                         <div class="invalid-feedback" id="placaError"></div>
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div id="modeloV" class="col-md-4 mb-3">
                         <label for="modelo" class="form-label font-weight-bold">Modelo</label>
                         <input type="text" name="modelo" id="modelo" class="form-control" 
                                placeholder="Ej: Toyota HiAce 2023" maxlength="50">
                         <div id="modeloError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    <div id="tipoV" class="col-md-4 mb-3">
                         <label for="tipo" class="form-label font-weight-bold">Tipo de Vehículo</label>
                         <select name="tipo" id="tipo" class="form-control">
                             <option value="" disabled selected>Seleccione un tipo</option>
@@ -35,13 +35,13 @@ function abrirModalCrearVehiculo() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-6 mb-3">
+                    <div id="fechaV" class="col-md-6 mb-3">
                         <label for="fecha_adquisicion" class="form-label font-weight-bold">Fecha de Adquisición</label>
                         <input type="date" name="fecha_adquisicion" id="fecha_adquisicion" class="form-control">
                         <div id="fechaError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div id="estadoV" class="col-md-6 mb-3">
                         <label for="estado" class="form-label font-weight-bold">Estado Actual</label>
                         <select name="estado" id="estado" class="form-control">
                             <option value="" selected disabled>Seleccione una opción</option>

@@ -9,7 +9,7 @@ function abrirModalCrearProveedor() {
         <form id="formCrearProveedor" novalidate>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-3 mb-3">
+                    <div id="tipoDocPR" class="col-md-3 mb-3">
                         <label for="tipo_documento" class="form-label font-weight-bold">Tipo</label>
                         <select name="tipo_documento" id="tipo_documento" class="form-control">
                             <option value="" disabled selected>Seleccione</option>
@@ -21,14 +21,14 @@ function abrirModalCrearProveedor() {
                         <div id="tipo_documentoError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-3 mb-3">
+                    <div id="numDocPR" class="col-md-3 mb-3">
                         <label for="num_documento" class="form-label font-weight-bold">Documento</label>
                         <input type="text" name="num_documento" id="num_documento" class="form-control" 
                                placeholder="Ej: 12345678" maxlength="20">
                         <div id="num_documentoError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div id="nombrePR" class="col-md-6 mb-3">
                         <label for="nombre" class="form-label font-weight-bold">Nombre o Razón Social</label>
                         <input type="text" name="nombre" id="nombre" class="form-control" 
                                placeholder="Ej: Inversiones XYZ C.A." maxlength="100">
@@ -37,7 +37,7 @@ function abrirModalCrearProveedor() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-3 mb-3">
+                    <div id="prefijoPR" class="col-md-3 mb-3">
                         <label for="prefijo" class="form-label font-weight-bold">Prefijo</label>
                         <select name="prefijo" id="prefijo" class="form-control">
                             <option value="" selected disabled>Cod.</option>
@@ -51,7 +51,7 @@ function abrirModalCrearProveedor() {
                         </select>
                     </div>
 
-                    <div class="col-md-3 mb-3">
+                    <div id="telefonoPR" class="col-md-3 mb-3">
                         <label for="numero_telefono" class="form-label font-weight-bold">Teléfono</label>
                         <input type="tel" name="numero_telefono" id="numero_telefono" class="form-control" 
                                placeholder="7 dígitos" maxlength="7">
@@ -60,7 +60,7 @@ function abrirModalCrearProveedor() {
                     
                     <input type="hidden" name="telefono" id="telefono">
 
-                    <div class="col-md-6 mb-3">
+                    <div id="correoPR" class="col-md-6 mb-3">
                         <label for="correo" class="form-label font-weight-bold">Correo Electrónico</label>
                         <input type="email" name="correo" id="correo" class="form-control" 
                                placeholder="proveedor@empresa.com">
@@ -69,7 +69,7 @@ function abrirModalCrearProveedor() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-12 mb-3">
+                    <div id="direccionPR" class="col-md-12 mb-3">
                         <label for="direccion" class="form-label font-weight-bold">Dirección Fiscal / Comercial</label>
                         <textarea name="direccion" id="direccion" class="form-control" rows="2" 
                                   placeholder="Av. Principal, Edificio XYZ, Piso 5" maxlength="100"></textarea>

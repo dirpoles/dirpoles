@@ -42,7 +42,7 @@ var TransporteLoader = (function () {
      * @returns {string} URL completa del script
      */
     function construirUrl(modulo, archivo) {
-        return BASE_URL + 'dist/js/modulos/transporte/' + modulo + '/' + archivo + '.js';
+        return BASE_URL + 'dist/js/modulos/transporte/' + modulo + '/' + archivo + '.js?v=' + Date.now();
     }
 
     /**

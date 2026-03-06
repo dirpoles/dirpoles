@@ -64,3 +64,12 @@
 .mi-popover .driver-popover-arrow-side-bottom.driver-popover-arrow {
   border-bottom-color: #CAE8FC !important;
 }
+
+/* Z-index para que Driver.js se muestre por encima de los modales de Bootstrap */
+.driver-active .driver-overlay {
+  z-index: 100000 !important;
+}
+
+.driver-active .driver-popover {
+  z-index: 100001 !important;
+}

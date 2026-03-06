@@ -333,7 +333,10 @@ include BASE_PATH . '/app/Views/template/head.php';
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalGenericoTitle"></h5>
+                    <div class="d-flex align-items-center w-100">
+                        <h5 class="modal-title mb-0" id="modalGenericoTitle"></h5>
+                        <i id="btnAyudaModal" class="fa fa-question-circle ms-auto me-3 fa-lg text-white" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
+                    </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalContenido">

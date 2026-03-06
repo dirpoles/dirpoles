@@ -9,14 +9,14 @@ function abrirModalCrearRuta() {
         <form id="formCrearRuta" novalidate>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div id="nombreRU" class="col-md-6 mb-3">
                         <label for="nombre_ruta" class="form-label font-weight-bold">Nombre de la Ruta</label>
                         <input type="text" name="nombre_ruta" id="nombre_ruta" class="form-control" 
                                placeholder="Escriba un nombre para la ruta">
                         <div id="nombre_rutaError" class="invalid-feedback"></div>
                     </div>
                     
-                    <div class="col-md-6 mb-3">
+                    <div id="tipoRU" class="col-md-6 mb-3">
                         <label for="tipo_ruta" class="form-label font-weight-bold">Tipo de Ruta</label>
                         <select name="tipo_ruta" id="tipo_ruta" class="form-control">
                             <option value="" disabled selected>Seleccione...</option>
@@ -31,19 +31,19 @@ function abrirModalCrearRuta() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-4 mb-3">
+                    <div id="horarioSalidaRU" class="col-md-4 mb-3">
                         <label for="horario_salida" class="form-label font-weight-bold">Hora de Salida</label>
                         <input type="time" name="horario_salida" id="horario_salida" class="form-control">
                         <div id="horario_salidaError" class="invalid-feedback"></div>
                     </div>
                     
-                    <div class="col-md-4 mb-3">
+                    <div id="horarioLlegadaRU" class="col-md-4 mb-3">
                         <label for="horario_llegada" class="form-label font-weight-bold">Hora de Llegada</label>
                         <input type="time" name="horario_llegada" id="horario_llegada" class="form-control">
                         <div id="horario_llegadaError" class="invalid-feedback"></div>
                     </div>
                     
-                    <div class="col-md-4 mb-3">
+                    <div id="estatusRU" class="col-md-4 mb-3">
                         <label for="estatus_ruta" class="form-label font-weight-bold">Estatus</label>
                         <select name="estatus" id="estatus_ruta" class="form-control">
                             <option value="" selected disabled>Seleccione...</option>
@@ -55,14 +55,14 @@ function abrirModalCrearRuta() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-6 mb-3">
+                    <div id="puntoPartidaRU" class="col-md-6 mb-3">
                         <label for="punto_partida" class="form-label font-weight-bold">Punto de Partida</label>
                         <input type="text" name="punto_partida" id="punto_partida" class="form-control" 
                                placeholder="Ej: Terminal Principal">
                         <div id="punto_partidaError" class="invalid-feedback"></div>
                     </div>
                     
-                    <div class="col-md-6 mb-3">
+                    <div id="puntoDestinoRU" class="col-md-6 mb-3">
                         <label for="punto_destino" class="form-label font-weight-bold">Punto de Destino</label>
                         <input type="text" name="punto_destino" id="punto_destino" class="form-control" 
                                placeholder="Ej: Sede Universitaria">
@@ -71,7 +71,7 @@ function abrirModalCrearRuta() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-12 mb-3">
+                    <div id="trayectoriaRU" class="col-md-12 mb-3">
                         <label for="trayectoria" class="form-label font-weight-bold">Trayectoria Detallada</label>
                         <textarea name="trayectoria" id="trayectoria" class="form-control" rows="3" 
                                   placeholder="Describa el recorrido completo de la ruta..."></textarea>

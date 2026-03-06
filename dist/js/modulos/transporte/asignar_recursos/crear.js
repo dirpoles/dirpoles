@@ -10,7 +10,7 @@ function abrirModalCrearAsignacion() {
         <form id="formAsignarRecursos" novalidate>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div id="rutaAR" class="col-md-6 mb-3">
                         <label for="id_ruta" class="form-label font-weight-bold">Ruta Asignada</label>
                         <select name="id_ruta" id="id_ruta" class="form-control select2">
                             <option value="" disabled selected>Cargando rutas...</option>
@@ -18,7 +18,7 @@ function abrirModalCrearAsignacion() {
                         <div id="id_rutaError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div id="fechaAR" class="col-md-6 mb-3">
                         <label for="fecha_asignacion" class="form-label font-weight-bold">Fecha de Asignación</label>
                         <input type="date" name="fecha_asignacion" id="fecha_asignacion" 
                                class="form-control" min="${fechaHoy}" value="${fechaHoy}">
@@ -27,7 +27,7 @@ function abrirModalCrearAsignacion() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-6 mb-3">
+                    <div id="vehiculoAR" class="col-md-6 mb-3">
                         <label for="id_vehiculo" class="form-label font-weight-bold">Vehículo</label>
                         <select name="id_vehiculo" id="id_vehiculo" class="form-control select2">
                             <option value="" disabled selected>Cargando vehículos...</option>
@@ -35,7 +35,7 @@ function abrirModalCrearAsignacion() {
                         <div id="id_vehiculoError" class="invalid-feedback"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div id="choferAR" class="col-md-6 mb-3">
                         <label for="id_empleado" class="form-label font-weight-bold">Chofer / Conductor</label>
                         <select name="id_empleado" id="id_empleado" class="form-control select2">
                             <option value="" disabled selected>Cargando personal...</option>
@@ -45,7 +45,7 @@ function abrirModalCrearAsignacion() {
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-6 mb-3">
+                    <div id="estatusAR" class="col-md-6 mb-3">
                         <label for="estatus" class="form-label font-weight-bold">Estatus de la Asignación</label>
                         <select name="estatus" id="estatus" class="form-control">
                             <option value="" disabled selected>Seleccione...</option>
