@@ -13,6 +13,9 @@ $(function () {
                             extend: 'excel',
                             text: '<i class="fas fa-file-excel"></i> Excel',
                             className: 'btn btn-success',
+                            attr: {
+                                id: 'btn-excele'
+                            },
                             exportOptions: {
                                 columns: ':visible',
                                 format: {
@@ -27,6 +30,9 @@ $(function () {
                             extend: 'pdf',
                             text: '<i class="fas fa-file-pdf"></i> PDF',
                             className: 'btn btn-danger',
+                            attr: {
+                                id: 'btn-pdfe'
+                            },
                             orientation: 'landscape',
                             pageSize: 'A4',
                             exportOptions: {
@@ -38,6 +44,9 @@ $(function () {
                         {
                             text: '<i class="fas fa-plus"></i> Crear Equipo',
                             className: 'btn btn-info',
+                            attr: {
+                                id: 'btn-creare'
+                            },
                             action: function () {
                                 window.location.href = 'crear_inventario_mob';
                             }
@@ -45,6 +54,9 @@ $(function () {
                         {
                             text: '<i class="fas fa-table"></i> Consultar Movimientos',
                             className: 'btn btn-secondary',
+                            attr: {
+                                id: 'btn-consultare'
+                            },
                             action: function () {
                                 mostrarMovimientos();
                             }
@@ -132,19 +144,19 @@ $(function () {
                     render: function (data, type, row) {
                         return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button class="btn btn-primary btn-ver" 
+                                <button id="btn-vere" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-info btn-editar" 
+                                <button id="btn-editare" class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-eliminar" 
+                                <button id="btn-eliminare" class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Eliminar">

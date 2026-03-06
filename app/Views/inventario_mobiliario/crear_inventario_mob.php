@@ -126,7 +126,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                     <!-- Fila inicial (debe conservar los ids con _0) -->
                                                     <div class="item-row-mobiliario mb-3 border-bottom pb-3">
                                                         <div class="row">
-                                                            <div class="col-md-6 mb-3">
+                                                            <div id="input_tipo_mobiliario" class="col-md-6 mb-3">
                                                                 <label for="id_tipo_mobiliario_0" class="form-label">Tipo de Mobiliario <span class="text-danger">*</span></label>
                                                                 <select class="form-control select2 tipo-mobiliario" name="id_tipo_mobiliario[]" id="id_tipo_mobiliario_0">
                                                                     <option value="">Seleccione...</option>
@@ -136,7 +136,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                                 </select>
                                                                 <div id="id_tipo_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-6 mb-3">
+                                                            <div id="input_ubicacion" class="col-md-6 mb-3">
                                                                 <label for="id_servicios_mobiliario_0" class="form-label">Ubicación <span class="text-danger">*</span></label>
                                                                 <select class="form-control select2" name="id_servicios[]" id="id_servicios_mobiliario_0">
                                                                     <option value="">Seleccione...</option>
@@ -149,22 +149,22 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                         </div>
 
                                                         <div class="row">
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_marca" class="col-md-2 mb-3">
                                                                 <label for="marca_mobiliario_0" class="form-label">Marca <span class="text-danger">*</label>
                                                                 <input type="text" class="form-control" name="marca[]" id="marca_mobiliario_0">
                                                                 <div id="marca_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_modelo" class="col-md-2 mb-3">
                                                                 <label for="modelo_mobiliario_0" class="form-label">Modelo <span class="text-danger">*</label>
                                                                 <input type="text" class="form-control" name="modelo[]" id="modelo_mobiliario_0">
                                                                 <div id="modelo_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_color" class="col-md-2 mb-3">
                                                                 <label for="color_mobiliario_0" class="form-label">Color <span class="text-danger">*</label>
                                                                 <input type="text" class="form-control" name="color[]" id="color_mobiliario_0">
                                                                 <div id="color_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_estado" class="col-md-2 mb-3">
                                                                 <label for="estado_mobiliario_0" class="form-label">Estado <span class="text-danger">*</span></label>
                                                                 <select class="form-control" name="estado[]" id="estado_mobiliario_0">
                                                                     <option value="" disabled selected>Seleccione una opción...</option>
@@ -174,12 +174,12 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                                 </select>
                                                                 <div id="estado_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_cantidad" class="col-md-2 mb-3">
                                                                 <label for="cantidad_mobiliario_0" class="form-label">Cantidad <span class="text-danger">*</span></label>
                                                                 <input type="text" class="form-control" name="cantidad[]" id="cantidad_mobiliario_0">
                                                                 <div id="cantidad_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_fecha_adquisicion" class="col-md-2 mb-3">
                                                                 <label for="fecha_adquisicion_mobiliario_0" class="form-label">Fecha Adquisición <span class="text-danger">*</label>
                                                                 <input type="date" class="form-control" name="fecha_adquisicion[]" id="fecha_adquisicion_mobiliario_0">
                                                                 <div id="fecha_adquisicion_mobiliario_0Error" class="form-text text-danger"></div>
@@ -187,21 +187,21 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                         </div>
 
                                                         <div class="row">
-                                                            <div class="col-md-5 mb-3">
+                                                            <div id="input_descripcion" class="col-md-5 mb-3">
                                                                 <label for="descripcion_mobiliario_0" class="form-label">Descripción <span class="text-danger">*</label>
                                                                 <textarea class="form-control" name="descripcion[]" rows="2" id="descripcion_mobiliario_0"></textarea>
                                                                 <div id="descripcion_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-6 mb-3">
+                                                            <div id="input_observaciones" class="col-md-6 mb-3">
                                                                 <label for="observaciones_mobiliario_0" class="form-label">Observaciones</label>
                                                                 <textarea class="form-control" name="observaciones[]" rows="2" id="observaciones_mobiliario_0"></textarea>
                                                                 <div id="observaciones_mobiliario_0Error" class="form-text text-danger"></div>
                                                             </div>
                                                             <div class="col-md-1 d-flex align-items-end justify-content-end gap-2 mb-3">
-                                                                <button type="button" class="btn btn-danger btn-sm btn-remove-row" title="Eliminar fila">
+                                                                <button id="btnEliminarFilaMobiliario" type="button" class="btn btn-danger btn-sm btn-remove-row" title="Eliminar fila">
                                                                     <i class="fa-solid fa-trash-can"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-success btn-sm btn-add-row" data-target="mobiliario" title="Agregar fila">
+                                                                <button id="btnAgregarFilaMobiliario" type="button" class="btn btn-success btn-sm btn-add-row" data-target="mobiliario" title="Agregar fila">
                                                                     <i class="fa-solid fa-plus"></i>
                                                                 </button>
                                                             </div>
@@ -233,7 +233,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                     <!-- Fila inicial equipo -->
                                                     <div class="item-row-equipo mb-3 border-bottom pb-3">
                                                         <div class="row">
-                                                            <div class="col-md-6 mb-3">
+                                                            <div id="input_tipo_equipo" class="col-md-6 mb-3">
                                                                 <label for="id_tipo_equipo_0" class="form-label">Tipo de Equipo <span class="text-danger">*</span></label>
                                                                 <select class="form-control select2 tipo-equipo" name="id_tipo_equipo[]" id="id_tipo_equipo_0">
                                                                     <option value="">Seleccione...</option>
@@ -243,7 +243,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                                 </select>
                                                                 <div id="id_tipo_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-6 mb-3">
+                                                            <div id="input_ubicacion_equipo" class="col-md-6 mb-3">
                                                                 <label for="id_servicios_equipo_0" class="form-label">Ubicación <span class="text-danger">*</span></label>
                                                                 <select class="form-control select2" name="id_servicios[]" id="id_servicios_equipo_0">
                                                                     <option value="">Seleccione...</option>
@@ -256,27 +256,27 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                         </div>
 
                                                         <div class="row">
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_marca_equipo" class="col-md-2 mb-3">
                                                                 <label for="marca_equipo_0" class="form-label">Marca</label>
                                                                 <input type="text" class="form-control" name="marca[]" id="marca_equipo_0">
                                                                 <div id="marca_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_modelo_equipo" class="col-md-2 mb-3">
                                                                 <label for="modelo_equipo_0" class="form-label">Modelo</label>
                                                                 <input type="text" class="form-control" name="modelo[]" id="modelo_equipo_0">
                                                                 <div id="modelo_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_serial_equipo" class="col-md-2 mb-3">
                                                                 <label for="serial_equipo_0" class="form-label">Serial</label>
                                                                 <input type="text" class="form-control" name="serial[]" id="serial_equipo_0">
                                                                 <div id="serial_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_color_equipo" class="col-md-2 mb-3">
                                                                 <label for="color_equipo_0" class="form-label">Color</label>
                                                                 <input type="text" class="form-control" name="color[]" id="color_equipo_0">
                                                                 <div id="color_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_estado_equipo" class="col-md-2 mb-3">
                                                                 <label for="estado_equipo_0" class="form-label">Estado <span class="text-danger">*</span></label>
                                                                 <select class="form-control" name="estado[]" id="estado_equipo_0">
                                                                     <option value="" disabled selected>Seleccione...</option>
@@ -288,7 +288,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                                 </select>
                                                                 <div id="estado_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-2 mb-3">
+                                                            <div id="input_fecha_adquisicion_equipo" class="col-md-2 mb-3">
                                                                 <label for="fecha_adquisicion_equipo_0" class="form-label">Fecha Adquisición</label>
                                                                 <input type="date" class="form-control" name="fecha_adquisicion[]" id="fecha_adquisicion_equipo_0">
                                                                 <div id="fecha_adquisicion_equipo_0Error" class="form-text text-danger"></div>
@@ -296,21 +296,21 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                         </div>
 
                                                         <div class="row">
-                                                            <div class="col-md-5 mb-3">
+                                                            <div id="input_descripcion_equipo" class="col-md-5 mb-3">
                                                                 <label for="descripcion_adicional_equipo_0" class="form-label">Descripción Adicional</label>
                                                                 <textarea class="form-control" name="descripcion[]" rows="2" id="descripcion_adicional_equipo_0"></textarea>
                                                                 <div id="descripcion_adicional_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
-                                                            <div class="col-md-6 mb-3">
+                                                            <div id="input_observaciones_equipo" class="col-md-6 mb-3">
                                                                 <label for="observaciones_equipo_0" class="form-label">Observaciones</label>
                                                                 <textarea class="form-control" name="observaciones[]" rows="2" id="observaciones_equipo_0"></textarea>
                                                                 <div id="observaciones_equipo_0Error" class="form-text text-danger"></div>
                                                             </div>
                                                             <div class="col-md-1 d-flex align-items-end justify-content-end gap-2 mb-3">
-                                                                <button type="button" class="btn btn-danger btn-sm btn-remove-row" title="Eliminar fila">
+                                                                <button id="btnEliminarFilaEquipo" type="button" class="btn btn-danger btn-sm btn-remove-row" title="Eliminar fila">
                                                                     <i class="fa-solid fa-trash-can"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-success btn-sm btn-add-row" data-target="equipo" title="Agregar fila">
+                                                                <button id="btnAgregarFilaEquipo" type="button" class="btn btn-success btn-sm btn-add-row" data-target="equipo" title="Agregar fila">
                                                                     <i class="fa-solid fa-plus"></i>
                                                                 </button>
                                                             </div>
@@ -357,7 +357,7 @@ include BASE_PATH . '/app/Views/template/head.php';
     <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
     <script src="<?= BASE_URL ?>/dist/js/modulos/inventario_mob/crear_mobiliario.js"></script>
     <script src="<?= BASE_URL ?>/dist/js/modulos/inventario_mob/crear_equipo.js"></script>
-
+    <script src="<?= BASE_URL ?>/dist/js/modulos/inventario_mob/crear_driver.js"></script>
 
 </body>
 

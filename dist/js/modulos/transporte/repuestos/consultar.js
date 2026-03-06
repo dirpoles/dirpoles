@@ -12,6 +12,9 @@ $('#tabla_repuestos').DataTable({
                     extend: 'excel',
                     text: '<i class="fas fa-file-excel"></i> Excel',
                     className: 'btn btn-success',
+                    attr: {
+                        id: 'btnExcel'
+                    },
                     exportOptions: {
                         columns: ':visible',
                         format: {
@@ -26,6 +29,9 @@ $('#tabla_repuestos').DataTable({
                     extend: 'pdf',
                     text: '<i class="fas fa-file-pdf"></i> PDF',
                     className: 'btn btn-danger',
+                    attr: {
+                        id: 'btnPdf'
+                    },
                     orientation: 'landscape',
                     pageSize: 'A4',
                     exportOptions: {
@@ -36,6 +42,9 @@ $('#tabla_repuestos').DataTable({
                 },
                 {
                     text: '<i class="fas fa-plus"></i> Crear Repuesto',
+                    attr: {
+                        id: 'btnCrear'
+                    },
                     className: 'btn btn-info',
                     action: function () {
                         TransporteLoader.cargar('repuestos', 'crear', function () {
@@ -45,6 +54,9 @@ $('#tabla_repuestos').DataTable({
                 },
                 {
                     text: '<i class="fas fa-plus"></i> Agregar Entrada',
+                    attr: {
+                        id: 'btnAgregarEntrada'
+                    },
                     className: 'btn btn-success',
                     action: function () {
                         AlertManager.info('Funcionalidad en desarrollo');
@@ -55,6 +67,9 @@ $('#tabla_repuestos').DataTable({
                 },
                 {
                     text: '<i class="fas fa-exchange-alt"></i> Movimientos del Inventario',
+                    attr: {
+                        id: 'btnMovimientos'
+                    },
                     className: 'btn btn-warning',
                     action: function () {
                         AlertManager.info('Funcionalidad en desarrollo');
@@ -147,19 +162,19 @@ $('#tabla_repuestos').DataTable({
             render: function (data, type, row) {
                 return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button class="btn btn-primary btn-ver" 
+                                <button id="btnVer" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-info btn-editar" 
+                                <button id="btnEditar" class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar repuesto">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-eliminar" 
+                                <button id="btnEliminar" class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Eliminar repuesto">

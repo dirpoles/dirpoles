@@ -12,6 +12,9 @@ $('#tabla_rutas').DataTable({
                     extend: 'excel',
                     text: '<i class="fas fa-file-excel"></i> Excel',
                     className: 'btn btn-success',
+                    attr: {
+                        id: 'btnExcel'
+                    },
                     exportOptions: {
                         columns: ':visible',
                         format: {
@@ -28,6 +31,9 @@ $('#tabla_rutas').DataTable({
                     className: 'btn btn-danger',
                     orientation: 'landscape',
                     pageSize: 'A4',
+                    attr: {
+                        id: 'btnPdf'
+                    },
                     exportOptions: {
                         columns: ':visible',
                         stripHtml: true
@@ -37,6 +43,9 @@ $('#tabla_rutas').DataTable({
                 {
                     text: '<i class="fas fa-plus"></i> Crear Ruta',
                     className: 'btn btn-info',
+                    attr: {
+                        id: 'btnCrear'
+                    },
                     action: function () {
                         TransporteLoader.cargar('rutas', 'crear', function () {
                             abrirModalCrearRuta();
@@ -100,19 +109,19 @@ $('#tabla_rutas').DataTable({
             render: function (data, type, row) {
                 return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button class="btn btn-primary btn-ver" 
+                                <button id="btnVer" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-info btn-editar" 
+                                <button id="btnEditar" class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar ruta">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-eliminar" 
+                                <button id="btnEliminar" class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Eliminar ruta">

@@ -112,10 +112,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                             <div class="col-lg-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Registrar Nuevo Insumo<i
-                                                id="btn-ayuda"
-                                                class="fa fa-question-circle float-right fa-lg text-primary"
-                                                data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i></h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Registrar Nuevo Insumo<i id="btn-ayuda" class="fa fa-question-circle float-right fa-lg text-primary" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i></h6>
                                     </div>
                                     <div class="card-body">
                                         <form action="<?= BASE_URL ?>registrar_insumo" method="POST" autocomplete="off"
