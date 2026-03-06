@@ -97,3 +97,33 @@ Router::get('reportes_referencias_data', function () {
     load_controller('reportesController.php');
     reportes_referencias_data();
 });
+
+Router::get('reportes_jornadas', function () {
+    load_controller('reportesController.php');
+    reportes_jornadas();
+});
+
+Router::get('reportes_jornadas_data', function () {
+    load_controller('reportesController.php');
+    reportes_jornadas_data();
+});
+
+Router::get('reportes_mobiliario', function () {
+    load_controller('reportesController.php');
+    reportes_mobiliario();
+});
+
+Router::get('reportes_mobiliario_data', function () {
+    load_controller('reportesController.php');
+    reportes_mobiliario_data();
+});
+
+Router::get('reportes_transporte', function () {
+    load_controller('reportesController.php');
+    reportes_transporte();
+});
+
+Router::get('reportes_transporte_data', function () {
+    load_controller('reportesController.php');
+    reportes_transporte_data();
+});
