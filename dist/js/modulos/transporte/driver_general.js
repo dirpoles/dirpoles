@@ -444,7 +444,7 @@ window.onload = function () {
 
     const asignacionesSteps = [
       {
-        element: "#btnExcel",
+        element: "#btnExcelAR",
         popover: {
           title: "Exportar a Excel",
           description: "Exportar la tabla a Excel.",
@@ -452,7 +452,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnPdf",
+        element: "#btnPdfAR",
         popover: {
           title: "Exportar a PDF",
           description: "Exportar la tabla a PDF.",
@@ -460,7 +460,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnCrear",
+        element: "#btnCrearAR",
         popover: {
           title: "Crear Asignacion",
           description: "Crear una nueva asignacion.",
@@ -476,7 +476,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnVer",
+        element: "#btnVerAR",
         popover: {
           title: "Ver Asignacion",
           description:
@@ -485,7 +485,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEditar",
+        element: "#btnEditarAR",
         popover: {
           title: "Editar Asignacion",
           description:
@@ -494,7 +494,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEliminar",
+        element: "#btnEliminarAR",
         popover: {
           title: "Eliminar Asignacion",
           description:

@@ -12,7 +12,7 @@ $('#tabla_asignar_recursos').DataTable({
                     extend: 'excel',
                     text: '<i class="fas fa-file-excel"></i> Excel',
                     attr: {
-                        id: 'btnExcel'
+                        id: 'btnExcelAR'
                     },
                     className: 'btn btn-success',
                     exportOptions: {
@@ -29,7 +29,7 @@ $('#tabla_asignar_recursos').DataTable({
                     extend: 'pdf',
                     text: '<i class="fas fa-file-pdf"></i> PDF',
                     attr: {
-                        id: 'btnPdf'
+                        id: 'btnPdfAR'
                     },
                     className: 'btn btn-danger',
                     orientation: 'landscape',
@@ -43,7 +43,7 @@ $('#tabla_asignar_recursos').DataTable({
                 {
                     text: '<i class="fas fa-plus"></i> Crear Asignación',
                     attr: {
-                        id: 'btnCrear'
+                        id: 'btnCrearAR'
                     },
                     className: 'btn btn-info',
                     action: function () {
@@ -116,19 +116,19 @@ $('#tabla_asignar_recursos').DataTable({
             render: function (data, type, row) {
                 return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button id="btnVer" class="btn btn-primary btn-ver" 
+                                <button id="btnVerAR" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button id="btnEditar" class="btn btn-info btn-editar" 
+                                <button id="btnEditarAR" class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar asignación">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button id="btnEliminar" class="btn btn-danger btn-eliminar" 
+                                <button id="btnEliminarAR" class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Eliminar asignación">
