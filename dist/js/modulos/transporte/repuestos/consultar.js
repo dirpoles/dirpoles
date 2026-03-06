@@ -13,7 +13,7 @@ $('#tabla_repuestos').DataTable({
                     text: '<i class="fas fa-file-excel"></i> Excel',
                     className: 'btn btn-success',
                     attr: {
-                        id: 'btnExcel'
+                        id: 'btnExcelRE'
                     },
                     exportOptions: {
                         columns: ':visible',
@@ -30,7 +30,7 @@ $('#tabla_repuestos').DataTable({
                     text: '<i class="fas fa-file-pdf"></i> PDF',
                     className: 'btn btn-danger',
                     attr: {
-                        id: 'btnPdf'
+                        id: 'btnPdfRE'
                     },
                     orientation: 'landscape',
                     pageSize: 'A4',
@@ -43,7 +43,7 @@ $('#tabla_repuestos').DataTable({
                 {
                     text: '<i class="fas fa-plus"></i> Crear Repuesto',
                     attr: {
-                        id: 'btnCrear'
+                        id: 'btnCrearRE'
                     },
                     className: 'btn btn-info',
                     action: function () {
@@ -55,7 +55,7 @@ $('#tabla_repuestos').DataTable({
                 {
                     text: '<i class="fas fa-plus"></i> Agregar Entrada',
                     attr: {
-                        id: 'btnAgregarEntrada'
+                        id: 'btnAgregarEntradaRE'
                     },
                     className: 'btn btn-success',
                     action: function () {
@@ -68,7 +68,7 @@ $('#tabla_repuestos').DataTable({
                 {
                     text: '<i class="fas fa-exchange-alt"></i> Movimientos del Inventario',
                     attr: {
-                        id: 'btnMovimientos'
+                        id: 'btnMovimientosRE'
                     },
                     className: 'btn btn-warning',
                     action: function () {
@@ -162,19 +162,19 @@ $('#tabla_repuestos').DataTable({
             render: function (data, type, row) {
                 return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button id="btnVer" class="btn btn-primary btn-ver" 
+                                <button id="btnVerRE" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button id="btnEditar" class="btn btn-info btn-editar" 
+                                <button id="btnEditarRE" class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar repuesto">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button id="btnEliminar" class="btn btn-danger btn-eliminar" 
+                                <button id="btnEliminarRE" class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Eliminar repuesto">

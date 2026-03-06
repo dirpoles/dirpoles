@@ -138,7 +138,7 @@ window.onload = function () {
 
     const proveedoresSteps = [
       {
-        element: "#btnExcel",
+        element: "#btnExcelPR",
         popover: {
           title: "Exportar a Excel",
           description: "Exportar la tabla a Excel.",
@@ -146,7 +146,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnPdf",
+        element: "#btnPdfPR",
         popover: {
           title: "Exportar a PDF",
           description: "Exportar la tabla a PDF.",
@@ -154,7 +154,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnCrear",
+        element: "#btnCrearPR",
         popover: {
           title: "Crear Proveedor",
           description: "Crear un nuevo proveedor.",
@@ -170,7 +170,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnVer",
+        element: "#btnVerPR",
         popover: {
           title: "Ver Proveedor",
           description:
@@ -179,7 +179,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEditar",
+        element: "#btnEditarPR",
         popover: {
           title: "Editar Proveedor",
           description:
@@ -188,7 +188,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEliminar",
+        element: "#btnEliminarPR",
         popover: {
           title: "Eliminar Proveedor",
           description:
@@ -200,7 +200,7 @@ window.onload = function () {
 
     const rutasSteps = [
       {
-        element: "#btnExcel",
+        element: "#btnExcelR",
         popover: {
           title: "Exportar a Excel",
           description: "Exportar la tabla a Excel.",
@@ -208,7 +208,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnPdf",
+        element: "#btnPdfR",
         popover: {
           title: "Exportar a PDF",
           description: "Exportar la tabla a PDF.",
@@ -216,7 +216,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnCrear",
+        element: "#btnCrearR",
         popover: {
           title: "Crear Ruta",
           description: "Crear una nueva ruta.",
@@ -232,7 +232,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnVer",
+        element: "#btnVerR",
         popover: {
           title: "Ver Ruta",
           description:
@@ -241,7 +241,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEditar",
+        element: "#btnEditarR",
         popover: {
           title: "Editar Ruta",
           description:
@@ -250,7 +250,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEliminar",
+        element: "#btnEliminarR",
         popover: {
           title: "Eliminar Ruta",
           description:
@@ -324,7 +324,7 @@ window.onload = function () {
 
     const repuestosSteps = [
       {
-        element: "#btnExcel",
+        element: "#btnExcelRE",
         popover: {
           title: "Exportar a Excel",
           description: "Exportar la tabla a Excel.",
@@ -332,7 +332,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnPdf",
+        element: "#btnPdfRE",
         popover: {
           title: "Exportar a PDF",
           description: "Exportar la tabla a PDF.",
@@ -340,7 +340,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnCrear",
+        element: "#btnCrearRE",
         popover: {
           title: "Crear Repuesto",
           description: "Crear un nuevo repuesto.",
@@ -348,7 +348,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnAgregarEntrada",
+        element: "#btnAgregarEntradaRE",
         popover: {
           title: "Agregar Entrada",
           description: "Agregar un nuevo repuesto al inventario.",
@@ -356,7 +356,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnMovimientos",
+        element: "#btnMovimientosRE",
         popover: {
           title: "Movimientos del Inventario",
           description: "Ver los movimientos del inventario.",
@@ -372,7 +372,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnVer",
+        element: "#btnVerRE",
         popover: {
           title: "Ver Repuesto",
           description:
@@ -381,7 +381,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEditar",
+        element: "#btnEditarRE",
         popover: {
           title: "Editar Repuesto",
           description:
@@ -390,7 +390,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEliminar",
+        element: "#btnEliminarRE",
         popover: {
           title: "Eliminar Repuesto",
           description:
@@ -402,7 +402,7 @@ window.onload = function () {
 
     const mantenimientosSteps = [
       {
-        element: "#btnExcel",
+        element: "#btnExcelM",
         popover: {
           title: "Exportar a Excel",
           description: "Exportar la tabla a Excel.",
@@ -410,7 +410,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnPdf",
+        element: "#btnPdfM",
         popover: {
           title: "Exportar a PDF",
           description: "Exportar la tabla a PDF.",
@@ -418,7 +418,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnCrear",
+        element: "#btnCrearM",
         popover: {
           title: "Crear Mantenimiento",
           description: "Crear un nuevo mantenimiento.",
@@ -434,7 +434,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnVer",
+        element: "#btnVerM",
         popover: {
           title: "Ver Mantenimiento",
           description:
@@ -443,7 +443,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEditar",
+        element: "#btnEditarM",
         popover: {
           title: "Editar Mantenimiento",
           description:
@@ -452,7 +452,7 @@ window.onload = function () {
         },
       },
       {
-        element: "#btnEliminar",
+        element: "#btnEliminarM",
         popover: {
           title: "Eliminar Mantenimiento",
           description:

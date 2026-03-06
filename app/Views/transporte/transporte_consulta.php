@@ -327,8 +327,6 @@ include BASE_PATH . '/app/Views/template/head.php';
     </script>
     <script src="<?= BASE_URL ?>dist/js/modulos/transporte/consultar_general.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/transporte/estadisticas_transporte.js"></script>
-    <script src="<?= BASE_URL ?>dist/js/modulos/transporte/driver_general.js"></script>
-
 
     <!-- Modal Genérico -->
     <div class="modal fade" id="modalGenerico" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -384,6 +382,8 @@ include BASE_PATH . '/app/Views/template/head.php';
             calendar.render();
         });
     </script>
+
+    <script src="<?= BASE_URL ?>dist/js/modulos/transporte/driver_general.js"></script>
 </body>
 
 </html>
