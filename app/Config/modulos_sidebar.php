@@ -121,5 +121,12 @@ return [
             ['url' => 'reportes_transporte', 'texto' => 'Transporte', 'permiso' => 2]
         ]
     ],
-    // Agrega los demás módulos...
+    'group_ayuda' => [
+        'key' => 'ayuda',
+        'icon' => 'fa-info-circle',
+        'titulo' => 'Ayuda',
+        'subitems' => [
+            ['url' => 'ayuda', 'texto' => 'Guía de Usuario', 'permiso' => 2]
+        ]
+    ]
 ];

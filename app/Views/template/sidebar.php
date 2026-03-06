@@ -28,18 +28,20 @@ $modulosPermitidos ??= ($_SESSION['modulosPermitidos'] ?? []);
 
 
     <!-- Módulos dinámicos -->
-    <?php 
-    if (!empty($modulosConfig)): 
-        foreach ($modulosConfig as $key => $config): 
+    <?php
+    if (!empty($modulosConfig)):
+        foreach ($modulosConfig as $key => $config):
             // Filtrar subitems permitidos
             $visibleSubitems = [];
             if (isset($config['subitems']) && is_array($config['subitems'])) {
                 foreach ($config['subitems'] as $subitem) {
-                    // Determinar ID del módulo: si el subitem tiene 'id_modulo', usarlo.
-                    // Si no, y la clave principal es numérica (es el ID), usar esa.
+                    // Si el subitem tiene un ID de módulo o si la clave principal es numérica
                     $targetModuleId = $subitem['id_modulo'] ?? (is_int($key) ? $key : null);
 
-                    if ($targetModuleId && isset($modulosPermitidos[$targetModuleId])) {
+                    // LÓGICA DE VISIBILIDAD:
+                    // 1. Si el módulo tiene un ID y el usuario tiene permiso.
+                    // 2. O si es un módulo "público" (llave no numérica, ej: 'group_ayuda')
+                    if (!is_int($key) || ($targetModuleId && isset($modulosPermitidos[$targetModuleId]))) {
                         $visibleSubitems[] = $subitem;
                     }
                 }
@@ -50,25 +52,25 @@ $modulosPermitidos ??= ($_SESSION['modulosPermitidos'] ?? []);
 
             $collapseId = 'collapse' . ucfirst($config['key']);
     ?>
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#<?= $collapseId ?>">
-                <i class="fa-solid <?= $config['icon'] ?>"></i>
-                <span><?= htmlspecialchars($config['titulo']) ?></span>
-            </a>
-            <div id="<?= $collapseId ?>" class="collapse">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <?php foreach ($visibleSubitems as $subitem): ?>
-                        <a class="collapse-item" href="<?= BASE_URL . $subitem['url'] ?>">
-                            <?= htmlspecialchars($subitem['texto']) ?>
-                        </a>
-                    <?php endforeach; ?>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#<?= $collapseId ?>">
+                    <i class="fa-solid <?= $config['icon'] ?>"></i>
+                    <span><?= htmlspecialchars($config['titulo']) ?></span>
+                </a>
+                <div id="<?= $collapseId ?>" class="collapse">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <?php foreach ($visibleSubitems as $subitem): ?>
+                            <a class="collapse-item" href="<?= BASE_URL . $subitem['url'] ?>">
+                                <?= htmlspecialchars($subitem['texto']) ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
 
-    <?php 
-        endforeach; 
-    endif; 
+    <?php
+        endforeach;
+    endif;
     ?>
 
     <!-- Divider -->
