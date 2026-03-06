@@ -24,6 +24,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <h6 class="m-0 font-weight-bold text-primary">Gestión de Inventario de Mobiliarios y Equipos</h6>
+                                    <i id="btn-ayuda" class="fa fa-question-circle fa-lg text-primary" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
                                 </div>
                                 <div class="card-body">
                                     <!-- Tabs de navegación -->
@@ -51,7 +52,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_mobiliario" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="tr_mobiliario">
                                                             <th>Tipo</th>
                                                             <th>Marca</th>
                                                             <th>Modelo</th>
@@ -75,7 +76,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_equipos" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="tr_equipos">
                                                             <th>Tipo</th>
                                                             <th>Marca</th>
                                                             <th>Modelo</th>
@@ -97,7 +98,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_fichas" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="tr_fichas">
                                                             <th>Ficha Técnica</th>
                                                             <th>Servicio</th>
                                                             <th>Responsable</th>
@@ -134,6 +135,7 @@ include BASE_PATH . '/app/Views/template/head.php';
     <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_mobiliario.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_equipos.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_fichas.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_driver.js"></script>
 
     <!-- Modal Genérico -->
     <div class="modal fade" id="modalGenerico" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">

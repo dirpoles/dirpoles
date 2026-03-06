@@ -27,6 +27,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <h6 class="m-0 font-weight-bold text-primary">Gestión de Transporte</h6>
+                                    <i id="btn-ayuda" class="fa fa-question-circle fa-lg text-primary" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
                                 </div>
                                 <div class="card-body">
                                     <!-- Tabs de navegación -->
@@ -71,7 +72,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     <div class="tab-content" id="transporteTabContent">
                                         <!-- ==================== TAB INICIO ==================== -->
                                         <div class="tab-pane fade show active" id="inicio" role="tabpanel">
-                                            <div class="row mt-4">
+                                            <div id="inicio-tab-content" class="row mt-4">
                                                 <!-- Total Vehículos -->
                                                 <div class="col-xl-3 col-md-6 mb-4">
                                                     <div class="card border-left-primary shadow h-100 py-2">
@@ -144,7 +145,7 @@ include BASE_PATH . '/app/Views/template/head.php';
 
                                             <div class="row">
                                                 <!-- Calendario de Asignaciones -->
-                                                <div class="col-lg-8 mb-4">
+                                                <div id="calendario-tab-content" class="col-lg-8 mb-4">
                                                     <div class="card shadow border-0">
                                                         <div class="card-header py-3 bg-white border-bottom-primary">
                                                             <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-calendar-alt me-2"></i> Calendario de Rutas y Asignaciones</h6>
@@ -158,7 +159,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                     </div>
                                                 </div>
                                                 <!-- Accesos Rápidos -->
-                                                <div class="col-lg-4 mb-4">
+                                                <div id="accesos-tab-content" class="col-lg-4 mb-4">
                                                     <div class="card shadow border-0">
                                                         <div class="card-header py-3 bg-white border-bottom-primary">
                                                             <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-bolt me-2"></i> Accesos Rápidos</h6>
@@ -187,7 +188,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_vehiculos" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="trVehiculos">
                                                             <th>Modelo</th>
                                                             <th>Placa</th>
                                                             <th>Tipo</th>
@@ -207,7 +208,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_proveedores" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="trProveedores">
                                                             <th>Documento</th>
                                                             <th>Nombre</th>
                                                             <th>Teléfono</th>
@@ -227,7 +228,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_rutas" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="trRutas">
                                                             <th>Nombre</th>
                                                             <th>Tipo de Ruta</th>
                                                             <th>Punto de partida</th>
@@ -247,7 +248,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_asignar_recursos" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="trAsignarRecursos">
                                                             <th>Ruta</th>
                                                             <th>Fecha</th>
                                                             <th>Vehículo</th>
@@ -267,7 +268,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_repuestos" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="trRepuestos">
                                                             <th>Repuesto</th>
                                                             <th>Nombre</th>
                                                             <th>Descripción</th>
@@ -288,7 +289,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <div class="table-responsive mt-3">
                                                 <table class="table table-striped table-bordered" id="tabla_historial_mantenimientos" width="100%" cellspacing="0">
                                                     <thead>
-                                                        <tr>
+                                                        <tr id="trMantenimientos">
                                                             <th>Mantenimiento</th>
                                                             <th>Vehículo</th>
                                                             <th>Placa</th>
@@ -326,6 +327,7 @@ include BASE_PATH . '/app/Views/template/head.php';
     </script>
     <script src="<?= BASE_URL ?>dist/js/modulos/transporte/consultar_general.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/transporte/estadisticas_transporte.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/transporte/driver_general.js"></script>
 
 
     <!-- Modal Genérico -->
