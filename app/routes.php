@@ -1,8 +1,9 @@
 <?php
+
 use App\Core\Router;
 
 // ==================== MIDDLEWARE GLOBAL ====================
-Router::antes('ALL', '.*', function() {
+Router::antes('ALL', '.*', function () {
     $rutasPublicas = ['login', 'iniciar_sesion', 'error', 'logout'];
 
     // Obtener ruta solicitada
@@ -25,51 +26,74 @@ Router::antes('ALL', '.*', function() {
 
     // Verificar autenticación para rutas protegidas
     if (!isset($_SESSION['id_empleado'])) {
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'estado' => 'error',
-                'mensaje' => 'Sesión expirada',
-                'redireccion' => BASE_URL . 'login'
-            ]);
-            exit();
-        } else {
-            $_SESSION['mensaje_redireccion'] = json_encode([
-                'estado' => 'error',
-                'titulo' => 'Acceso denegado',
-                'mensaje' => 'Debes iniciar sesión primero'
-            ]);
-            header('Location: ' . BASE_URL . 'login');
-            exit();
-        }
+        self::redireccionarLogin('Debes iniciar sesión primero');
+    }
+
+    // Verificar si el usuario ha sido bloqueado (estatus = 0)
+    if (isset($_SESSION['estatus']) && $_SESSION['estatus'] == 0) {
+        $msg = 'Tu cuenta ha sido desactivada. Contacta al administrador.';
+        self::redireccionarLogin($msg, 'Cuenta bloqueada');
     }
 });
 
+/**
+ * Función auxiliar para centralizar la redirección al login
+ */
+function redireccionarLogin($mensaje, $titulo = 'Acceso denegado')
+{
+    if (
+        !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
+    ) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'estado' => 'error',
+            'mensaje' => $mensaje,
+            'redireccion' => BASE_URL . 'login'
+        ]);
+        exit();
+    } else {
+        // Limpiar sesión para evitar bucles si es por bloqueo
+        $msg_final = json_encode([
+            'estado' => 'error',
+            'titulo' => $titulo,
+            'mensaje' => $mensaje
+        ]);
+
+        session_unset();
+        session_destroy();
+        session_start();
+        $_SESSION['mensaje_redireccion'] = $msg_final;
+
+        header('Location: ' . BASE_URL . 'login');
+        exit();
+    }
+}
+
 // ==================== RUTAS ESENCIALES (login / inicio) ====================
-Router::get('', function() {
+Router::get('', function () {
     header('Location: ' . BASE_URL . 'login');
     exit();
 });
 
-Router::get('login', function() {
+Router::get('login', function () {
     // carga perezosa del controlador de login
     load_controller('loginController.php');
     showLogin();
 });
 
-Router::post('iniciar_sesion', function() {
+Router::post('iniciar_sesion', function () {
     load_controller('loginController.php');
     iniciar_sesion();
 });
 
-Router::get('logout', function() {
+Router::get('logout', function () {
     load_controller('loginController.php');
     cerrar_sesion();
 });
 
 // ==================== RUTA DE INICIO (protegida) ====================
-Router::get('inicio', function() {
+Router::get('inicio', function () {
     load_controller('loginController.php');
     showInicio();
 });
@@ -80,13 +104,13 @@ foreach (glob(BASE_PATH . 'app/routes/*.php') as $rutaArchivo) {
 }
 
 // ==================== MANEJO DE ERRORES ====================
-Router::rutaNoEncontrada(function() {
+Router::rutaNoEncontrada(function () {
     header("HTTP/1.0 404 No Encontrado");
     echo "Página no encontrada - Error 404";
     exit();
 });
 
-Router::metodoNoPermitido(function() {
+Router::metodoNoPermitido(function () {
     header("HTTP/1.0 405 Método No Permitido");
     echo "Método no permitido - Error 405";
     exit();

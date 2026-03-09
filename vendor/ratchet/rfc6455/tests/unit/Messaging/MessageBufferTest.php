@@ -292,7 +292,7 @@ class MessageBufferTest extends TestCase
             false,
             null,
             0,
-            0x8000000000000000
+            0x7fffffffffffffff + 1
         );
     }
 
@@ -306,7 +306,7 @@ class MessageBufferTest extends TestCase
             function (Frame $frame) {},
             false,
             null,
-            0x8000000000000000,
+            0x7fffffffffffffff + 1,
             0
         );
     }

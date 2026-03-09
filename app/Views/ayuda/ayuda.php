@@ -1,5 +1,5 @@
 <?php
-$titulo = "Centro de Ayuda - DIRPOLES 4";
+$titulo = "DIRPOLES 4 | Ayuda";
 include BASE_PATH . '/app/Views/template/head.php';
 ?>
 
