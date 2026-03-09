@@ -4,47 +4,44 @@ use App\Core\Router;
 
 // ==================== MIDDLEWARE GLOBAL ====================
 Router::antes('ALL', '.*', function () {
-    $rutasPublicas = ['login', 'iniciar_sesion', 'error', 'logout'];
+    $rutasPublicas = ['', 'login', 'iniciar_sesion', 'error', 'logout'];
 
     // Obtener ruta solicitada
     $rutaSolicitada = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-    // Remover BASE_URL de la ruta
-    $baseUrlClean = trim(BASE_URL, '/');
-    $rutaLimpia = $rutaSolicitada;
+    // Sincronizar con la lógica de limpieza del Router
+    $rutaBase = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+    $rutaRelativa = substr($rutaSolicitada, strlen($rutaBase));
+    $rutaActual = trim($rutaRelativa, '/') ?: 'login';
 
-    if ($baseUrlClean && strpos($rutaLimpia, '/' . $baseUrlClean) === 0) {
-        $rutaLimpia = substr($rutaLimpia, strlen($baseUrlClean) + 1);
+    // 1. SI ES RUTA PÚBLICA O EL ROOT, SALIR INMEDIATAMENTE
+    // El root vacío '' se trata como 'login' por el Router y por la línea anterior
+    if (in_array($rutaActual, $rutasPublicas) || $rutaRelativa === '' || $rutaRelativa === '/') {
+        return;
     }
 
-    $rutaActual = trim($rutaLimpia, '/') ?: 'login';
-
-    // Verificar si es una ruta pública
-    if (in_array($rutaActual, $rutasPublicas)) {
-        return; // No requiere autenticación
-    }
-
-    // Verificar autenticación para rutas protegidas
+    // 2. VALIDACIÓN DE SESIÓN
     if (!isset($_SESSION['id_empleado'])) {
-        self::redireccionarLogin('Debes iniciar sesión primero');
+        redirigirLogin('Debes iniciar sesión primero', 'Acceso denegado');
     }
 
-    // Verificar si el usuario ha sido bloqueado (estatus = 0)
+    // 3. VALIDACIÓN DE ESTATUS (BLOQUEO)
     if (isset($_SESSION['estatus']) && $_SESSION['estatus'] == 0) {
         $msg = 'Tu cuenta ha sido desactivada. Contacta al administrador.';
-        self::redireccionarLogin($msg, 'Cuenta bloqueada');
+        // Solo limpiamos los datos de acceso, no destruimos la sesión
+        unset($_SESSION['id_empleado']);
+        unset($_SESSION['nombre']);
+        unset($_SESSION['estatus']);
+        redirigirLogin($msg, 'Cuenta bloqueada');
     }
 });
 
 /**
- * Función auxiliar para centralizar la redirección al login
+ * Redirección simple al login con mensaje
  */
-function redireccionarLogin($mensaje, $titulo = 'Acceso denegado')
+function redirigirLogin($mensaje, $titulo)
 {
-    if (
-        !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-        strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
-    ) {
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         header('Content-Type: application/json');
         echo json_encode([
             'estado' => 'error',
@@ -52,22 +49,15 @@ function redireccionarLogin($mensaje, $titulo = 'Acceso denegado')
             'redireccion' => BASE_URL . 'login'
         ]);
         exit();
-    } else {
-        // Limpiar sesión para evitar bucles si es por bloqueo
-        $msg_final = json_encode([
-            'estado' => 'error',
-            'titulo' => $titulo,
-            'mensaje' => $mensaje
-        ]);
-
-        session_unset();
-        session_destroy();
-        session_start();
-        $_SESSION['mensaje_redireccion'] = $msg_final;
-
-        header('Location: ' . BASE_URL . 'login');
-        exit();
     }
+
+    $_SESSION['mensaje_redireccion'] = json_encode([
+        'estado' => 'error',
+        'titulo' => $titulo,
+        'mensaje' => $mensaje
+    ]);
+    header('Location: ' . BASE_URL . 'login');
+    exit();
 }
 
 // ==================== RUTAS ESENCIALES (login / inicio) ====================
