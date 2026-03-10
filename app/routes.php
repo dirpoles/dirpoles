@@ -20,6 +20,13 @@ Router::antes('ALL', '.*', function () {
         return;
     }
 
+    // 1.5 IGNORAR ARCHIVOS ESTÁTICOS FALTANTES (ej. sourcemaps .map, imágenes, etc.)
+    // Evita que peticiones del navegador a recursos que no existen gatillen la alerta de 
+    // "Acceso denegado" en la sesión antes de hacer el 404 normal de rutaNoEncontrada.
+    if (preg_match('/\.(js|css|map|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/i', $rutaActual)) {
+        return;
+    }
+
     // 2. VALIDACIÓN DE SESIÓN
     if (!isset($_SESSION['id_empleado'])) {
         redirigirLogin('Debes iniciar sesión primero', 'Acceso denegado');

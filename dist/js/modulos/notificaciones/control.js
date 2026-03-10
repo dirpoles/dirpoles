@@ -110,7 +110,7 @@ class NotificationUtils {
 
         // Verificar formulario de login específico (no cualquier form con password)
         // Buscar forms que tengan action de login Y campos de login típicos
-        const hasLoginForm = document.querySelector('form[action*="login"], form[action*="auth"], form#formLogin') !== null;
+        const hasLoginForm = document.querySelector('form[action*="login"], form[action*="auth"], form#formLogin, form#formulario-login, form[action*="iniciar_sesion"]') !== null;
 
         // Verificar si hay un input de login específico (no de perfil o cambio de clave)
         // Excluimos campos que están dentro de modales de perfil

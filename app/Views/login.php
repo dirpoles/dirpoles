@@ -43,7 +43,8 @@ include "app/views/template/head.php"; ?>
                                     <input type="password" name="password" id="password" class="form-control form-control-lg"
                                         placeholder="Contraseña" maxlength="8" autocomplete="current-password">
                                     <span class="input-group-text bg-white border-start-0 toggle-password-btn" id="btnTogglePassword">
-                                        <i class="fa-solid fa-eye"></i>
+                                        <i class="fa-solid fa-eye" id="icon-eye"></i>
+                                        <i class="fa-solid fa-eye-slash d-none" id="icon-eye-slash"></i>
                                     </span>
                                 </div>
                                 <small id="passwordError" class="text-danger mt-1 d-block"></small>
@@ -113,16 +114,27 @@ include "app/views/template/head.php"; ?>
         document.addEventListener('DOMContentLoaded', function() {
             const togglePassword = document.querySelector('#btnTogglePassword');
             const password = document.querySelector('#password');
-            const icon = togglePassword.querySelector('i');
 
             togglePassword.addEventListener('click', function() {
-                // Alternar el tipo de input
-                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                password.setAttribute('type', type);
+                // 1. Alternar el tipo de input
+                const isPassword = password.getAttribute('type') === 'password';
+                password.setAttribute('type', isPassword ? 'text' : 'password');
 
-                // Alternar el icono
-                icon.classList.toggle('fa-eye');
-                icon.classList.toggle('fa-eye-slash');
+                // 2. BUSCAR LOS ICONOS AQUÍ ADENTRO
+                // Esto garantiza que atrapemos los <svg> reales que Font Awesome creó
+                const iconEye = document.querySelector('#icon-eye');
+                const iconEyeSlash = document.querySelector('#icon-eye-slash');
+
+                // 3. Mostrar/Ocultar los iconos
+                if (isPassword) {
+                    // Se ve la contraseña: ocultamos el ojo normal, mostramos el tachado
+                    iconEye.classList.add('d-none');
+                    iconEyeSlash.classList.remove('d-none');
+                } else {
+                    // Se oculta la contraseña: mostramos el ojo normal, ocultamos el tachado
+                    iconEye.classList.remove('d-none');
+                    iconEyeSlash.classList.add('d-none');
+                }
             });
         });
     </script>
