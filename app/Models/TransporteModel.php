@@ -152,8 +152,7 @@ class TransporteModel extends BusinessModel
             case 'Registrar_mantenimiento':
                 return $this->registrar_mantenimiento();
 
-
-            case 'Editar_vehiculo':
+            case 'vehiculo_detalle':
                 return $this->obtener_vehiculos_id();
 
 
@@ -955,8 +954,6 @@ class TransporteModel extends BusinessModel
     private function validar_placa()
     {
         try {
-
-
             $query = "SELECT COUNT(*) as total FROM vehiculos WHERE placa = :placa";
 
             if ($this->__get('id_vehiculo')) {

@@ -54,6 +54,21 @@ Router::post('vehiculos_registrar', function () {
     vehiculos_registrar();
 });
 
+Router::get('vehiculo_detalle', function () {
+    load_controller('transporteController.php');
+    vehiculo_detalle();
+});
+
+Router::post('vehiculo_actualizar', function () {
+    load_controller('transporteController.php');
+    vehiculo_actualizar();
+});
+
+Router::post('vehiculo_eliminar', function () {
+    load_controller('transporteController.php');
+    vehiculo_eliminar();
+});
+
 //==========================(Proveedores)==============================
 Router::post('proveedor_registrar', function () {
     load_controller('transporteController.php');

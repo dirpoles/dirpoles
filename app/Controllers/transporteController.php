@@ -77,6 +77,15 @@ function vehiculos_data_json()
     echo json_encode($data);
 }
 
+function vehiculo_detalle()
+{
+    $modelo = new TransporteModel();
+    $modelo->__set('id_vehiculo', $_GET['id_vehiculo']);
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('vehiculo_detalle');
+    echo json_encode($data);
+}
+
 function vehiculos_registrar()
 {
     header('Content-Type: application/json');
@@ -963,38 +972,6 @@ function registrar_mantenimiento_vehiculo()
     exit;
 }
 
-function editar_vehiculo()
-{
-    $modelo = new TransporteModel();
-    $permisos = new PermisosModel();
-    $modulo = 'Transporte';
-
-    $verificar = [
-        'Modulo' => $modulo,
-        'Permiso' => 'Leer',
-        'Rol' => $_SESSION['id_tipo_empleado']
-    ];
-
-    foreach ($verificar as $atributo => $valor) {
-        $permisos->__set($atributo, $valor);
-    }
-
-    try {
-        if (!$permisos->manejarAccion('Verificar')) {
-            throw new Exception('No tienes permiso para realizar esta acción');
-        }
-        $modelo->__set('id_vehiculo', $_GET['id_vehiculo']);
-        $vehiculo = $modelo->manejarAccion('Editar_vehiculo');
-        require_once "app/views/transporte_editar_vehiculo.php";
-    } catch (Exception $e) {
-        echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
-    }
-    exit;
-}
-
 function vehiculo_actualizar()
 {
     header('Content-Type: application/json');
@@ -1135,19 +1112,19 @@ function vehiculo_eliminar()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al eliminar el vehiculo."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
