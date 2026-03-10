@@ -155,26 +155,21 @@ class TransporteModel extends BusinessModel
             case 'vehiculo_detalle':
                 return $this->obtener_vehiculos_id();
 
-
             case 'Actualizar_vehiculo':
                 return $this->actualizar_vehiculo();
-
 
             case 'Eliminar_vehiculo':
                 return $this->eliminar_vehiculo();
 
-
-            case 'Editar_proveedor':
+            case 'proveedor_detalle':
                 return $this->obtener_proveedorID();
-
 
             case 'Actualizar_proveedor':
                 return $this->actualizar_proveedor();
 
-
             case 'Eliminar_proveedor':
                 return $this->eliminar_proveedor();
-
+                //------------------
 
             case 'Editar_ruta':
                 return $this->obtener_rutaID();
@@ -1124,12 +1119,12 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                "exito" => true,
                 "mensaje" => "Proveedor eliminado exitosamente"
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al eliminar el proveedor: ' . $e->getMessage()
             ];
         }

@@ -1130,37 +1130,13 @@ function vehiculo_eliminar()
     exit;
 }
 
-function editar_proveedor()
+function proveedor_detalle()
 {
     $modelo = new TransporteModel();
-    $permisos = new PermisosModel();
-    $modulo = 'Transporte';
-
-    $verificar = [
-        'Modulo' => $modulo,
-        'Permiso' => 'Leer',
-        'Rol' => $_SESSION['id_tipo_empleado']
-    ];
-
-    foreach ($verificar as $atributo => $valor) {
-        $permisos->__set($atributo, $valor);
-    }
-
-    try {
-        if (!$permisos->manejarAccion('Verificar')) {
-            throw new Exception('No tienes permiso para realizar esta acción');
-        }
-        $modelo->__set('id_proveedor', $_GET['id_proveedor']);
-        $proveedor = $modelo->manejarAccion('Editar_proveedor');
-
-        require_once "app/views/transporte_editar_proveedor.php";
-    } catch (Exception $e) {
-        echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
-    }
-    exit;
+    header('Content-Type: application/json');
+    $modelo->__set('id_proveedor', $_GET['id_proveedor']);
+    $proveedor = $modelo->manejarAccion('proveedor_detalle');
+    echo json_encode($proveedor);
 }
 
 function proveedor_actualizar()
@@ -1288,7 +1264,7 @@ function proveedor_eliminar()
         // Eliminar en base de datos
         $resultado = $modelo->manejarAccion('Eliminar_proveedor');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1305,19 +1281,19 @@ function proveedor_eliminar()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al eliminar el proveedor."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al eliminar el proveedor."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;

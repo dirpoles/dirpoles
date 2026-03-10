@@ -75,6 +75,21 @@ Router::post('proveedor_registrar', function () {
     proveedor_registrar();
 });
 
+Router::get('proveedor_detalle', function () {
+    load_controller('transporteController.php');
+    proveedor_detalle();
+});
+
+Router::post('proveedor_actualizar', function () {
+    load_controller('transporteController.php');
+    proveedor_actualizar();
+});
+
+Router::post('proveedor_eliminar', function () {
+    load_controller('transporteController.php');
+    proveedor_eliminar();
+});
+
 //==========================(Rutas)==============================
 Router::post('ruta_registrar', function () {
     load_controller('transporteController.php');
