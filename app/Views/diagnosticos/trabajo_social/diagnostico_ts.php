@@ -77,19 +77,42 @@ include BASE_PATH . '/app/Views/template/head.php';
                         </div>
                     </div>
 
-                    <!-- Fila 1: Becas y Exoneración -->
+                    <!-- Contenedor con Tabs para Formularios -->
                     <div class="row">
-                        <!-- Columna 1: Becas -->
-                        <div class="col-lg-6 mb-4">
-                            <div class="card shadow h-100 border-left-success">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold text-success">
-                                        <i class="fas fa-graduation-cap me-2"></i>Registro de Becas
-                                    </h6>
-                                    <span class="badge bg-success">Ayuda Económica</span>
+                        <div class="col-lg-12 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header py-3">
+                                    <ul class="nav nav-tabs card-header-tabs" id="tsTabs" role="tablist">
+                                        <li class="nav-item">
+                                            <button class="nav-link active fw-bold text-success" id="becas-tab" data-bs-toggle="tab" data-bs-target="#becas" type="button" role="tab" aria-controls="becas" aria-selected="true">
+                                                <i class="fas fa-graduation-cap me-2"></i>Registro de Becas
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link fw-bold text-warning" id="exoneracion-tab" data-bs-toggle="tab" data-bs-target="#exoneracion" type="button" role="tab" aria-controls="exoneracion" aria-selected="false">
+                                                <i class="fas fa-file-contract me-2"></i>Registro de Exoneración
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link fw-bold text-info" id="fames-tab" data-bs-toggle="tab" data-bs-target="#fames" type="button" role="tab" aria-controls="fames" aria-selected="false">
+                                                <i class="fas fa-hand-holding-heart me-2"></i>Registro FAMES
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link fw-bold text-primary" id="embarazadas-tab" data-bs-toggle="tab" data-bs-target="#embarazadas" type="button" role="tab" aria-controls="embarazadas" aria-selected="false">
+                                                <i class="fas fa-baby me-2"></i>Gestión de Embarazadas
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div class="card-body d-flex flex-column">
-                                    <form action="<?= BASE_URL ?>becas_registrar" method="POST" id="form-becas" class="needs-validation d-flex flex-column h-100" novalidate>
+                                <div class="card-body">
+                                    <div class="tab-content" id="tsTabsContent">
+                                        
+                                        <!-- BECAS TAB -->
+                                        <div class="tab-pane fade show active py-3" id="becas" role="tabpanel" aria-labelledby="becas-tab">
+                                            <div class="row justify-content-center">
+                                                <div class="col-lg-8">
+                                                    <form action="<?= BASE_URL ?>becas_registrar" method="POST" id="form-becas" class="needs-validation d-flex flex-column h-100" novalidate>
                                         <input type="hidden" name="id_beneficiario" class="id_beneficiario_hidden">
                                         <input type="hidden" name="id_empleado" value="<?= $_SESSION['id_empleado'] ?>">
                                         
@@ -170,21 +193,15 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             </button>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Columna 2: Exoneración -->
-                        <div class="col-lg-6 mb-4">
-                            <div class="card shadow h-100 border-left-warning">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold text-warning">
-                                        <i class="fas fa-file-contract me-2"></i>Registro de Exoneración
-                                    </h6>
-                                    <span class="badge bg-warning">Beneficio Estatal</span>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <form action="<?= BASE_URL ?>exoneracion_registrar" method="POST" id="form-exoneracion" 
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- EXONERACION TAB -->
+                                        <div class="tab-pane fade py-3" id="exoneracion" role="tabpanel" aria-labelledby="exoneracion-tab">
+                                            <div class="row justify-content-center">
+                                                <div class="col-lg-8">
+                                                    <form action="<?= BASE_URL ?>exoneracion_registrar" method="POST" id="form-exoneracion" 
                                         class="needs-validation d-flex flex-column h-100" novalidate>
                                         <input type="hidden" name="id_beneficiario" class="id_beneficiario_hidden">
                                         <input type="hidden" name="id_empleado" value="<?= $_SESSION['id_empleado'] ?>">
@@ -259,24 +276,15 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             </button>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    <!-- Fila 2: FAMES y Gestión de Embarazadas -->
-                    <div class="row">
-                        <!-- Columna 1: FAMES -->
-                        <div class="col-lg-6 mb-4">
-                            <div class="card shadow h-100 border-left-info">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold text-info">
-                                        <i class="fas fa-hand-holding-heart me-2"></i>Registro FAMES
-                                    </h6>
-                                    <span class="badge bg-info">Ayuda Alimentaria</span>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <form action="<?= BASE_URL ?>fames_registrar" method="POST" id="form-fames" class="needs-validation d-flex flex-column h-100" novalidate>
+                                        <!-- FAMES TAB -->
+                                        <div class="tab-pane fade py-3" id="fames" role="tabpanel" aria-labelledby="fames-tab">
+                                            <div class="row justify-content-center">
+                                                <div class="col-lg-8">
+                                                    <form action="<?= BASE_URL ?>fames_registrar" method="POST" id="form-fames" class="needs-validation d-flex flex-column h-100" novalidate>
                                         <input type="hidden" name="id_beneficiario" class="id_beneficiario_hidden">
                                         <input type="hidden" name="id_empleado" value="<?= $_SESSION['id_empleado'] ?>">
                                         
@@ -342,21 +350,15 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             </button>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Columna 2: Gestión de Embarazadas -->
-                        <div class="col-lg-6 mb-4">
-                            <div class="card shadow h-100 border-left-primary">
-                                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        <i class="fas fa-baby me-2"></i>Gestión de Embarazadas
-                                    </h6>
-                                    <span class="badge bg-primary">Control Prenatal</span>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <form action="<?= BASE_URL ?>emb_registrar" method="POST" id="form-gestion-emb" class="needs-validation d-flex flex-column h-100" novalidate>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- EMBARAZADAS TAB -->
+                                        <div class="tab-pane fade py-3" id="embarazadas" role="tabpanel" aria-labelledby="embarazadas-tab">
+                                            <div class="row justify-content-center">
+                                                <div class="col-lg-8">
+                                                    <form action="<?= BASE_URL ?>emb_registrar" method="POST" id="form-gestion-emb" class="needs-validation d-flex flex-column h-100" novalidate>
                                         <input type="hidden" name="id_beneficiario" class="id_beneficiario_hidden">
                                         <input type="hidden" name="id_empleado" value="<?= $_SESSION['id_empleado'] ?>">
                                         <input type="hidden" name="genero" id="genero" class="id_beneficiario_genero">
@@ -447,6 +449,11 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             </button>
                                         </div>
                                     </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

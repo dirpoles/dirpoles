@@ -121,7 +121,7 @@
         <div class="card-body">
             <div class="text-center">
                 <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Referidos</div>
-                <div class="h6 mb-0 font-weight-bold text-gray-800"><?= $total_referidos ?? 0; ?> Pac.</div>
+                <div class="h6 mb-0 font-weight-bold text-gray-800" id="stat-referidos-total"></div>
             </div>
         </div>
     </div>

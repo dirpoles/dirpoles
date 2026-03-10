@@ -29,6 +29,11 @@ async function initDashboardStats() {
     if (document.getElementById('stat-discapacidad-total')) {
         await cargarStatsDiscapacidad();
     }
+
+    // 6. Estadísticas de Referencias
+    if (document.getElementById('stat-referidos-total')) {
+        await cargarStatsReferencias();
+    }
 }
 
 async function cargarStatsPsicologia() {
@@ -113,6 +118,23 @@ async function cargarStatsDiscapacidad() {
     } catch (error) {
         console.error('Error en la petición de stats de discapacidad:', error);
         marcarErrorStats(['stat-discapacidad-total']);
+    }
+}
+
+async function cargarStatsReferencias() {
+    try {
+        const response = await fetch('referencias_stats_admin');
+        const data = await response.json();
+
+        if (data.exito) {
+            actualizarValor('stat-referidos-total', data.total, ' Ref.');
+        } else {
+            console.error('Error al cargar stats de referencias:', data.mensaje);
+            marcarErrorStats(['stat-referidos-total']);
+        }
+    } catch (error) {
+        console.error('Error en la petición de stats de referencias:', error);
+        marcarErrorStats(['stat-referidos-total']);
     }
 }
 
