@@ -1,26 +1,28 @@
 <?php
+
 use App\Models\HorarioModel;
 use App\Models\BitacoraModel;
 use App\Models\PermisosModel;
 use App\Models\NotificacionesModel;
 
-function crear_horario(){
+function crear_horario()
+{
     $permisos = new PermisosModel();
-    $modulo = 'Horarios';
-    try{
+    $modulo = 'Empleados';
+    try {
         $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
-        foreach($verificar as $atributo => $valor){
+        foreach ($verificar as $atributo => $valor) {
             $permisos->__set($atributo, $valor);
         }
 
-        if(!$permisos->manejarAccion('Verificar')){
+        if (!$permisos->manejarAccion('Verificar')) {
             throw new Exception('No tienes permiso para realizar esta acción');
         }
-        
+
         require_once BASE_PATH . '/app/Views/horario/crear_horario.php';
-    }catch(Throwable $e){
+    } catch (Throwable $e) {
         // Si la petición NO es AJAX, mostramos la vista de error
-        if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+        if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
             require_once BASE_PATH . '/app/Views/errors/access_denied.php';
         } else {
             // Si es AJAX, devolvemos JSON
@@ -32,34 +34,34 @@ function crear_horario(){
     }
 }
 
-function validar_dia_horario() {
+function validar_dia_horario()
+{
     $modelo = new HorarioModel();
     header('Content-Type: application/json');
-    
+
     try {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception('Método no permitido.');
         }
-        
+
         $id_empleado = $_POST['id_empleado'] ?? null;
         $dia_semana = $_POST['dia_semana'] ?? null;
         $id_horario = $_POST['id_horario'] ?? null;
-        
+
         if (!$id_empleado || !$dia_semana) {
             echo json_encode(['existe' => false, 'error' => 'Datos incompletos']);
             exit();
         }
-        
+
         $modelo->__set('id_empleado', $id_empleado);
         $modelo->__set('dia_semana', $dia_semana);
         $modelo->__set('id_horario', $id_horario);
-        
+
         $existe = $modelo->manejarAccion('validarDiaHorario');
-        
+
         echo json_encode(['existe' => $existe]);
         exit();
-        
-    } catch(Throwable $e) {
+    } catch (Throwable $e) {
         error_log("Error en validar_dia_horario: " . $e->getMessage());
         echo json_encode([
             'existe' => false,
@@ -69,24 +71,25 @@ function validar_dia_horario() {
     }
 }
 
-function registrar_horario(){
-    try{
+function registrar_horario()
+{
+    try {
         $modelo = new HorarioModel();
         $bitacora = new BitacoraModel();
         $permisos = new PermisosModel();
         $notificacion = new NotificacionesModel();
-        $modulo = 'Horarios';
+        $modulo = 'Empleados';
 
-        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception('Metodo no permitido');
         }
 
         $verificar = ['Modulo' => $modulo, 'Permiso' => 'Crear', 'Rol' => $_SESSION['id_tipo_empleado']];
-        foreach($verificar as $atributo => $valor){
+        foreach ($verificar as $atributo => $valor) {
             $permisos->__set($atributo, $valor);
         }
 
-        if(!$permisos->manejarAccion('Verificar')){
+        if (!$permisos->manejarAccion('Verificar')) {
             throw new Exception('No tienes permiso para realizar esta acción');
         }
 
@@ -96,7 +99,7 @@ function registrar_horario(){
         $hora_fin = filter_input(INPUT_POST, 'hora_fin', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $empleado = $_SESSION['nombre'];
 
-        if(!$id_empleado || !$dia_semana || !$hora_inicio || !$hora_fin){
+        if (!$id_empleado || !$dia_semana || !$hora_inicio || !$hora_fin) {
             throw new Exception('Todos los campos son obligatorios');
         }
 
@@ -106,7 +109,7 @@ function registrar_horario(){
             'hora_inicio' => $hora_inicio,
             'hora_fin' => $hora_fin
         ];
-        foreach($datos as $atributo => $valor){
+        foreach ($datos as $atributo => $valor) {
             $modelo->__set($atributo, $valor);
         }
 
@@ -151,11 +154,10 @@ function registrar_horario(){
                 'mensaje' => $registro['mensaje']
             ]);
             exit();
-        } else{
+        } else {
             throw new Exception($registro['mensaje']);
         }
-
-    } catch(Throwable $e){
+    } catch (Throwable $e) {
         echo json_encode([
             'exito' => false,
             'mensaje' => $e->getMessage()
@@ -163,23 +165,24 @@ function registrar_horario(){
     }
 }
 
-function consultar_horarios(){
+function consultar_horarios()
+{
     $permisos = new PermisosModel();
-    $modulo = 'Horarios';
-    try{
+    $modulo = 'Empleados';
+    try {
         $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
-        foreach($verificar as $atributo => $valor){
+        foreach ($verificar as $atributo => $valor) {
             $permisos->__set($atributo, $valor);
         }
 
-        if(!$permisos->manejarAccion('Verificar')){
+        if (!$permisos->manejarAccion('Verificar')) {
             throw new Exception('No tienes permiso para realizar esta acción');
         }
-        
+
         require_once BASE_PATH . '/app/Views/horario/consultar_horarios.php';
-    }catch(Throwable $e){
+    } catch (Throwable $e) {
         // Si la petición NO es AJAX, mostramos la vista de error
-        if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+        if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
             require_once BASE_PATH . '/app/Views/errors/access_denied.php';
         } else {
             // Si es AJAX, devolvemos JSON
@@ -191,7 +194,8 @@ function consultar_horarios(){
     }
 }
 
-function horarios_data_json(){
+function horarios_data_json()
+{
     $modelo = new HorarioModel();
     header('Content-Type: application/json');
     try {
@@ -199,7 +203,7 @@ function horarios_data_json(){
         $horarios = $modelo->manejarAccion('consultar_horarios');
         echo json_encode(['data' => $horarios]);
         exit();
-    } catch(Throwable $e) {
+    } catch (Throwable $e) {
         error_log("Error en horarios_data_json: " . $e->getMessage());
         echo json_encode([
             'data' => [],
@@ -209,18 +213,18 @@ function horarios_data_json(){
     }
 }
 
-function horario_detalle_editar(){
+function horario_detalle_editar()
+{
     $modelo = new HorarioModel();
     $id_horario = $_GET['id_horario'];
     header('Content-Type: application/json');
-    
+
     try {
         $modelo->__set('id_horario', $id_horario);
         $horarios = $modelo->manejarAccion('horario_detalle_editar');
         echo json_encode(['data' => $horarios]);
         exit();
-
-    } catch(Throwable $e) {
+    } catch (Throwable $e) {
         error_log("Error en horario_detalle_editar: " . $e->getMessage());
         echo json_encode([
             'data' => [],
@@ -230,24 +234,25 @@ function horario_detalle_editar(){
     }
 }
 
-function actualizar_horario(){
+function actualizar_horario()
+{
     $modelo = new HorarioModel();
     $bitacora = new BitacoraModel();
     $permisos = new PermisosModel();
     $notificacion = new NotificacionesModel();
-    $modulo = 'Horarios';
+    $modulo = 'Empleados';
 
     try {
-        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception('Metodo no permitido');
         }
 
         $verificar = ['Modulo' => $modulo, 'Permiso' => 'Editar', 'Rol' => $_SESSION['id_tipo_empleado']];
-        foreach($verificar as $atributo => $valor){
+        foreach ($verificar as $atributo => $valor) {
             $permisos->__set($atributo, $valor);
         }
 
-        if(!$permisos->manejarAccion('Verificar')){
+        if (!$permisos->manejarAccion('Verificar')) {
             throw new Exception('No tienes permiso para realizar esta acción');
         }
 
@@ -257,7 +262,7 @@ function actualizar_horario(){
         $hora_fin = filter_input(INPUT_POST, 'hora_fin', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $empleado = $_SESSION['nombre'];
 
-        if(!$id_horario || !$dia_semana || !$hora_inicio || !$hora_fin){
+        if (!$id_horario || !$dia_semana || !$hora_inicio || !$hora_fin) {
             throw new Exception('Todos los campos son obligatorios');
         }
 
@@ -268,21 +273,21 @@ function actualizar_horario(){
             'hora_fin' => $hora_fin
         ];
 
-        foreach($datos as $atributo => $valor){
+        foreach ($datos as $atributo => $valor) {
             $modelo->__set($atributo, $valor);
         }
 
         $actualizar = $modelo->manejarAccion('actualizar_horario');
         $nombre_empleado = $modelo->manejarAccion('obtener_empleado_horario');
 
-        if($actualizar['exito'] === true){
+        if ($actualizar['exito'] === true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => $modulo,
                 'accion' => 'Actualización',
                 'descripcion' => "El empleado $empleado actualizó un horario para el empleado $nombre_empleado"
             ];
-            foreach($bitacora_data as $atributo => $valor){
+            foreach ($bitacora_data as $atributo => $valor) {
                 $bitacora->__set($atributo, $valor);
             }
             $bitacora->manejarAccion('registrar_bitacora');
@@ -295,7 +300,7 @@ function actualizar_horario(){
                 'id_receptor' => 1, //Administrador
                 'leido' => 0
             ];
-            foreach($notificacion_data as $atributo => $valor){
+            foreach ($notificacion_data as $atributo => $valor) {
                 $notificacion->__set($atributo, $valor);
             }
             $notificacion->manejarAccion('crear_notificacion');
@@ -305,7 +310,7 @@ function actualizar_horario(){
                 'mensaje' => $actualizar['mensaje']
             ]);
             exit();
-        } else{
+        } else {
             throw new Exception($actualizar['mensaje']);
         }
     } catch (Throwable $e) {
@@ -314,34 +319,35 @@ function actualizar_horario(){
             'mensaje' => $e->getMessage()
         ]);
         exit();
-    }   
+    }
 }
 
-function eliminar_horario(){
+function eliminar_horario()
+{
     $modelo = new HorarioModel();
     $bitacora = new BitacoraModel();
     $permisos = new PermisosModel();
     $notificacion = new NotificacionesModel();
-    $modulo = 'Horarios';
+    $modulo = 'Empleados';
 
     try {
-        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception('Metodo no permitido');
         }
 
         $verificar = ['Modulo' => $modulo, 'Permiso' => 'Eliminar', 'Rol' => $_SESSION['id_tipo_empleado']];
-        foreach($verificar as $atributo => $valor){
+        foreach ($verificar as $atributo => $valor) {
             $permisos->__set($atributo, $valor);
         }
 
-        if(!$permisos->manejarAccion('Verificar')){
+        if (!$permisos->manejarAccion('Verificar')) {
             throw new Exception('No tienes permiso para realizar esta acción');
         }
 
         $id_horario = filter_input(INPUT_POST, 'id_horario', FILTER_SANITIZE_NUMBER_INT);
         $empleado = $_SESSION['nombre'];
 
-        if(!$id_horario){
+        if (!$id_horario) {
             throw new Exception('Todos los campos son obligatorios');
         }
 
@@ -349,14 +355,14 @@ function eliminar_horario(){
         $eliminar = $modelo->manejarAccion('eliminar_horario');
         $nombre_empleado = $modelo->manejarAccion('obtener_empleado_horario');
 
-        if($eliminar['exito'] === true){
+        if ($eliminar['exito'] === true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => $modulo,
                 'accion' => 'Eliminación',
                 'descripcion' => "El empleado $empleado eliminó un horario para el empleado $nombre_empleado"
             ];
-            foreach($bitacora_data as $atributo => $valor){
+            foreach ($bitacora_data as $atributo => $valor) {
                 $bitacora->__set($atributo, $valor);
             }
             $bitacora->manejarAccion('registrar_bitacora');
@@ -369,7 +375,7 @@ function eliminar_horario(){
                 'id_receptor' => 1, //Administrador
                 'leido' => 0
             ];
-            foreach($notificacion_data as $atributo => $valor){
+            foreach ($notificacion_data as $atributo => $valor) {
                 $notificacion->__set($atributo, $valor);
             }
             $notificacion->manejarAccion('crear_notificacion');
@@ -379,7 +385,7 @@ function eliminar_horario(){
                 'mensaje' => $eliminar['mensaje']
             ]);
             exit();
-        } else{
+        } else {
             throw new Exception($eliminar['mensaje']);
         }
     } catch (Throwable $e) {
@@ -388,16 +394,17 @@ function eliminar_horario(){
             'mensaje' => $e->getMessage()
         ]);
         exit();
-    }   
+    }
 }
-function horarios_calendario_json() {
+function horarios_calendario_json()
+{
     $modelo = new HorarioModel();
     header('Content-Type: application/json');
-    
+
     try {
         // Usar la misma consulta que tenías
         $horarios = $modelo->manejarAccion('consultar_horarios');
-        
+
         // Verificar si es un array o tiene estructura de error
         if (isset($horarios['exito']) && !$horarios['exito']) {
             echo json_encode([
@@ -406,17 +413,16 @@ function horarios_calendario_json() {
             ]);
             return;
         }
-        
+
         // Asegurarnos de que sea un array
         $data = is_array($horarios) ? $horarios : ($horarios['data'] ?? []);
-        
+
         echo json_encode([
             'exito' => true,
             'mensaje' => 'Horarios cargados para calendario',
             'data' => $data
         ]);
-        
-    } catch(Throwable $e) {
+    } catch (Throwable $e) {
         error_log("Error en horarios_calendario_json: " . $e->getMessage());
         echo json_encode([
             'exito' => false,
