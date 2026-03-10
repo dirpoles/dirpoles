@@ -121,6 +121,21 @@ Router::get('ruta_detalle', function () {
     ruta_detalle();
 });
 
+Router::post('ruta_actualizar', function () {
+    load_controller('transporteController.php');
+    ruta_actualizar();
+});
+
+Router::post('ruta_eliminar', function () {
+    load_controller('transporteController.php');
+    ruta_eliminar();
+});
+
+Router::post('asignacion_eliminar', function () {
+    load_controller('transporteController.php');
+    asignaciones_eliminar();
+});
+
 //===========================(Repuestos)==============================
 Router::post('repuesto_registrar', function () {
     load_controller('transporteController.php');

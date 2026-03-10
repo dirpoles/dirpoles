@@ -84,9 +84,9 @@ function inicializarValidacionesRuta() {
             showError(field, "La hora de salida es obligatoria");
             return false;
         }
-        // Opcional: validar formato HH:MM
-        if (!/^\d{2}:\d{2}$/.test(val)) {
-            showError(field, "Formato de hora inválido (HH:MM)");
+        // Opcional: validar formato HH:MM o HH:MM:SS
+        if (!/^\d{2}:\d{2}(:\d{2})?$/.test(val)) {
+            showError(field, "Formato de hora inválido");
             return false;
         }
 
@@ -103,8 +103,9 @@ function inicializarValidacionesRuta() {
             showError(field, "La hora de llegada es obligatoria");
             return false;
         }
-        if (!/^\d{2}:\d{2}$/.test(llegada)) {
-            showError(field, "Formato de hora inválido (HH:MM)");
+        // Opcional: validar formato HH:MM o HH:MM:SS
+        if (!/^\d{2}:\d{2}(:\d{2})?$/.test(llegada)) {
+            showError(field, "Formato de hora inválido");
             return false;
         }
         // Opcional: llegada ≥ salida

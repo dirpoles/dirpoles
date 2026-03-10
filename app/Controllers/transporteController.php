@@ -1380,19 +1380,19 @@ function ruta_actualizar()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al actualizar la ruta."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -1448,19 +1448,19 @@ function ruta_eliminar()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al eliminar la ruta."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al eliminar la ruta."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -1516,19 +1516,19 @@ function asignaciones_eliminar()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al eliminar la ruta."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al eliminar la asignación de la ruta."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;

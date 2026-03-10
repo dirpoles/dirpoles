@@ -115,27 +115,15 @@ $('#tabla_asignar_recursos').DataTable({
             width: '140px',
             render: function (data, type, row) {
                 return `
-                            <div class="btn-group btn-group-sm" role="group">
-                                <button id="btnVerAR" class="btn btn-primary btn-ver" 
-                                        data-id="${data}"
-                                        data-bs-toggle="tooltip"
-                                        title="Ver detalles">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button id="btnEditarAR" class="btn btn-info btn-editar" 
-                                        data-id="${data}"
-                                        data-bs-toggle="tooltip"
-                                        title="Editar asignación">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button id="btnEliminarAR" class="btn btn-danger btn-eliminar" 
-                                        data-id="${data}"
-                                        data-bs-toggle="tooltip"
-                                        title="Eliminar asignación">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        `;
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button id="btnEliminarAR" class="btn btn-danger btn-eliminar" 
+                                data-id="${data}"
+                                data-bs-toggle="tooltip"
+                                title="Eliminar asignación">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
             }
         }
     ],
@@ -166,27 +154,8 @@ $('#tabla_asignar_recursos').DataTable({
  */
 function asignarEventosBotones() {
     const $tabla = $('#tabla_asignar_recursos');
-
     // Eliminar eventos anteriores para evitar duplicados
-    $tabla.off('click', '.btn-ver');
-    $tabla.off('click', '.btn-editar');
     $tabla.off('click', '.btn-eliminar');
-
-    // Ver detalles de la asignación
-    $tabla.on('click', '.btn-ver', function () {
-        const id = $(this).data('id');
-        TransporteLoader.cargar('asignar_recursos', 'ver', function () {
-            verAsignacion(id);
-        });
-    });
-
-    // Editar asignación
-    $tabla.on('click', '.btn-editar', function () {
-        const id = $(this).data('id');
-        TransporteLoader.cargar('asignar_recursos', ['editar', 'validar_editar'], function () {
-            editarAsignacion(id);
-        });
-    });
 
     // Eliminar asignación
     $tabla.on('click', '.btn-eliminar', function () {

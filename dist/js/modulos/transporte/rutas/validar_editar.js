@@ -1,131 +1,269 @@
-function editarRuta(id) {
-    const modalElement = document.getElementById('modalGenerico');
-    const modal = new bootstrap.Modal(modalElement);
+function inicializarValidacionesEditarRuta() {
+    const form = document.getElementById('formEditarRuta');
+    if (!form) return;
 
-    // Ajustamos el título del modal genérico
-    document.getElementById('modalGenericoTitle').innerHTML = '<i class="fas fa-route me-2"></i> Editar Ruta';
+    // Elementos del formulario
+    const elements = {
+        nombre_ruta: form.querySelector("#nombre_ruta"),
+        tipo_ruta: form.querySelector("#tipo_ruta"),
+        horario_salida: form.querySelector("#horario_salida"),
+        horario_llegada: form.querySelector("#horario_llegada"),
+        estatus_ruta: form.querySelector("#estatus_ruta"),
+        punto_partida: form.querySelector("#punto_partida"),
+        punto_destino: form.querySelector("#punto_destino"),
+        trayectoria: form.querySelector("#trayectoria"),
+    };
 
-    // Limpiar contenido y poner un spinner de carga
-    document.getElementById('modalContenido').innerHTML = `
-        <div class="text-center py-5">
-            <div class="spinner-border text-success" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
-            <p class="mt-2">Obteniendo datos de la ruta...</p>
-        </div>
-    `;
+    // Helper functions
+    const showError = (field, msg) => {
+        const errorElement = document.getElementById(`${field.id}Error`);
+        if (errorElement) errorElement.textContent = msg;
 
-    modal.show();
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
 
-    // Petición para obtener los datos del vehículo
-    $.ajax({
-        url: 'ruta_detalle',
-        method: 'GET',
-        data: { id_ruta: id },
-        dataType: 'json',
-        success: function (data) {
-            if (!data) {
-                document.getElementById('modalContenido').innerHTML = '<div class="alert alert-danger m-3">No se pudieron cargar los datos de la ruta.</div>';
-                return;
-            }
+        // Si es Select2, aplicar al contenedor visible
+        if ($(field).hasClass('select2')) {
+            $(field).next('.select2-container').find('.select2-selection')
+                .addClass('is-invalid')
+                .removeClass('is-valid');
+        }
+    };
 
-            // Inyectamos el formulario de edición con los datos cargados
-            document.getElementById('modalContenido').innerHTML = `
-                <form id="formEditarRuta" novalidate>
-                    <input type="hidden" name="id_ruta" id="id_ruta" value="${data.id_ruta}">
-                    
-                    <div class="modal-body">
-                        <div class="row">
-                            <div id="nombreRU" class="col-md-6 mb-3">
-                                <label for="nombre_ruta" class="form-label font-weight-bold">Nombre de la Ruta</label>
-                                <input type="text" name="nombre_ruta" id="nombre_ruta" class="form-control" 
-                                    placeholder="Escriba un nombre para la ruta" value="${data.nombre_ruta || ''}">
-                                <div id="nombre_rutaError" class="invalid-feedback"></div>
-                            </div>
-                            
-                            <div id="tipoRU" class="col-md-6 mb-3">
-                                <label for="tipo_ruta" class="form-label font-weight-bold">Tipo de Ruta</label>
-                                <select name="tipo_ruta" id="tipo_ruta" class="form-control">
-                                    <option value="" disabled>Seleccione...</option>
-                                    <option value="Extra-Urbana" ${data.tipo_ruta === 'Extra-Urbana' ? 'selected' : ''}>Extra-Urbana</option>
-                                    <option value="Inter-Urbana" ${data.tipo_ruta === 'Inter-Urbana' ? 'selected' : ''}>Inter-Urbana</option>
-                                    <option value="Vacacional" ${data.tipo_ruta === 'Vacacional' ? 'selected' : ''}>Vacacional</option>
-                                    <option value="Extra-Urbana Vacacional" ${data.tipo_ruta === 'Extra-Urbana Vacacional' ? 'selected' : ''}>Extra-Urbana Vacacional</option>
-                                    <option value="Inter-Urbana Vacacional" ${data.tipo_ruta === 'Inter-Urbana Vacacional' ? 'selected' : ''}>Inter-Urbana Vacacional</option>
-                                </select>
-                                <div id="tipo_rutaError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
+    const clearError = (field) => {
+        const errorElement = document.getElementById(`${field.id}Error`);
+        if (errorElement) errorElement.textContent = "";
 
-                        <div class="row mt-2">
-                            <div id="horarioSalidaRU" class="col-md-4 mb-3">
-                                <label for="horario_salida" class="form-label font-weight-bold">Hora de Salida</label>
-                                <input type="time" name="horario_salida" id="horario_salida" class="form-control" 
-                                    value="${data.horario_salida || ''}">
-                                <div id="horario_salidaError" class="invalid-feedback"></div>
-                            </div>
-                            
-                            <div id="horarioLlegadaRU" class="col-md-4 mb-3">
-                                <label for="horario_llegada" class="form-label font-weight-bold">Hora de Llegada</label>
-                                <input type="time" name="horario_llegada" id="horario_llegada" class="form-control" 
-                                    value="${data.horario_llegada || ''}">
-                                <div id="horario_llegadaError" class="invalid-feedback"></div>
-                            </div>
-                            
-                            <div id="estatusRU" class="col-md-4 mb-3">
-                                <label for="estatus_ruta" class="form-label font-weight-bold">Estatus</label>
-                                <select name="estatus" id="estatus_ruta" class="form-control">
-                                    <option value="Activa" ${data.estatus === 'Activa' ? 'selected' : ''}>Activa</option>
-                                    <option value="Inactiva" ${data.estatus === 'Inactiva' ? 'selected' : ''}>Inactiva</option>
-                                </select>
-                                <div id="estatus_rutaError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
+        field.classList.remove("is-invalid");
+        field.classList.add("is-valid");
 
-                        <div class="row mt-2">
-                            <div id="puntoPartidaRU" class="col-md-6 mb-3">
-                                <label for="punto_partida" class="form-label font-weight-bold">Punto de Partida</label>
-                                <input type="text" name="punto_partida" id="punto_partida" class="form-control" 
-                                    placeholder="Ej: Terminal Principal" value="${data.punto_partida || ''}">
-                                <div id="punto_partidaError" class="invalid-feedback"></div>
-                            </div>
-                            
-                            <div id="puntoDestinoRU" class="col-md-6 mb-3">
-                                <label for="punto_destino" class="form-label font-weight-bold">Punto de Destino</label>
-                                <input type="text" name="punto_destino" id="punto_destino" class="form-control" 
-                                    placeholder="Ej: Sede Universitaria" value="${data.punto_destino || ''}">
-                                <div id="punto_destinoError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
+        // Si es Select2, aplicar al contenedor visible
+        if ($(field).hasClass('select2')) {
+            $(field).next('.select2-container').find('.select2-selection')
+                .removeClass('is-invalid')
+                .addClass('is-valid');
+        }
+    };
 
-                        <div class="row mt-2">
-                            <div id="trayectoriaRU" class="col-md-12 mb-3">
-                                <label for="trayectoria" class="form-label font-weight-bold">Trayectoria Detallada</label>
-                                <textarea name="trayectoria" id="trayectoria" class="form-control" rows="3" 
-                                        placeholder="Describa el recorrido completo de la ruta...">${data.trayectoria || ''}</textarea>
-                                <div id="trayectoriaError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                    </div>
+    // Validaciones específicas
+    function validarNombreRuta() {
+        const field = elements.nombre_ruta;
+        const val = field.value.trim();
+        const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,50}$/;
 
-                    <div class="modal-footer border-top-0 d-flex justify-content-end">
-                        <button type="button" class="btn btn-secondary shadow-sm" data-bs-dismiss="modal">
-                            <i class="fas fa-times me-1"></i> Cerrar
-                        </button>
-                        <button type="submit" class="btn btn-success shadow-sm">
-                            <i class="fas fa-save me-1"></i> Guardar Cambios
-                        </button>
-                    </div>
-                </form>
-            `;
+        if (!val) {
+            showError(field, "El nombre de la ruta es obligatorio");
+            return false;
+        }
+        if (!regex.test(val)) {
+            showError(field, "Solo letras y espacios (2-50 caracteres)");
+            return false;
+        }
+        clearError(field);
+        return true;
+    }
 
-            // Re-vincular validaciones
-            if (typeof inicializarValidacionesEditarRuta === 'function') {
-                inicializarValidacionesEditarRuta();
-            }
-        },
-        error: function () {
-            document.getElementById('modalContenido').innerHTML = '<div class="alert alert-danger m-3">Error al conectar con el servidor.</div>';
+    function validartipoRuta() {
+        const field = elements.tipo_ruta;
+        const val = field.value.trim();
+
+        if (!val) {
+            showError(field, "El tipo de ruta es obligatorio");
+            return false;
+        }
+
+        clearError(field);
+        return true;
+    }
+
+    function validarHorarioSalida() {
+        const field = elements.horario_salida;
+        const val = field.value;
+
+        if (!val) {
+            showError(field, "La hora de salida es obligatoria");
+            return false;
+        }
+        // Opcional: validar formato HH:MM o HH:MM:SS
+        if (!/^\d{2}:\d{2}(:\d{2})?$/.test(val)) {
+            showError(field, "Formato de hora inválido");
+            return false;
+        }
+
+        clearError(field);
+        return true;
+    }
+
+    function validarHorarioLlegada() {
+        const field = elements.horario_llegada;
+        const salida = elements.horario_salida.value;
+        const llegada = field.value;
+
+        if (!llegada) {
+            showError(field, "La hora de llegada es obligatoria");
+            return false;
+        }
+        // Opcional: validar formato HH:MM o HH:MM:SS
+        if (!/^\d{2}:\d{2}(:\d{2})?$/.test(llegada)) {
+            showError(field, "Formato de hora inválido");
+            return false;
+        }
+        // Opcional: llegada ≥ salida
+        if (salida && llegada < salida) {
+            showError(field, "La llegada no puede ser antes de la salida");
+            return false;
+        }
+
+        clearError(field);
+        return true;
+    }
+
+    function validarEstatusRuta() {
+        const field = elements.estatus_ruta;
+        const val = field.value;
+
+        if (!val) {
+            showError(field, "Debe seleccionar un estatus");
+            return false;
+        }
+        clearError(field);
+        return true;
+    }
+
+    function validarPuntoPartida() {
+        const field = elements.punto_partida;
+        const val = field.value.trim();
+
+        if (!val) {
+            showError(field, "El punto de partida es obligatorio");
+            return false;
+        }
+        if (val.length < 3) {
+            showError(field, "Mínimo 3 caracteres");
+            return false;
+        }
+
+        clearError(field);
+        return true;
+    }
+
+    function validarPuntoDestino() {
+        const field = elements.punto_destino;
+        const val = field.value.trim();
+
+        if (!val) {
+            showError(field, "El punto de destino es obligatorio");
+            return false;
+        }
+        if (val.length < 3) {
+            showError(field, "Mínimo 3 caracteres");
+            return false;
+        }
+
+        clearError(field);
+        return true;
+    }
+
+    function validarTrayectoria() {
+        const field = elements.trayectoria;
+        const val = field.value.trim();
+
+        if (!val) {
+            showError(field, "La trayectoria es obligatoria");
+            return false;
+        }
+        if (val.length < 10) {
+            showError(field, "Describe al menos 10 caracteres");
+            return false;
+        }
+
+        clearError(field);
+        return true;
+    }
+
+    // Event Listeners para validación en tiempo real
+    elements.nombre_ruta.addEventListener("input", validarNombreRuta);
+    elements.tipo_ruta.addEventListener("change", validartipoRuta);
+    elements.horario_llegada.addEventListener("change", validarHorarioLlegada);
+    elements.horario_salida.addEventListener("change", validarHorarioSalida);
+    elements.estatus_ruta.addEventListener("change", validarEstatusRuta);
+    elements.punto_partida.addEventListener("input", validarPuntoPartida);
+    elements.punto_destino.addEventListener("input", validarPuntoDestino);
+    elements.trayectoria.addEventListener("input", validarTrayectoria);
+
+    // Validación del formulario
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Ejecutamos todas las validaciones para que se marquen todos los errores
+        const isNombreValid = validarNombreRuta();
+        const isTipoValid = validartipoRuta();
+        const isSalidaValid = validarHorarioSalida();
+        const isLlegadaValid = validarHorarioLlegada();
+        const isEstatusValid = validarEstatusRuta();
+        const isPartidaValid = validarPuntoPartida();
+        const isDestinoValid = validarPuntoDestino();
+        const isTrayectoriaValid = validarTrayectoria();
+
+        if (isNombreValid && isTipoValid && isSalidaValid && isLlegadaValid && isEstatusValid && isPartidaValid && isDestinoValid && isTrayectoriaValid) {
+            enviarFormularioRuta(form);
+        } else {
+            AlertManager.warning('Atención', 'Por favor, corrige los errores en el formulario.');
         }
     });
+}
+
+async function enviarFormularioRuta(form) {
+    try {
+        // Bloquear el botón de submit para evitar doble clic
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        const originalText = btnSubmit.innerHTML;
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
+
+        const formData = new FormData(form);
+        const response = await fetch('ruta_actualizar', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        if (!response.ok) throw new Error('Error en la comunicación con el servidor');
+
+        const data = await response.json();
+
+        if (data.exito || data.success) {
+            AlertManager.success('Exito', data.mensaje || 'Ruta registrada correctamente.');
+
+            // 1. Resetear el formulario
+            form.reset();
+            // 2. Cerrar el modal (usando el ID genérico que definiste)
+            const modalElement = document.getElementById('modalGenerico');
+            const bsModal = bootstrap.Modal.getInstance(modalElement);
+            if (bsModal) bsModal.hide();
+
+            // 3. Recargar DataTable específicamente
+            if ($.fn.DataTable.isDataTable('#tabla_rutas')) {
+                $('#tabla_rutas').DataTable().ajax.reload(null, false);
+                // null, false permite recargar sin perder la página actual de la tabla
+            } else {
+                // Si por alguna razón la tabla no es DataTable, recarga la página
+                window.location.reload();
+            }
+
+        } else {
+            AlertManager.error('Error', data.mensaje || 'No se pudo registrar la ruta.');
+        }
+
+    } catch (error) {
+        console.error('Error en el registro:', error);
+        AlertManager.error('Error crítico', 'Ocurrió un fallo inesperado: ' + error.message);
+    } finally {
+        // Restaurar botón
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<i class="fas fa-save"></i> Registrar';
+    }
 }
