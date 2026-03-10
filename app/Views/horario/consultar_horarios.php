@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titulo = "Consultar Horarios";
 include 'app/Views/template/head.php';
 ?>
@@ -7,7 +7,7 @@ include 'app/Views/template/head.php';
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-         <?php include 'app/Views/template/sidebar.php'; ?>
+        <?php include 'app/Views/template/sidebar.php'; ?>
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -32,9 +32,15 @@ include 'app/Views/template/head.php';
                                     <h6 class="m-0 font-weight-bold text-primary">
                                         <i class="fas fa-calendar-alt me-2"></i> Horarios de Psicología
                                     </h6>
-                                    <button type="button" class="btn btn-success" id="btn-nuevo-horario">
-                                        <i class="fa-solid fa-clock me-1"></i> Nuevo Horario
-                                    </button>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-success btn-sm" id="btn-nuevo-horario">
+                                            <i class="fa-solid fa-clock me-1"></i> Nuevo Horario
+                                        </button>
+                                        <a href="<?= BASE_URL ?>consultar_empleados"
+                                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                            <i class="fas fa-clipboard-list fa-sm text-white-50 me-1"></i> Regresar
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <!-- Filtros -->
@@ -42,7 +48,7 @@ include 'app/Views/template/head.php';
                                         <div class="col-md-4">
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                                <input type="text" class="form-control" id="filter-psicologo" 
+                                                <input type="text" class="form-control" id="filter-psicologo"
                                                     placeholder="Buscar psicólogo...">
                                             </div>
                                         </div>
@@ -58,7 +64,7 @@ include 'app/Views/template/head.php';
                                             </select>
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Calendario Semanal -->
                                     <div class="table-responsive" id="calendario-semanal">
                                         <table class="table table-bordered align-middle text-center">
@@ -86,7 +92,7 @@ include 'app/Views/template/head.php';
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                     <!-- Leyenda -->
                                     <!-- Leyenda mejorada y más útil -->
                                     <div class="row mt-4">
@@ -137,171 +143,180 @@ include 'app/Views/template/head.php';
     </div>
     <!-- End of Page Wrapper -->
 
-   <?php include 'app/Views/template/script.php'; ?>
-   <!-- Script principal de la página -->
-   
-   <script src="<?php BASE_URL ?>dist/js/modulos/horario/editar_horario.js"></script>
-   <script src="<?php BASE_URL ?>dist/js/modulos/horario/validar_editar_horario.js"></script>
-   <script src="<?php BASE_URL ?>dist/js/modulos/horario/eliminar_horario.js"></script>
-   <script src="<?php BASE_URL ?>dist/js/modulos/horario/calendario_horario.js"></script>
+    <?php include 'app/Views/template/script.php'; ?>
+    <!-- Script principal de la página -->
 
-   <style>
-    /* calendario_horarios.css */
-    #calendario-semanal table {
-        font-size: 0.9rem;
-    }
+    <script src="<?php BASE_URL ?>dist/js/modulos/horario/editar_horario.js"></script>
+    <script src="<?php BASE_URL ?>dist/js/modulos/horario/validar_editar_horario.js"></script>
+    <script src="<?php BASE_URL ?>dist/js/modulos/horario/eliminar_horario.js"></script>
+    <script src="<?php BASE_URL ?>dist/js/modulos/horario/calendario_horario.js"></script>
 
-    #calendario-semanal th {
-        font-weight: 600;
-        background-color: #f8f9fa;
-        vertical-align: middle;
-        padding: 12px 8px;
-    }
+    <style>
+        /* calendario_horarios.css */
+        #calendario-semanal table {
+            font-size: 0.9rem;
+        }
 
-    #calendario-semanal td {
-        padding: 8px;
-        vertical-align: top;
-        height: 120px;
-        position: relative;
-    }
+        #calendario-semanal th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+            vertical-align: middle;
+            padding: 12px 8px;
+        }
 
-    .psicologo-header {
-        text-align: left !important;
-        padding-left: 16px !important;
-        background-color: #e9ecef;
-    }
+        #calendario-semanal td {
+            padding: 8px;
+            vertical-align: top;
+            height: 120px;
+            position: relative;
+        }
 
-    .horario-cell {
-        min-height: 100px;
-        border: 1px solid #dee2e6;
-    }
+        .psicologo-header {
+            text-align: left !important;
+            padding-left: 16px !important;
+            background-color: #e9ecef;
+        }
 
-    .horario-item {
-        margin-bottom: 4px;
-        padding: 6px 8px;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        border-left: 3px solid;
-    }
+        .horario-cell {
+            min-height: 100px;
+            border: 1px solid #dee2e6;
+        }
 
-    .horario-item:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+        .horario-item {
+            margin-bottom: 4px;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid;
+        }
 
-    .horario-normal {
-        background-color: #d1e7dd;
-        border-left-color: #198754;
-        color: #0f5132;
-    }
+        .horario-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .horario-parcial {
-        background-color: #fff3cd;
-        border-left-color: #ffc107;
-        color: #664d03;
-    }
+        .horario-normal {
+            background-color: #d1e7dd;
+            border-left-color: #198754;
+            color: #0f5132;
+        }
 
-    .horario-conflicto {
-        background-color: #f8d7da;
-        border-left-color: #dc3545;
-        color: #842029;
-    }
+        .horario-parcial {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+            color: #664d03;
+        }
 
-    .horario-empty {
-        color: #6c757d;
-        font-style: italic;
-        font-size: 0.85rem;
-    }
+        .horario-conflicto {
+            background-color: #f8d7da;
+            border-left-color: #dc3545;
+            color: #842029;
+        }
 
-    .psicologo-row td:first-child {
-        font-weight: 500;
-        background-color: #f8f9fa;
-        border-right: 2px solid #dee2e6;
-    }
+        .horario-empty {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
 
-    .horario-time {
-        font-weight: 600;
-        display: block;
-        margin-bottom: 2px;
-    }
+        .psicologo-row td:first-child {
+            font-weight: 500;
+            background-color: #f8f9fa;
+            border-right: 2px solid #dee2e6;
+        }
 
-    .horario-actions {
-        display: flex;
-        gap: 4px;
-        margin-top: 4px;
-        opacity: 0;
-        transition: opacity 0.2s;
-    }
+        .horario-time {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
 
-    .horario-item:hover .horario-actions {
-        opacity: 1;
-    }
+        .horario-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
 
-    .horario-actions .btn {
-        padding: 1px 4px;
-        font-size: 0.7rem;
-    }
+        .horario-item:hover .horario-actions {
+            opacity: 1;
+        }
 
-    /* Para días sin horarios */
-    .dia-vacio {
-        background-color: #f8f9fa;
-    }
+        .horario-actions .btn {
+            padding: 1px 4px;
+            font-size: 0.7rem;
+        }
 
-    
+        /* Para días sin horarios */
+        .dia-vacio {
+            background-color: #f8f9fa;
+        }
 
-    /* Mejoras visuales generales */
-.horario-item {
-    position: relative;
-    overflow: hidden;
-}
 
-.horario-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-}
 
-.horario-normal::before { background-color: #198754; }
-.horario-parcial::before { background-color: #ffc107; }
-.horario-conflicto::before { background-color: #dc3545; }
+        /* Mejoras visuales generales */
+        .horario-item {
+            position: relative;
+            overflow: hidden;
+        }
 
-/* Efecto hover mejorado */
-.horario-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    z-index: 10;
-}
+        .horario-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
 
-/* Responsive para móviles */
-@media (max-width: 768px) {
-    .psicologo-header {
-        font-size: 0.85rem;
-    }
-    
-    .horario-time {
-        font-size: 0.75rem;
-    }
-    
-    .horario-actions .btn {
-        padding: 2px 5px;
-        font-size: 0.7rem;
-    }
-}
+        .horario-normal::before {
+            background-color: #198754;
+        }
 
-/* Animaciones suaves */
-.psicologo-row {
-    transition: all 0.3s ease;
-}
+        .horario-parcial::before {
+            background-color: #ffc107;
+        }
 
-.psicologo-row:hover {
-    background-color: #f8f9fa;
-}
-   </style>
+        .horario-conflicto::before {
+            background-color: #dc3545;
+        }
+
+        /* Efecto hover mejorado */
+        .horario-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            .psicologo-header {
+                font-size: 0.85rem;
+            }
+
+            .horario-time {
+                font-size: 0.75rem;
+            }
+
+            .horario-actions .btn {
+                padding: 2px 5px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Animaciones suaves */
+        .psicologo-row {
+            transition: all 0.3s ease;
+        }
+
+        .psicologo-row:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
 
 </body>
+
 </html>

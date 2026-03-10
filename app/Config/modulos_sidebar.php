@@ -84,15 +84,6 @@ return [
             ['url' => 'transporte_consulta', 'texto' => 'Consultar', 'permiso' => 2]
         ]
     ],
-    18 => [
-        'key' => 'horario',
-        'icon' => 'fa-clock',
-        'titulo' => 'Gestionar Horario',
-        'subitems' => [
-            ['url' => 'crear_horario', 'texto' => 'Crear', 'permiso' => 2],
-            ['url' => 'consultar_horarios', 'texto' => 'Consultar', 'permiso' => 2]
-        ]
-    ],
     14 => [
         'key' => 'configuraciones',
         'icon' => 'fa-gear',

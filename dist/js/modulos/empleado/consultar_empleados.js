@@ -144,6 +144,13 @@ $(function () {
                             action: function () {
                                 window.location.href = 'crear_empleado';
                             }
+                        },
+                        {
+                            text: '<i class="fa-regular fa-clock"></i> Horarios Psicólogos',
+                            className: 'btn btn-warning',
+                            action: function () {
+                                window.location.href = 'consultar_horarios';
+                            }
                         }
                     ]
                 },

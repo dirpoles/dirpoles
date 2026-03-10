@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titulo = "Crear Horario";
 include BASE_PATH . '/app/Views/template/head.php';
 ?>
@@ -22,6 +22,10 @@ include BASE_PATH . '/app/Views/template/head.php';
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h2 mb-0 text-gray-800">Gestionar Horario</h1>
+                        <a href="<?= BASE_URL ?>consultar_horarios"
+                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <i class="fas fa-clipboard-list fa-sm text-white-50 me-1"></i> Consultar Horarios
+                        </a>
                     </div>
 
                     <!-- Content Row - Cards -->
@@ -48,7 +52,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Total Horas Semanales -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card text-bg-primary shadow h-100 py-2">
@@ -189,22 +193,23 @@ include BASE_PATH . '/app/Views/template/head.php';
                         </div>
                     </div>
 
-                <!-- /.container-fluid -->
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+                <?php include BASE_PATH . '/app/Views/horario/modal_horario.php'; ?>
+                <!-- Footer -->
+
+                <!-- End of Footer -->
+
             </div>
-            <!-- End of Main Content -->
-            <?php include BASE_PATH . '/app/Views/horario/modal_horario.php'; ?>
-            <!-- Footer -->
-            
-            <!-- End of Footer -->
-
+            <!-- End of Content Wrapper -->
+            <?php include BASE_PATH . '/app/Views/template/footer.php'; ?>
         </div>
-        <!-- End of Content Wrapper -->
-        <?php include BASE_PATH . '/app/Views/template/footer.php'; ?>
-    </div>
-    <!-- End of Page Wrapper -->
+        <!-- End of Page Wrapper -->
 
-   <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
-   <script src="<?= BASE_URL ?>dist/js/modulos/horario/crear_horario.js"></script>
+        <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
+        <script src="<?= BASE_URL ?>dist/js/modulos/horario/crear_horario.js"></script>
 
 </body>
+
 </html>
