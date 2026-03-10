@@ -116,6 +116,11 @@ Router::post('asignar_recursos_registrar', function () {
     asignar_recursos();
 });
 
+Router::get('ruta_detalle', function () {
+    load_controller('transporteController.php');
+    ruta_detalle();
+});
+
 //===========================(Repuestos)==============================
 Router::post('repuesto_registrar', function () {
     load_controller('transporteController.php');

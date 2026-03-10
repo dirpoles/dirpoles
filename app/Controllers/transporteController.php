@@ -1299,38 +1299,13 @@ function proveedor_eliminar()
     exit;
 }
 
-function ruta_editar()
+function ruta_detalle()
 {
     $modelo = new TransporteModel();
-    $permisos = new PermisosModel();
-    $modulo = 'Transporte';
-
-    $verificar = [
-        'Modulo' => $modulo,
-        'Permiso' => 'Leer',
-        'Rol' => $_SESSION['id_tipo_empleado']
-    ];
-
-    foreach ($verificar as $atributo => $valor) {
-        $permisos->__set($atributo, $valor);
-    }
-
-    try {
-        if (!$permisos->manejarAccion('Verificar')) {
-            throw new Exception('No tienes permiso para realizar esta acción');
-        }
-
-        $modelo->__set('id_ruta', $_GET['id_ruta']);
-        $ruta = $modelo->manejarAccion('Editar_ruta');
-
-        require_once 'app/views/transporte_editar_ruta.php';
-    } catch (Exception $e) {
-        echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
-    }
-    exit;
+    header('Content-Type: application/json');
+    $modelo->__set('id_ruta', $_GET['id_ruta']);
+    $ruta = $modelo->manejarAccion('ruta_detalle');
+    echo json_encode($ruta);
 }
 
 function ruta_actualizar()

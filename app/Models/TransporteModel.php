@@ -170,10 +170,8 @@ class TransporteModel extends BusinessModel
             case 'Eliminar_proveedor':
                 return $this->eliminar_proveedor();
                 //------------------
-
-            case 'Editar_ruta':
+            case 'ruta_detalle':
                 return $this->obtener_rutaID();
-
 
             case 'Actualizar_ruta':
                 return $this->ruta_actualizar();
