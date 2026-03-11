@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titulo = "Inicio";
 include 'app/Views/template/head.php';
 ?>
@@ -7,7 +7,7 @@ include 'app/Views/template/head.php';
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-         <?php include 'app/Views/template/sidebar.php'; ?>
+        <?php include 'app/Views/template/sidebar.php'; ?>
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -22,7 +22,7 @@ include 'app/Views/template/head.php';
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Bienvenido, <?= $_SESSION['nombre'] . ' ' . $_SESSION['apellido'] ?></h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        <a href="<?= BASE_URL ?>reportes_general" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-file fa-sm text-white-50"></i> Ver Reportes</a>
                     </div>
 
@@ -30,9 +30,9 @@ include 'app/Views/template/head.php';
                     <div class="row">
                         <?php
                         $tipoEmpleado = $_SESSION['tipo_empleado'] ?? '';
-                        
+
                         // Cargar componentes de estadísticas según el tipo de empleado
-                        switch($tipoEmpleado) {
+                        switch ($tipoEmpleado) {
                             case 'Psicologo':
                                 include 'components/stats_psicologo.php';
                                 break;
@@ -60,7 +60,7 @@ include 'app/Views/template/head.php';
                         ?>
                     </div>
 
-                <!-- Content Row - Main Dynamic Content --> 
+                    <!-- Content Row - Main Dynamic Content -->
                     <div class="row">
                         <!-- Sección del Calendario para roles que lo requieren -->
                         <?php include 'components/calendario.php'; ?>
@@ -83,45 +83,46 @@ include 'app/Views/template/head.php';
     <!-- End of Page Wrapper -->
 
 
-   <?php include 'app/Views/template/script.php'; ?>
-   <?php include 'app/Views/template/scripts-dashboard.php'; ?>
+    <?php include 'app/Views/template/script.php'; ?>
+    <?php include 'app/Views/template/scripts-dashboard.php'; ?>
 
-   <!-- Calendario personal (debe ir al final) -->
+    <!-- Calendario personal (debe ir al final) -->
     <script src="<?= BASE_URL ?>dist/js/modulos/calendario/calendario_personal.js"></script>
 
-<style>
-    /* Ajustar altura mínima de las celdas */
-.fc-daygrid-day {
-  min-height: 100px;
-}
+    <style>
+        /* Ajustar altura mínima de las celdas */
+        .fc-daygrid-day {
+            min-height: 100px;
+        }
 
-/* Eventos con estilo más compacto */
-.fc-event {
-  font-size: 0.85rem;
-  padding: 2px 4px;
-  border-radius: 0.25rem;
-}
+        /* Eventos con estilo más compacto */
+        .fc-event {
+            font-size: 0.85rem;
+            padding: 2px 4px;
+            border-radius: 0.25rem;
+        }
 
 
-/* Hover sobre eventos */
-.fc-event:hover {
-  opacity: 0.85;
-  cursor: pointer;
-}
+        /* Hover sobre eventos */
+        .fc-event:hover {
+            opacity: 0.85;
+            cursor: pointer;
+        }
 
-/* Toolbar más compacto */
-.fc-toolbar-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
+        /* Toolbar más compacto */
+        .fc-toolbar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
 
-.fc-prev-button .fa,
-.fc-next-button .fa {
-  font-size: 1rem;
-  margin-right: 4px;
-}
-</style>
+        .fc-prev-button .fa,
+        .fc-next-button .fa {
+            font-size: 1rem;
+            margin-right: 4px;
+        }
+    </style>
 
 
 </body>
+
 </html>
