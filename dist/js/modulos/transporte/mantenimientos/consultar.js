@@ -98,38 +98,6 @@ $('#tabla_historial_mantenimientos').DataTable({
             render: function (data) {
                 return data || '<span class="text-muted">No especificado</span>';
             }
-        },
-        // Columna de acciones simplificada
-        {
-            data: 'id_mantenimiento',
-            title: 'Acciones',
-            orderable: false,
-            searchable: false,
-            width: '140px',
-            render: function (data, type, row) {
-                return `
-                            <div class="btn-group btn-group-sm" role="group">
-                                <button id="btnVerM" class="btn btn-primary btn-ver" 
-                                        data-id="${data}"
-                                        data-bs-toggle="tooltip"
-                                        title="Ver detalles">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button id="btnEditarM" class="btn btn-info btn-editar" 
-                                        data-id="${data}"
-                                        data-bs-toggle="tooltip"
-                                        title="Editar mantenimiento">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button id="btnEliminarM" class="btn btn-danger btn-eliminar" 
-                                        data-id="${data}"
-                                        data-bs-toggle="tooltip"
-                                        title="Eliminar mantenimiento">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        `;
-            }
         }
     ],
     initComplete: function (settings, json) {

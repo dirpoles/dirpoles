@@ -77,6 +77,14 @@ function vehiculos_data_json()
     echo json_encode($data);
 }
 
+function asignaciones_calendario_json()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+    $data = $modelo->manejarAccion('Asignaciones_calendario');
+    echo json_encode($data);
+}
+
 function vehiculo_detalle()
 {
     $modelo = new TransporteModel();
@@ -804,7 +812,7 @@ function repuestos_entrada()
 
         $resultado = $modelo->manejarAccion('Registrar_entrada_repuesto');
 
-        if (isset($resultado['status']) && $resultado['status'] === true) {
+        if (isset($resultado['exito']) && $resultado['exito'] === true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -822,7 +830,7 @@ function repuestos_entrada()
 
             $notificacion_data = [
                 'titulo' => 'Entrada de repuesto',
-                'url' => '#',
+                'url' => 'transporte_consulta',
                 'id_emisor' => $_SESSION['id_empleado'],
                 'id_receptor' => 1,
                 'leido' => 0
@@ -838,20 +846,20 @@ function repuestos_entrada()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
             ]);
         }
     } catch (Exception $e) {
         http_response_code(400);
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
 }
@@ -1302,6 +1310,7 @@ function proveedor_eliminar()
 function ruta_detalle()
 {
     $modelo = new TransporteModel();
+
     header('Content-Type: application/json');
     $modelo->__set('id_ruta', $_GET['id_ruta']);
     $ruta = $modelo->manejarAccion('ruta_detalle');
@@ -1534,43 +1543,13 @@ function asignaciones_eliminar()
     exit;
 }
 
-function repuesto_editar()
+function repuesto_detalle()
 {
     $modelo = new TransporteModel();
-    $permisos = new PermisosModel();
-    $modulo = 'Transporte';
-
-    $verificar = [
-        'Modulo' => $modulo,
-        'Permiso' => 'Leer',
-        'Rol' => $_SESSION['id_tipo_empleado']
-    ];
-
-    foreach ($verificar as $atributo => $valor) {
-        $permisos->__set($atributo, $valor);
-    }
-
-    try {
-        if (!$permisos->manejarAccion('Verificar')) {
-            throw new Exception('No tienes permiso para realizar esta acción');
-        }
-
-        $modelo->__set('id_repuesto', $_GET['id_repuesto']);
-        $repuesto = $modelo->manejarAccion('Editar_repuesto');
-
-        $data = [
-            'ID' => $repuesto['ID'],
-            'Proveedores' => $repuesto['Proveedores']
-        ];
-
-        require_once 'app/views/transporte_editar_repuesto.php';
-    } catch (Exception $e) {
-        echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]);
-    }
-    exit;
+    header('Content-Type: application/json');
+    $modelo->__set('id_repuesto', $_GET['id_repuesto']);
+    $repuesto = $modelo->manejarAccion('repuesto_detalle');
+    echo json_encode($repuesto);
 }
 
 function repuesto_actualizar()
@@ -1637,19 +1616,19 @@ function repuesto_actualizar()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -1705,20 +1684,29 @@ function repuesto_eliminar()
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al eliminar la ruta."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al eliminar la ruta."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
+}
+
+function movimientos_repuestos()
+{
+    $modelo = new TransporteModel();
+    header('Content-Type: application/json');
+
+    $historial = $modelo->manejarAccion('repuestos_movimientos');
+    echo json_encode($historial);
 }

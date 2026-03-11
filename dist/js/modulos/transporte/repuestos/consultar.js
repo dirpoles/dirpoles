@@ -59,10 +59,9 @@ $('#tabla_repuestos').DataTable({
                     },
                     className: 'btn btn-success',
                     action: function () {
-                        AlertManager.info('Funcionalidad en desarrollo');
-                        // TransporteLoader.cargar('repuestos', 'agregar_entrada', function () {
-                        //     abrirModalAgregarEntrada();
-                        // });
+                        TransporteLoader.cargar('repuestos', 'agregar_entrada', function () {
+                            abrirModalAgregarEntrada();
+                        });
                     }
                 },
                 {
@@ -72,10 +71,9 @@ $('#tabla_repuestos').DataTable({
                     },
                     className: 'btn btn-warning',
                     action: function () {
-                        AlertManager.info('Funcionalidad en desarrollo');
-                        // TransporteLoader.cargar('repuestos', 'movimientos', function () {
-                        //     abrirModalMovimientos();
-                        // });
+                        TransporteLoader.cargar('repuestos', 'movimientos', function () {
+                            abrirModalMovimientos();
+                        });
                     }
                 }
             ]
@@ -147,6 +145,8 @@ $('#tabla_repuestos').DataTable({
                         return '<span class="badge bg-success">' + data + '</span>';
                     case 'Usado':
                         return '<span class="badge bg-warning">' + data + '</span>';
+                    case 'Dañado':
+                        return '<span class="badge bg-danger">' + data + '</span>';
                     default:
                         return '<span class="text-muted">No especificado</span>';
                 }

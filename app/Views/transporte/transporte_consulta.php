@@ -365,24 +365,105 @@ include BASE_PATH . '/app/Views/template/head.php';
                     }
                 }
 
-                // Guardar la tab activa cuando cambie
+                // Guardar la tab activa cuando cambie y arreglar renderizado del calendario
                 transporteTab.addEventListener('shown.bs.tab', function(event) {
                     const target = event.target.getAttribute('data-bs-target');
                     localStorage.setItem('transporteActiveTab', target);
+
+                    // Si se vuelve a la tab de inicio, re-renderizar el calendario
+                    if (target === '#inicio' && window.calendarInstance) {
+                        window.calendarInstance.render();
+                    }
                 });
             }
 
             var calendario = document.getElementById('calendario_transporte');
-            var calendar = new FullCalendar.Calendar(calendario, {
+            window.calendarInstance = new FullCalendar.Calendar(calendario, {
                 initialView: 'dayGridMonth',
                 locale: 'es',
                 headerToolbar: {
                     left: 'prev,next',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek'
+                },
+                events: function(info, successCallback, failureCallback) {
+                    fetch(BASE_URL + 'asignaciones_calendario_json')
+                        .then(response => response.json())
+                        .then(data => {
+                            // Mapear los datos del backend al formato de FullCalendar
+                            const eventos = data.map(item => {
+                                let color = '#3788d8'; // Azul por defecto
+                                if (item.tipo_ruta === 'Urbana') color = '#28a745';
+                                else if (item.tipo_ruta === 'Suburbana') color = '#ffc107';
+
+                                return {
+                                    id: item.id_asignacion,
+                                    title: item.nombre_ruta + ' (' + item.vehiculo + ')',
+                                    start: item.fecha_asignacion,
+                                    backgroundColor: color,
+                                    borderColor: color,
+                                    extendedProps: {
+                                        ruta: item.nombre_ruta,
+                                        vehiculo: item.vehiculo,
+                                        chofer: item.nombre_chofer + ' ' + item.apellido_chofer,
+                                        tipo: item.tipo_ruta,
+                                        estatus: item.estatus
+                                    }
+                                };
+                            });
+                            successCallback(eventos);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching calendar events:', error);
+                            failureCallback(error);
+                        });
+                },
+                eventClick: function(info) {
+                    const props = info.event.extendedProps;
+                    // Mostrar los detalles en el modal genérico
+                    const modalElement = document.getElementById('modalGenerico');
+                    document.getElementById('modalGenericoTitle').innerHTML = '<i class="fas fa-route me-2"></i> Detalles de la Asignación';
+
+                    let htmlDetalles = `
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <strong>Ruta:</strong> <br> ${props.ruta}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Tipo de Ruta:</strong> <br> ${props.tipo}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Vehículo:</strong> <br> ${props.vehiculo}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Chofer asignado:</strong> <br> ${props.chofer}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Fecha:</strong> <br> ${moment ? moment(info.event.start).format('DD/MM/YYYY') : info.event.startStr}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Estado:</strong> <br> 
+                                <span class="badge bg-success">${props.estatus}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById('modalContenido').innerHTML = `
+                        <div class="modal-body">
+                            ${htmlDetalles}
+                        </div>
+                        <div class="modal-footer border-top-0 d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary shadow-sm" data-bs-dismiss="modal">
+                                Cerrar
+                            </button>
+                        </div>
+                    `;
+
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
                 }
             });
-            calendar.render();
+            window.calendarInstance.render();
         });
     </script>
 

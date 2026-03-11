@@ -43,6 +43,11 @@ Router::get('mantenimientos_data_json', function () {
     mantenimientos_data_json();
 });
 
+Router::get('asignaciones_calendario_json', function () {
+    load_controller('transporteController.php');
+    asignaciones_calendario_json();
+});
+
 //========================== (Vehiculos) ================================
 Router::post('vehiculos_validar_placa', function () {
     load_controller('transporteController.php');
@@ -142,6 +147,30 @@ Router::post('repuesto_registrar', function () {
     repuestos_registrar();
 });
 
+Router::get('repuesto_detalle', function () {
+    load_controller('transporteController.php');
+    repuesto_detalle();
+});
+
+Router::post('repuesto_actualizar', function () {
+    load_controller('transporteController.php');
+    repuesto_actualizar();
+});
+
+Router::post('repuesto_eliminar', function () {
+    load_controller('transporteController.php');
+    repuesto_eliminar();
+});
+
+Router::get('repuestos_movimientos', function () {
+    load_controller('transporteController.php');
+    movimientos_repuestos();
+});
+
+Router::post('registrar_entrada_repuesto', function () {
+    load_controller('transporteController.php');
+    repuestos_entrada();
+});
 //==============================(Mantenimientos)==============================
 Router::post('mantenimiento_registrar', function () {
     load_controller('transporteController.php');

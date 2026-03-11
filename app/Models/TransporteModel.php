@@ -169,35 +169,30 @@ class TransporteModel extends BusinessModel
 
             case 'Eliminar_proveedor':
                 return $this->eliminar_proveedor();
-                //------------------
+
             case 'ruta_detalle':
                 return $this->obtener_rutaID();
 
             case 'Actualizar_ruta':
                 return $this->ruta_actualizar();
 
-
             case 'Eliminar_ruta':
                 return $this->ruta_eliminar();
 
-
             case 'Eliminar_asignacion':
                 return $this->Eliminar_asignacion();
-
-
-            case 'Editar_repuesto':
-                return [
-                    'ID' => $this->obtener_repuestoID(),
-                    'Proveedores' => $this->obtener_proveedores()
-                ];
-
+                //----------------------
+            case 'repuesto_detalle':
+                return $this->obtener_repuestoID();
 
             case 'Actualizar_repuesto':
                 return $this->actualizar_repuesto();
 
-
             case 'Eliminar_repuesto':
                 return $this->eliminar_repuesto();
+
+            case 'repuestos_movimientos':
+                return $this->obtener_inventario_repuestos();
         }
     }
 
@@ -737,13 +732,13 @@ class TransporteModel extends BusinessModel
             $this->conn->commit();
 
             return [
-                "status" => true,
+                "exito" => true,
                 "mensaje" => "Entrada registrada exitosamente"
             ];
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al registrar la entrada: ' . $e->getMessage()
             ];
         }
@@ -1293,7 +1288,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener el inventario de repuestos: ' . $e->getMessage()
             ];
         }
@@ -1302,9 +1297,10 @@ class TransporteModel extends BusinessModel
     private function obtener_repuestoID()
     {
         try {
-
-
-            $query = "SELECT * FROM repuestos_vehiculos WHERE id_repuesto = :id_repuesto";
+            $query = "SELECT rv.*, p.nombre as nombre_proveedor FROM 
+            repuestos_vehiculos rv
+            JOIN proveedores p ON rv.id_proveedor = p.id_proveedor 
+            WHERE rv.id_repuesto = :id_repuesto";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':id_repuesto', $this->__get('id_repuesto'));
             $stmt->execute();
