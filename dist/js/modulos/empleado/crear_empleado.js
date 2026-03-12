@@ -1,5 +1,8 @@
-window.onload = function () {
-            document.getElementById('btn-ayuda').addEventListener('click', function () {
+document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("click", function (e) {
+        const btnAyuda = e.target.closest("#btn-ayuda");
+        if (btnAyuda) {
+            try {
                 const driverObj = window.driver.js.driver({
                     showProgress: true,
                     nextBtnText: 'Siguiente',
@@ -7,6 +10,7 @@ window.onload = function () {
                     doneBtnText: 'Finalizar',
                     popoverClass: 'mi-popover',
                     // popoverOffset: 30,
+
                     steps: [
                         {
                             element: '#cedula-input',
@@ -91,7 +95,11 @@ window.onload = function () {
                     ]
                 });
                 driverObj.drive();
-            });
+            } catch (error) {
+                console.error("Error al inicializar driver:", error);
+            }
+        }
+    });
           
     const form = document.getElementById('formulario-empleado');
     if (!form) return;
@@ -521,4 +529,4 @@ window.onload = function () {
             AlertManager.error("Formulario incompleto", "Corrige los campos resaltados antes de continuar");
         }
     });
-};
+});

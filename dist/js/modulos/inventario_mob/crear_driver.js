@@ -1,4 +1,4 @@
-window.onload = function () {
+﻿window.onload = function () {
   document.getElementById("btn-ayuda").addEventListener("click", function () {
     // Variables locales dentro del evento
     let driverActual = null;
@@ -259,4 +259,4 @@ window.onload = function () {
     // Llamar a la función para iniciar el tour
     iniciarTourSegunTab();
   });
-};
+});

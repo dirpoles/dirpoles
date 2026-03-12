@@ -1,4 +1,4 @@
-window.onload = function () {
+﻿window.onload = function () {
   document.getElementById("btn-ayuda").addEventListener("click", function () {
     const driverObj = window.driver.js.driver({
       showProgress: true,
@@ -56,6 +56,7 @@ window.onload = function () {
       ],
     });
     driverObj.drive();
+  }
   });
 
   const form = document.getElementById("form-orientacion");
@@ -522,4 +523,4 @@ window.onload = function () {
 
   setupEliminarButtons();
   inicializarDataTableBeneficiarios();
-};
+});

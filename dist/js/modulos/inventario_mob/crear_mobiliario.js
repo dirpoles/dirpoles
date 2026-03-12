@@ -1,4 +1,4 @@
-window.onload = function () {
+﻿window.onload = function () {
   const form = document.getElementById("form-mobiliario");
   const container = document.getElementById("items-container-mobiliario");
   let rowCount = 1;
@@ -450,4 +450,4 @@ window.onload = function () {
       );
     }
   });
-};
+});

@@ -476,8 +476,10 @@ $(function () {
   }
 });
 
-window.onload = function () {
-  document.getElementById("btn-ayuda").addEventListener("click", function () {
+document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("click", function (e) {
+    const btnAyuda = e.target.closest("#btn-ayuda");
+    if (btnAyuda) {
     const driverObj = window.driver.js.driver({
       showProgress: true,
       nextBtnText: "Siguiente",
@@ -589,5 +591,6 @@ window.onload = function () {
       ]
     });
     driverObj.drive();
+    }
   });
-};
+});
