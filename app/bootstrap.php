@@ -8,8 +8,6 @@ ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 ini_set('error_log', BASE_PATH . '/logs/php_errors.log');
 
-require_once __DIR__ . '/Helpers/sidebar_helper.php';
-
 // ---------------------------------------------------------
 // CONFIGURACIÓN PARA CARGA DE CONTROLADORES
 // ---------------------------------------------------------
@@ -24,7 +22,8 @@ require_once __DIR__ . '/Helpers/sidebar_helper.php';
  * Uso:
  *   load_controller('beneficiarioController.php');
  */
-function load_controller(string $file) : void {
+function load_controller(string $file): void
+{
     static $loaded = [];
 
     // Normalizar path
@@ -50,7 +49,8 @@ function load_controller(string $file) : void {
  * Pre-carga todos los controladores (usa glob).
  * Útil en entornos donde prefieres evitar la carga condicional (p. ej. producción + OPcache).
  */
-function preload_all_controllers(): void {
+function preload_all_controllers(): void
+{
     foreach (glob(rtrim(BASE_PATH, '/\\') . '/app/controllers/*.php') as $controlador) {
         require_once $controlador;
     }

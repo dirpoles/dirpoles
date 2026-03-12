@@ -41,4 +41,4 @@
 </script>
 
 <!-- Driver.js -->
-<script src="<?= BASE_URL ?>node_modules/driver.js/dist/driver.js.iife.js"></script>
+<script src="<?= BASE_URL ?>plugins/driver.js/driver.js.iife.js"></script>
