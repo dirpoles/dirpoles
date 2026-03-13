@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           steps: [
             {
-              element: "#tipoReporte",
+              element: "#tipoReported",
               popover: {
                 title: "Tipo de Reporte",
                 description:

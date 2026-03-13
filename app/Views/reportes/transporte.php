@@ -24,7 +24,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="card-body">
                             <form id="form-reporte" novalidate>
                                 <div class="row g-3">
-                                    <div id="tipoReporte" class="col-md-3 mb-3">
+                                    <div id="tipoReported" class="col-md-3 mb-3">
                                         <label for="tipoReporte" class="form-label font-weight-bold small text-primary">Tipo de Reporte:</label>
                                         <select id="tipoReporte" name="tipoReporte" class="form-control form-control-sm border-primary">
                                             <option value="" selected disabled>Seleccione una opción</option>
