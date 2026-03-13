@@ -1,87 +1,90 @@
 ﻿window.onload = function () {
-  document.getElementById("btn-ayuda").addEventListener("click", function () {
-    const driverObj = window.driver.js.driver({
-      showProgress: true,
-      nextBtnText: "Siguiente",
-      prevBtnText: "Anterior",
-      doneBtnText: "Finalizar",
-      popoverClass: "mi-popover",
-      // popoverOffset: 30,
-      steps: [
-        // Sección: Datos del Beneficiario
-        {
-          element: "#input-beneficiario",
-          popover: {
-            title: "Selección de Beneficiario",
-            description:
-              "Busca y selecciona el beneficiario que será referido a otro servicio. Este campo es obligatorio.",
-            align: "center",
-          },
-        },
+  addEventListener("click", function (e) {
+    const btnAyuda = e.target.closest("#btn-ayuda");
 
-        // Sección: Datos del Traslado - Origen
-        {
-          element: "#input-servicio-origen",
-          popover: {
-            title: "Servicio de Origen",
-            description:
-              "Servicio desde donde se realiza la referencia. Para administradores puede ser modificable.",
-            align: "center",
+    if (btnAyuda) {
+      const driverObj = window.driver.js.driver({
+        showProgress: true,
+        nextBtnText: "Siguiente",
+        prevBtnText: "Anterior",
+        doneBtnText: "Finalizar",
+        popoverClass: "mi-popover",
+        // popoverOffset: 30,
+        steps: [
+          // Sección: Datos del Beneficiario
+          {
+            element: "#input-beneficiario",
+            popover: {
+              title: "Selección de Beneficiario",
+              description:
+                "Busca y selecciona el beneficiario que será referido a otro servicio. Este campo es obligatorio.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#input-empleado-origen",
-          popover: {
-            title: "Empleado que Refiere",
-            description:
-              "Profesional que realiza la referencia. Por defecto eres tú como usuario actual.",
-            align: "center",
-          },
-        },
 
-        // Sección: Datos del Traslado - Destino
-        {
-          element: "#input-servicio-destino",
-          popover: {
-            title: "Servicio de Destino",
-            description:
-              "Selecciona el servicio al cual se está refiriendo al beneficiario. Campo obligatorio.",
-            align: "center",
+          // Sección: Datos del Traslado - Origen
+          {
+            element: "#input-servicio-origen",
+            popover: {
+              title: "Servicio de Origen",
+              description:
+                "Servicio desde donde se realiza la referencia. Para administradores puede ser modificable.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#input-empleado-destino",
-          popover: {
-            title: "Empleado Destino",
-            description:
-              "Selecciona un especialista específico o déjalo en 'Cualquier especialista disponible'.",
-            align: "center",
+          {
+            element: "#input-empleado-origen",
+            popover: {
+              title: "Empleado que Refiere",
+              description:
+                "Profesional que realiza la referencia. Por defecto eres tú como usuario actual.",
+              align: "center",
+            },
           },
-        },
 
-        // Sección: Detalles de la Referencia
-        {
-          element: "#input-motivo",
-          popover: {
-            title: "Motivo de la Referencia",
-            description:
-              "Indica el motivo principal por el cual se realiza la referencia. Ej: Evaluación psicológica, Valoración médica, etc.",
-            align: "center",
+          // Sección: Datos del Traslado - Destino
+          {
+            element: "#input-servicio-destino",
+            popover: {
+              title: "Servicio de Destino",
+              description:
+                "Selecciona el servicio al cual se está refiriendo al beneficiario. Campo obligatorio.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#input-observaciones",
-          popover: {
-            title: "Observaciones",
-            description:
-              "Agrega detalles adicionales sobre el caso, informe breve o consideraciones importantes para el servicio destino.",
-            align: "center",
+          {
+            element: "#input-empleado-destino",
+            popover: {
+              title: "Empleado Destino",
+              description:
+                "Selecciona un especialista específico o déjalo en 'Cualquier especialista disponible'.",
+              align: "center",
+            },
           },
-        },
-      ],
-    });
-    driverObj.drive();
-  }
+
+          // Sección: Detalles de la Referencia
+          {
+            element: "#input-motivo",
+            popover: {
+              title: "Motivo de la Referencia",
+              description:
+                "Indica el motivo principal por el cual se realiza la referencia. Ej: Evaluación psicológica, Valoración médica, etc.",
+              align: "center",
+            },
+          },
+          {
+            element: "#input-observaciones",
+            popover: {
+              title: "Observaciones",
+              description:
+                "Agrega detalles adicionales sobre el caso, informe breve o consideraciones importantes para el servicio destino.",
+              align: "center",
+            },
+          },
+        ],
+      });
+      driverObj.drive();
+    }
   });
 
   form = document.getElementById("formulario-referencia");
@@ -526,4 +529,4 @@
 
   Listeners();
   inicializarDataTableBeneficiarios();
-});
+};

@@ -28,7 +28,7 @@ function cargarTabla(tipo) {
 
     const renderActions = (id, type) => {
         return `
-            <div class="text-center btn-group btn-group-sm d-block">
+            <div id="btn-editar" class="text-center btn-group btn-group-sm d-block">
                 <button class="btn btn-info btn-editar" 
                         data-id="${id}"
                         data-tipo="${type}"
@@ -115,6 +115,9 @@ function cargarTabla(tipo) {
                         extend: 'excel',
                         text: '<i class="fas fa-file-excel"></i> Excel',
                         className: 'btn btn-success',
+                        attr: {
+                            id: 'btn-excel'
+                        },
                         exportOptions: {
                             columns: ':visible',
                             format: {
@@ -130,6 +133,9 @@ function cargarTabla(tipo) {
                         className: 'btn btn-danger',
                         orientation: 'landscape',
                         pageSize: 'A4',
+                        attr: {
+                            id: 'btn-pdf'
+                        },
                         exportOptions: {
                             columns: ':visible',
                             stripHtml: true
@@ -148,19 +154,26 @@ function cargarTabla(tipo) {
         },
         responsive: true,
         autoWidth: false,
+        createdRow: function (row, data, dataIndex) {
+            // Callback genérico por fila
+        },
+        drawCallback: function (settings) {
+            // Re-inicializar tooltips después de cada dibujado
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        },
         initComplete: function (settings, json) {
             if (json && json.error) {
                 console.error('Error: ', json.error);
             }
+            
+            // Asignar el ID a la fila de TÍTULOS (cabecera) para el tour
+            $('#tabla_config thead tr').attr('id', 'tr-' + tipo);
+
             // Inicializar tooltips
             $('[data-bs-toggle="tooltip"]').tooltip();
 
             // Cargar el script específico del tipo
             cargarScriptTipo(tipo);
-        },
-        drawCallback: function (settings) {
-            // Re-inicializar tooltips después de cada dibujado
-            $('[data-bs-toggle="tooltip"]').tooltip();
         }
     });
 }

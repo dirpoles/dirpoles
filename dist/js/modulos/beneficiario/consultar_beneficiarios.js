@@ -1,3 +1,78 @@
+window.onload = function () {
+    addEventListener("click", function (e) {
+        const btnAyuda = e.target.closest("#btn-ayuda");
+
+        if (btnAyuda) {
+        const driverObj = window.driver.js.driver({
+            showProgress: true,
+            nextBtnText: "Siguiente",
+            prevBtnText: "Anterior",
+            doneBtnText: "Finalizar",
+            popoverClass: "mi-popover",
+            steps: [
+                {
+                    element: "#btn-excel",
+                    popover: {
+                        title: "Exportar a Excel",
+                        description: "Exporta la tabla a un archivo Excel.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-pdf",
+                    popover: {
+                        title: "Exportar a PDF",
+                        description: "Exporta la tabla a un archivo PDF.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-crear",
+                    popover: {
+                        title: "Crear Beneficiario",
+                        description: "Agrega un nuevo beneficiario al sistema.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#tr-beneficiarios",
+                    popover: {
+                        title: "Tabla de Beneficiarios",
+                        description: "Tabla donde se muestran los beneficiarios registrados.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-ver",
+                    popover: {
+                        title: "Ver Beneficiario",
+                        description: "Ver los datos del beneficiario.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-editar",
+                    popover: {
+                        title: "Editar Beneficiario",
+                        description: "Edita los datos del beneficiario.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-eliminar",
+                    popover: {
+                        title: "Eliminar Beneficiario",
+                        description: "Elimina el beneficiario del sistema.",
+                        align: "center",
+                    },
+                }
+            ],
+        });
+        driverObj.drive();
+        }
+    });
+};
+
 $(function () {
     // Declarar la variable en el scope global del archivo
     window.dataTableInstance = null;
@@ -18,6 +93,9 @@ $(function () {
                             extend: 'excel',
                             text: '<i class="fas fa-file-excel"></i> Excel',
                             className: 'btn btn-success',
+                            attr: {
+                                id: 'btn-excel'
+                            },
                             exportOptions: {
                                 columns: ':visible',
                                 format: {
@@ -32,6 +110,9 @@ $(function () {
                             extend: 'pdf',
                             text: '<i class="fas fa-file-pdf"></i> PDF',
                             className: 'btn btn-danger',
+                            attr: {
+                                id: 'btn-pdf'
+                            },
                             orientation: 'landscape',
                             pageSize: 'A4',
                             exportOptions: {
@@ -43,6 +124,9 @@ $(function () {
                         {
                             text: '<i class="fas fa-user-plus"></i> Crear Beneficiario',
                             className: 'btn btn-info',
+                            attr: {
+                                id: 'btn-crear'
+                            },
                             action: function () {
                                 window.location.href = 'crear_beneficiario';
                             }
@@ -156,19 +240,19 @@ $(function () {
                     render: function (data, type, row) {
                         return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button class="btn btn-primary btn-ver" 
+                                <button id="btn-ver" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-info btn-editar" 
+                                <button id="btn-editar" class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-eliminar" 
+                                <button id="btn-eliminar" class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Eliminar">

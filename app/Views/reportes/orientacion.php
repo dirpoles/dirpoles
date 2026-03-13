@@ -24,15 +24,15 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="card-body">
                             <form id="form-reporte" novalidate>
                                 <div class="row g-3 align-items-end">
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_iniciod" class="col-md-2 mb-3">
                                         <label for="fecha_inicio" class="form-label font-weight-bold small">Fecha Inicio:</label>
                                         <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_find" class="col-md-2 mb-3">
                                         <label for="fecha_fin" class="form-label font-weight-bold small">Fecha Fin:</label>
                                         <input type="date" id="fecha_fin" name="fecha_fin" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="generod" class="col-md-2 mb-3">
                                         <label for="genero" class="form-label font-weight-bold small">Género:</label>
                                         <select id="genero" name="genero" class="form-control form-control-sm">
                                             <option value="" selected>Todos</option>
@@ -40,7 +40,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <option value="F">Femenino</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
+                                    <div id="pnfd" class="col-md-3 mb-3">
                                         <label for="pnf" class="form-label font-weight-bold small">PNF:</label>
                                         <select id="pnf" name="pnf" class="form-control form-control-sm">
                                             <option value="">Todos</option>

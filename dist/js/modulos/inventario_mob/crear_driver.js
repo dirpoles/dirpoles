@@ -242,9 +242,7 @@
     function iniciarTourSegunTab() {
       // Destruir el driver actual si existe
       destruirDriverActual();
-
-      // Pequeño delay para asegurar que todo esté listo
-      setTimeout(() => {
+    
         // Determinar qué pestaña está activa
         if ($("#mobiliario-tab").hasClass("active")) {
           driverActual = crearDriverConSteps(mobiliarioSteps);
@@ -253,10 +251,9 @@
           driverActual = crearDriverConSteps(equipoSteps);
           driverActual.drive();
         }
-      }, 300);
     }
 
     // Llamar a la función para iniciar el tour
     iniciarTourSegunTab();
   });
-});
+};

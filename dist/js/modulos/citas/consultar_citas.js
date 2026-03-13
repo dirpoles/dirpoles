@@ -1,3 +1,78 @@
+window.onload = function () {
+    addEventListener("click", function (e) {
+        const btnAyuda = e.target.closest("#btn-ayuda");
+
+        if (btnAyuda) {
+        const driverObj = window.driver.js.driver({
+            showProgress: true,
+            nextBtnText: "Siguiente",
+            prevBtnText: "Anterior",
+            doneBtnText: "Finalizar",
+            popoverClass: "mi-popover",
+            steps: [
+                {
+                    element: "#btn-excel",
+                    popover: {
+                        title: "Exportar a Excel",
+                        description: "Exporta la tabla a un archivo Excel.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-pdf",
+                    popover: {
+                        title: "Exportar a PDF",
+                        description: "Exporta la tabla a un archivo PDF.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-crear",
+                    popover: {
+                        title: "Crear Cita",
+                        description: "Agrega una nueva cita al sistema.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#tr-citas",
+                    popover: {
+                        title: "Tabla de Citas",
+                        description: "Tabla donde se muestran las citas registradas.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-ver",
+                    popover: {
+                        title: "Ver Cita",
+                        description: "Ver los detalles de la cita.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-editar",
+                    popover: {
+                        title: "Editar Cita",
+                        description: "Edita los datos de la cita.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-eliminar",
+                    popover: {
+                        title: "Eliminar Cita",
+                        description: "Elimina la cita del sistema.",
+                        align: "center",
+                    },
+                }
+            ],
+        });
+        driverObj.drive();
+        }
+    });
+};
+
 $(function () {
     // ============================================
     // VARIABLES GLOBALES Y CONFIGURACIÓN
@@ -47,6 +122,9 @@ $(function () {
                             extend: 'excel',
                             text: '<i class="fas fa-file-excel"></i> Excel',
                             className: 'btn btn-success',
+                            attr: {
+                                id: 'btn-excel'
+                            },
                             exportOptions: {
                                 columns: ':visible',
                                 format: {
@@ -61,6 +139,9 @@ $(function () {
                             extend: 'pdf',
                             text: '<i class="fas fa-file-pdf"></i> PDF',
                             className: 'btn btn-danger',
+                            attr: {
+                                id: 'btn-pdf'
+                            },
                             orientation: 'landscape',
                             pageSize: 'A4',
                             exportOptions: {
@@ -72,6 +153,9 @@ $(function () {
                         {
                             text: '<i class="fas fa-calendar-plus me-1"></i> Crear Cita',
                             className: 'btn btn-info',
+                            attr: {
+                                id: 'btn-crear'
+                            },
                             action: function () {
                                 window.location.href = 'crear_cita';
                             }
@@ -195,19 +279,19 @@ $(function () {
                                         title="Cambiar estado">
                                     <i class="fas fa-check"></i>
                                 </button>
-                                <button class="btn btn-primary btn-ver-cita" 
+                                <button id="btn-ver" class="btn btn-primary btn-ver-cita" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-info btn-editar-cita" 
+                                <button id="btn-editar" class="btn btn-info btn-editar-cita" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar cita">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-eliminar-cita" 
+                                <button id="btn-eliminar" class="btn btn-danger btn-eliminar-cita" 
                                         data-id="${data}"
                                         data-id-beneficiario="${row.id_beneficiario}"
                                         data-bs-toggle="tooltip"

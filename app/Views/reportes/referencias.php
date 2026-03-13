@@ -24,15 +24,15 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="card-body">
                             <form id="form-reporte" novalidate>
                                 <div class="row g-3">
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_iniciod" class="col-md-2 mb-3">
                                         <label for="fecha_inicio" class="form-label font-weight-bold small">Fecha Inicio:</label>
                                         <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_find" class="col-md-2 mb-3">
                                         <label for="fecha_fin" class="form-label font-weight-bold small">Fecha Fin:</label>
                                         <input type="date" id="fecha_fin" name="fecha_fin" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="generod" class="col-md-2 mb-3">
                                         <label for="genero" class="form-label font-weight-bold small">Género:</label>
                                         <select id="genero" name="genero" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -40,7 +40,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <option value="F">Femenino</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="estatusd" class="col-md-2 mb-3">
                                         <label for="estatus" class="form-label font-weight-bold small">Estado:</label>
                                         <select id="estatus" name="estatus" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -49,32 +49,32 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <option value="Rechazada">Rechazada</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div id="id_beneficiariod" class="col-md-4 mb-3">
                                         <label for="id_beneficiario" class="form-label font-weight-bold small">Beneficiario:</label>
                                         <select id="id_beneficiario" name="id_beneficiario" class="form-control form-control-sm select2">
                                             <option value="">Buscar beneficiario...</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-md-3 mb-3">
+                                    <div id="areaOrd" class="col-md-3 mb-3">
                                         <label for="areaOr" class="form-label font-weight-bold small">Área Origen:</label>
                                         <select id="areaOr" name="areaOr" class="form-control form-control-sm">
                                             <option value="">Todas</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
+                                    <div id="areaDestd" class="col-md-3 mb-3">
                                         <label for="areaDest" class="form-label font-weight-bold small">Área Destino:</label>
                                         <select id="areaDest" name="areaDest" class="form-control form-control-sm">
                                             <option value="">Todas</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
+                                    <div id="empOrd" class="col-md-3 mb-3">
                                         <label for="empOr" class="form-label font-weight-bold small">Empleado Origen:</label>
                                         <select id="empOr" name="empOr" class="form-control form-control-sm">
                                             <option value="">Todos</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
+                                    <div id="empDestd" class="col-md-3 mb-3">
                                         <label for="empDest" class="form-label font-weight-bold small">Empleado Destino:</label>
                                         <select id="empDest" name="empDest" class="form-control form-control-sm">
                                             <option value="">Todos</option>

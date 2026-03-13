@@ -1,3 +1,78 @@
+window.onload = function () {
+    addEventListener("click", function (e) {
+        const btnAyuda = e.target.closest("#btn-ayuda");
+
+        if (btnAyuda) {
+        const driverObj = window.driver.js.driver({
+            showProgress: true,
+            nextBtnText: "Siguiente",
+            prevBtnText: "Anterior",
+            doneBtnText: "Finalizar",
+            popoverClass: "mi-popover",
+            steps: [
+                {
+                    element: "#btn-excel",
+                    popover: {
+                        title: "Exportar a Excel",
+                        description: "Exporta la tabla a un archivo Excel.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-pdf",
+                    popover: {
+                        title: "Exportar a PDF",
+                        description: "Exporta la tabla a un archivo PDF.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-crear",
+                    popover: {
+                        title: "Crear Referencia",
+                        description: "Agrega una nueva referencia al sistema.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#tr-referencias",
+                    popover: {
+                        title: "Tabla de Referencias",
+                        description: "Tabla donde se muestran las referencias registradas.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-ver",
+                    popover: {
+                        title: "Ver Detalles",
+                        description: "Ver los detalles de la referencia.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-aceptar",
+                    popover: {
+                        title: "Aceptar Referencia",
+                        description: "Acepta la referencia enviada.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-rechazar",
+                    popover: {
+                        title: "Rechazar Referencia",
+                        description: "Rechaza la referencia enviada.",
+                        align: "center",
+                    },
+                }
+            ],
+        });
+        driverObj.drive();
+        }
+    });
+};
+
 $(function () {
     function inicializarDataTableReferencias() {
         $('#tabla_referencias').DataTable({
@@ -13,6 +88,9 @@ $(function () {
                             extend: 'excel',
                             text: '<i class="fas fa-file-excel"></i> Excel',
                             className: 'btn btn-success',
+                            attr: {
+                                id: 'btn-excel'
+                            },
                             exportOptions: {
                                 columns: ':visible',
                                 format: {
@@ -27,6 +105,9 @@ $(function () {
                             extend: 'pdf',
                             text: '<i class="fas fa-file-pdf"></i> PDF',
                             className: 'btn btn-danger',
+                            attr: {
+                                id: 'btn-pdf'
+                            },
                             orientation: 'landscape',
                             pageSize: 'A4',
                             exportOptions: {
@@ -38,6 +119,9 @@ $(function () {
                         {
                             text: '<i class="fas fa-plus"></i> Crear Referencia',
                             className: 'btn btn-info',
+                            attr: {
+                                id: 'btn-crear'
+                            },
                             action: function () {
                                 window.location.href = 'crear_referencias';
                             }
@@ -124,14 +208,14 @@ $(function () {
                     render: function (data, type, row) {
                         return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button class="btn btn-primary btn-ver" 
+                                <button id="btn-ver" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-estado="${row.estado}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-info btn-aceptar" 
+                                <button id="btn-aceptar" class="btn btn-info btn-aceptar" 
                                         data-id="${data}"
                                         data-estado="${row.estado}"
                                         data-id-empleado="${row.id_empleado_origen}"
@@ -139,7 +223,7 @@ $(function () {
                                         title="Aceptar Referencia">
                                     <i class="fas fa-check"></i>
                                 </button>
-                                <button class="btn btn-danger btn-rechazar" 
+                                <button id="btn-rechazar" class="btn btn-danger btn-rechazar" 
                                         data-id="${data}"
                                         data-estado="${row.estado}"
                                         data-id-empleado="${row.id_empleado_origen}"

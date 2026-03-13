@@ -1,5 +1,7 @@
 ﻿window.onload = function () {
-  document.getElementById("btn-ayuda").addEventListener("click", function () {
+  addEventListener("click", function (e) {
+    const btnAyuda = e.target.closest("#btn-ayuda");
+    if (btnAyuda) {
     const driverObj = window.driver.js.driver({
       showProgress: true,
       nextBtnText: "Siguiente",
@@ -478,4 +480,4 @@
       );
     }
   });
-});
+}

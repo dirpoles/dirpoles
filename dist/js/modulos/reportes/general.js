@@ -1,3 +1,67 @@
+document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("click", function (e) {
+    const btnAyuda = e.target.closest("#btn-ayuda");
+    if (btnAyuda) {
+      try {
+        const driverObj = window.driver.js.driver({
+          showProgress: true,
+          nextBtnText: "Siguiente",
+          prevBtnText: "Anterior",
+          doneBtnText: "Finalizar",
+          popoverClass: "mi-popover",
+          // popoverOffset: 30,
+
+          steps: [
+            {
+              element: "#fecha_inicio",
+              popover: {
+                title: "Fecha Inicio",
+                description: "Seleccione la fecha inicial para filtrar el reporte.",
+                align: "center",
+              },
+            },
+            {
+              element: "#fecha_fin",
+              popover: {
+                title: "Fecha Fin",
+                description: "Seleccione la fecha final para filtrar el reporte.",
+                align: "center",
+              },
+            },
+            {
+              element: "#genero",
+              popover: {
+                title: "Género",
+                description: "Filtre los resultados especificando un género.",
+                align: "center",
+              },
+            },
+            {
+              element: "#pnfd",
+              popover: {
+                title: "PNF",
+                description: "Filtre los resultados por Programa Nacional de Formación.",
+                align: "center",
+              },
+            },
+            {
+              element: "#aread",
+              popover: {
+                title: "Área",
+                description: "Filtre los resultados por el área o departamento involucrado.",
+                align: "center",
+              },
+            }
+          ],
+        });
+        driverObj.drive();
+      } catch (error) {
+        console.error("Error al inicializar driver:", error);
+      }
+    }
+  });
+});
+
 //-------------------------------------------- VALIDACIONES
 const hoy = new Date();
 const fechaActual = hoy.toISOString().split("T")[0];

@@ -34,12 +34,15 @@ $es_admin = in_array($_SESSION['tipo_empleado'], ['Administrador', 'Superusuario
                         <div class="col-lg-12 mb-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Diagnósticos Generales</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Diagnósticos Generales
+                                        <i id="btn-ayuda" class="fa fa-question-circle float-right fa-lg"
+                                            data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
+                                    </h6>
                                 </div>
                                 <div class="card-body">
                                     <table id="tabla_diagnostico_general" class="table table-striped table-bordered">
                                         <thead>
-                                            <tr>
+                                            <tr id="tr-diagnosticos">
                                                 <th>Beneficiario</th>
                                                 <th>Empleado</th>
                                                 <th>Tipo de consulta</th>

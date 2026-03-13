@@ -1,3 +1,50 @@
+document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("click", function (e) {
+    const btnAyuda = e.target.closest("#btn-ayuda");
+    if (btnAyuda) {
+      try {
+        const driverObj = window.driver.js.driver({
+          showProgress: true,
+          nextBtnText: "Siguiente",
+          prevBtnText: "Anterior",
+          doneBtnText: "Finalizar",
+          popoverClass: "mi-popover",
+          // popoverOffset: 30,
+
+          steps: [
+            {
+              element: "#fecha_iniciod",
+              popover: {
+                title: "Fecha Inicio",
+                description: "Seleccione la fecha inicial para filtrar el reporte.",
+                align: "center",
+              },
+            },
+            {
+              element: "#fecha_find",
+              popover: {
+                title: "Fecha Fin",
+                description: "Seleccione la fecha final para filtrar el reporte.",
+                align: "center",
+              },
+            },
+            {
+              element: "#tipoReported",
+              popover: {
+                title: "Tipo de Reporte",
+                description: "Seleccione el tipo de reporte que desea generar.",
+                align: "center",
+              },
+            }
+          ],
+        });
+        driverObj.drive();
+      } catch (error) {
+        console.error("Error al inicializar driver:", error);
+      }
+    }
+  });
+});
 //-------------------------------------------- CONSTANTES Y CONFIGURACIÓN
 const hoy = new Date();
 const fechaActual = hoy.toISOString().split("T")[0];

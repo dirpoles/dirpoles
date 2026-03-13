@@ -24,15 +24,15 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="card-body">
                             <form id="form-reporte" novalidate>
                                 <div class="row g-3 align-items-end">
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_iniciod" class="col-md-2 mb-3">
                                         <label for="fecha_inicio" class="form-label font-weight-bold small">Fecha Inicio:</label>
                                         <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_find" class="col-md-2 mb-3">
                                         <label for="fecha_fin" class="form-label font-weight-bold small">Fecha Fin:</label>
                                         <input type="date" id="fecha_fin" name="fecha_fin" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="tipoReported" class="col-md-2 mb-3">
                                         <label for="tipoReporte" class="form-label font-weight-bold small">Tipo de Reporte:</label>
                                         <select id="tipoReporte" name="tipoReporte" class="form-control form-control-sm">
                                             <option value="" selected disabled>Seleccione...</option>
@@ -44,13 +44,13 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     </div>
 
                                     <!-- Filtros Generales (mostrados/ocultos dinámicamente) -->
-                                    <div class="col-md-2 mb-3 filtro-general" style="display: none;">
+                                    <div id="pnfd" class="col-md-2 mb-3 filtro-general" style="display: none;">
                                         <label for="pnf" class="form-label font-weight-bold small">PNF:</label>
                                         <select id="pnf" name="pnf" class="form-control form-control-sm">
                                             <option value="">Todos</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 mb-3 filtro-general" style="display: none;">
+                                    <div id="generod" class="col-md-2 mb-3 filtro-general" style="display: none;">
                                         <label for="genero" class="form-label font-weight-bold small">Género:</label>
                                         <select id="genero" name="genero" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -60,14 +60,14 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     </div>
 
                                     <!-- Filtros Específicos -->
-                                    <div class="col-md-2 mb-3 filtro-becas" style="display: none;">
+                                    <div id="bancod" class="col-md-2 mb-3 filtro-becas" style="display: none;">
                                         <label for="banco" class="form-label font-weight-bold small">Banco:</label>
                                         <select id="banco" name="banco" class="form-control form-control-sm">
                                             <option value="">Todos</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-md-2 mb-3 filtro-exoneracion" style="display: none;">
+                                    <div id="discapacidadd" class="col-md-2 mb-3 filtro-exoneracion" style="display: none;">
                                         <label for="discapacidad" class="form-label font-weight-bold small">Discapacidad:</label>
                                         <select id="discapacidad" name="discapacidad" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -76,14 +76,14 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         </select>
                                     </div>
 
-                                    <div class="col-md-2 mb-3 filtro-fames filtro-embarazo" style="display: none;">
+                                    <div id="patologiad" class="col-md-2 mb-3 filtro-fames filtro-embarazo" style="display: none;">
                                         <label for="patologia" class="form-label font-weight-bold small">Patología:</label>
                                         <select id="patologia" name="patologia" class="form-control form-control-sm">
                                             <option value="">Todos</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-md-2 mb-3 filtro-fames" style="display: none;">
+                                    <div id="tipoAyudad" class="col-md-2 mb-3 filtro-fames" style="display: none;">
                                         <label for="tipoAyuda" class="form-label font-weight-bold small">Tipo Ayuda:</label>
                                         <select id="tipoAyuda" name="tipoAyuda" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -95,7 +95,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                         </select>
                                     </div>
 
-                                    <div class="col-md-2 mb-3 filtro-embarazo" style="display: none;">
+                                    <div id="estadod" class="col-md-2 mb-3 filtro-embarazo" style="display: none;">
                                         <label for="estado" class="form-label font-weight-bold small">Estado:</label>
                                         <select id="estado" name="estado" class="form-control form-control-sm">
                                             <option value="">Todos</option>

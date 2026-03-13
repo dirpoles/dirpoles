@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titulo = "Consultar Bitácora";
 include 'app/Views/template/head.php';
 ?>
@@ -7,7 +7,7 @@ include 'app/Views/template/head.php';
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-         <?php include 'app/Views/template/sidebar.php'; ?>
+        <?php include 'app/Views/template/sidebar.php'; ?>
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -29,12 +29,14 @@ include 'app/Views/template/head.php';
                         <div class="col-lg-12 mb-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Movimientos de la Bitácora</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Movimientos de la Bitácora<i
+                                            id="btn-ayuda" class="fa fa-question-circle float-right text-primary fa-lg"
+                                            data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i></h6>
                                 </div>
                                 <div class="card-body">
                                     <table id="tabla_bitacora" class="table table-striped table-bordered">
                                         <thead>
-                                            <tr>
+                                            <tr id="tr-bitacora">
                                                 <th>Módulo</th>
                                                 <th>Empleado</th>
                                                 <th>Acción</th>
@@ -62,9 +64,10 @@ include 'app/Views/template/head.php';
     </div>
     <!-- End of Page Wrapper -->
 
-   <?php include 'app/Views/template/script.php'; ?>
-   <!-- Script principal de la página -->
-   <script src="<?= BASE_URL ?>dist/js/modulos/bitacora/consultar_bitacora.js"></script>
+    <?php include 'app/Views/template/script.php'; ?>
+    <!-- Script principal de la página -->
+    <script src="<?= BASE_URL ?>dist/js/modulos/bitacora/consultar_bitacora.js"></script>
 
 </body>
+
 </html>

@@ -17,7 +17,10 @@ $es_admin = in_array($_SESSION['tipo_empleado'], ['Administrador', 'Superusuario
 
                 <div class="container-fluid">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Gestionar Diagnósticos de Trabajo Social</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Gestionar Diagnósticos de Trabajo Social
+                            <i id="btn-ayuda" class="fa fa-question-circle fa-sm ml-2"
+                                data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
+                        </h1>
                         <a href="<?= BASE_URL ?>pdf/reporte_ts" target="_blank" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                             <i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte
                         </a>

@@ -22,6 +22,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h2 mb-0 text-gray-800">Gestionar Configuraciones</h1>
+                        <i id="btn-ayuda" class="fa fa-question-circle text-primary fa-lg" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
                     </div>
 
                     <!-- Fila 1: Patologia y PNF -->
@@ -37,12 +38,12 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <form action="<?= BASE_URL ?>registrar_patologia" method="POST" id="form-patologia" class="needs-validation d-flex flex-column h-100" novalidate>
-                                        <div class="mb-3">
+                                        <div id="nombre_patologia-input" class="mb-3">
                                             <label for="nombre_patologia" class="form-label">Nombre de la Patología <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="nombre_patologia" name="nombre_patologia" required placeholder="Ej: Gripe, Ansiedad...">
                                             <div class="invalid-feedback" id="nombre_patologiaError"></div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div id="tipo_patologia-input" class="mb-3">
                                             <label for="tipo_patologia" class="form-label">Tipo de Patología <span class="text-danger">*</span></label>
                                             <select class="form-select" id="tipo_patologia" name="tipo_patologia" required>
                                                 <option value="" selected disabled>Seleccione...</option>
@@ -71,7 +72,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <form action="<?= BASE_URL ?>registrar_pnf" method="POST" id="form-pnf" class="needs-validation d-flex flex-column h-100" novalidate>
-                                        <div class="mb-3">
+                                        <div id="nombre_pnf-input" class="mb-3">
                                             <label for="nombre_pnf" class="form-label">Nombre del PNF <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-text">PNF</span>
@@ -101,7 +102,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <form action="<?= BASE_URL ?>registrar_servicio" method="POST" id="form-servicio" class="needs-validation d-flex flex-column h-100" novalidate>
-                                        <div class="mb-3">
+                                        <div id="nombre_serv-input" class="mb-3">
                                             <label for="nombre_serv" class="form-label">Nombre del Servicio <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="nombre_serv" name="nombre_serv" required placeholder="Ej: Mantenimiento, Docencia...">
                                             <div class="invalid-feedback" id="nombre_servError"></div>
@@ -125,12 +126,12 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <form action="<?= BASE_URL ?>registrar_tipo_empleado" method="POST" id="form-tipo-empleado" class="needs-validation d-flex flex-column h-100" novalidate>
-                                        <div class="mb-3">
+                                        <div id="tipo-input" class="mb-3">
                                             <label for="tipo" class="form-label">Tipo de Empleado <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="tipo" name="tipo" required placeholder="Ej: Docente, Obrero...">
                                             <div class="invalid-feedback" id="tipoError"></div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div id="id_servicios-input" class="mb-3">
                                             <label for="id_servicios" class="form-label">Servicio Asociado <span class="text-danger">*</span></label>
                                             <select class="form-select select2" id="id_servicios" name="id_servicios" required>
                                                 <option value="" selected disabled>Seleccione un servicio...</option>
@@ -164,12 +165,12 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <form action="<?= BASE_URL ?>registrar_tipo_mobiliario" method="POST" id="form-tipo-mobiliario" class="needs-validation d-flex flex-column h-100" novalidate>
-                                        <div class="mb-3">
+                                        <div id="nombre_mobiliario-input" class="mb-3">
                                             <label for="nombre_mobiliario" class="form-label">Nombre del Mobiliario <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="nombre_mobiliario" name="nombre" required placeholder="Ej: Silla giratoria, Escritorio...">
                                             <div class="invalid-feedback" id="nombre_mobiliarioError"></div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div id="descripcion_mobiliario-input" class="mb-3">
                                             <label for="descripcion_mobiliario" class="form-label">Descripción</label>
                                             <textarea class="form-control" id="descripcion_mobiliario" name="descripcion" placeholder="Descripción..."></textarea>
                                             <div class="invalid-feedback" id="descripcion_mobiliarioError"></div>
@@ -193,12 +194,12 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <form action="<?= BASE_URL ?>registrar_tipo_equipo" method="POST" id="form-tipo-equipo" class="needs-validation d-flex flex-column h-100" novalidate>
-                                        <div class="mb-3">
+                                        <div id="nombre_equipo-input" class="mb-3">
                                             <label for="nombre_equipo" class="form-label">Nombre del Equipo <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="nombre_equipo" name="nombre" required placeholder="Ej: Laptop, Video Beam...">
                                             <div class="invalid-feedback" id="nombre_equipoError"></div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div id="descripcion_equipo-input" class="mb-3">
                                             <label for="descripcion_equipo" class="form-label">Descripción</label>
                                             <textarea class="form-control" id="descripcion_equipo" name="descripcion" placeholder="Descripción..."></textarea>
                                             <div class="invalid-feedback" id="descripcion_equipoError"></div>
@@ -224,7 +225,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <form action="<?= BASE_URL ?>registrar_presentacion_insumo" method="POST" id="form-presentacion-insumo" class="needs-validation d-flex flex-column h-100" novalidate>
-                                        <div class="mb-3">
+                                        <div id="nombre_presentacion-input" class="mb-3">
                                             <label for="nombre_presentacion" class="form-label">Nombre de Presentación para Insumos <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="nombre_presentacion" name="nombre_presentacion" required placeholder="Ej: Capsulas, Pastillas...">
                                             <div class="invalid-feedback" id="nombre_presentacionError"></div>
@@ -258,6 +259,7 @@ include BASE_PATH . '/app/Views/template/head.php';
    <script src="<?= BASE_URL ?>dist/js/modulos/configuracion/tipo_mobiliario/crear_tipo_mobiliario.js"></script>
    <script src="<?= BASE_URL ?>dist/js/modulos/configuracion/tipo_equipo/crear_tipo_equipo.js"></script>
    <script src="<?= BASE_URL ?>dist/js/modulos/configuracion/presentacion_insumo/crear_presentacion.js"></script>
+   <script src="<?= BASE_URL ?>dist/js/modulos/configuracion/crear_driver.js"></script>
 
                                                                 
 </body>

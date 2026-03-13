@@ -13,6 +13,7 @@ include 'app/Views/template/head.php';
                 <div class="container-fluid">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Consultar Configuración</h1>
+                        <i id="btn-ayuda" class="fa fa-question-circle text-primary fa-lg" data-toggle="tooltip" title="Ayuda" style="cursor: pointer;"></i>
                     </div>
 
                     <div class="card shadow mb-4">
@@ -104,5 +105,6 @@ include 'app/Views/template/head.php';
 
     <?php include 'app/Views/template/script.php'; ?>
     <script src="<?= BASE_URL ?>dist/js/modulos/configuracion/config_consultar_gen.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/configuracion/consultar_driver.js"></script>
 </body>
 </html>

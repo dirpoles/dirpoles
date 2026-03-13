@@ -1,3 +1,78 @@
+window.onload = function () {
+    addEventListener("click", function (e) {
+        const btnAyuda = e.target.closest("#btn-ayuda");
+
+        if (btnAyuda) {
+        const driverObj = window.driver.js.driver({
+            showProgress: true,
+            nextBtnText: "Siguiente",
+            prevBtnText: "Anterior",
+            doneBtnText: "Finalizar",
+            popoverClass: "mi-popover",
+            steps: [
+                {
+                    element: "#btn-excel",
+                    popover: {
+                        title: "Exportar a Excel",
+                        description: "Exporta la tabla a un archivo Excel.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-pdf",
+                    popover: {
+                        title: "Exportar a PDF",
+                        description: "Exporta la tabla a un archivo PDF.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-crear",
+                    popover: {
+                        title: "Crear Diagnóstico",
+                        description: "Agrega un nuevo diagnóstico al sistema.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#tr-diagnosticos",
+                    popover: {
+                        title: "Tabla de Diagnósticos",
+                        description: "Tabla donde se muestran los diagnósticos registrados.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-ver",
+                    popover: {
+                        title: "Ver Diagnóstico",
+                        description: "Ver los detalles del diagnóstico.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-editar",
+                    popover: {
+                        title: "Editar Diagnóstico",
+                        description: "Edita los datos del diagnóstico.",
+                        align: "center",
+                    },
+                },
+                {
+                    element: "#btn-eliminar",
+                    popover: {
+                        title: "Eliminar Diagnóstico",
+                        description: "Elimina el diagnóstico del sistema.",
+                        align: "center",
+                    },
+                }
+            ],
+        });
+        driverObj.drive();
+        }
+    });
+};
+
 $(function () {
     function inicializarDataTableGeneral() {
         $('#tabla_discapacidad').DataTable({
@@ -13,6 +88,9 @@ $(function () {
                             extend: 'excel',
                             text: '<i class="fas fa-file-excel"></i> Excel',
                             className: 'btn btn-success',
+                            attr: {
+                                id: 'btn-excel'
+                            },
                             exportOptions: {
                                 columns: ':visible',
                                 format: {
@@ -27,6 +105,9 @@ $(function () {
                             extend: 'pdf',
                             text: '<i class="fas fa-file-pdf"></i> PDF',
                             className: 'btn btn-danger',
+                            attr: {
+                                id: 'btn-pdf'
+                            },
                             orientation: 'landscape',
                             pageSize: 'A4',
                             exportOptions: {
@@ -38,6 +119,9 @@ $(function () {
                         {
                             text: '<i class="fas fa-plus"></i> Crear Diagnostico',
                             className: 'btn btn-info',
+                            attr: {
+                                id: 'btn-crear'
+                            },
                             action: function () {
                                 window.location.href = 'diagnostico_discapacidad';
                             }
@@ -114,19 +198,19 @@ $(function () {
                     render: function (data, type, row) {
                         return `
                             <div class="btn-group btn-group-sm" role="group">
-                                <button class="btn btn-primary btn-ver" 
+                                <button id="btn-ver" class="btn btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-info btn-editar" 
+                                <button id="btn-editar" class="btn btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-eliminar" 
+                                <button id="btn-eliminar" class="btn btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-id-solicitud="${row.id_solicitud_serv}"
                                         data-id-beneficiario="${row.id_beneficiario}"

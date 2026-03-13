@@ -24,7 +24,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="card-body">
                             <form id="form-reporte" novalidate>
                                 <div class="row g-3">
-                                    <div class="col-md-3 mb-3">
+                                    <div id="tipoReporte" class="col-md-3 mb-3">
                                         <label for="tipoReporte" class="form-label font-weight-bold small text-primary">Tipo de Reporte:</label>
                                         <select id="tipoReporte" name="tipoReporte" class="form-control form-control-sm border-primary">
                                             <option value="" selected disabled>Seleccione una opción</option>
@@ -34,17 +34,17 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <option value="repuestos">Repuestos</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_iniciod" class="col-md-2 mb-3">
                                         <label for="fecha_inicio" class="form-label font-weight-bold small">Fecha Inicio:</label>
                                         <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_find" class="col-md-2 mb-3">
                                         <label for="fecha_fin" class="form-label font-weight-bold small">Fecha Fin:</label>
                                         <input type="date" id="fecha_fin" name="fecha_fin" class="form-control form-control-sm">
                                     </div>
 
                                     <!-- Filtros específicos VEHICULOS -->
-                                    <div class="col-md-2 mb-3 f-vehiculo" style="display: none;">
+                                    <div id="tipoVd" class="col-md-2 mb-3 f-vehiculo" style="display: none;">
                                         <label for="tipoV" class="form-label font-weight-bold small">Tipo de Vehículo:</label>
                                         <select id="tipoV" name="tipoV" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -53,7 +53,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <option value="Automóvil">Automóvil</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3 f-vehiculo" style="display: none;">
+                                    <div id="modelod" class="col-md-3 mb-3 f-vehiculo" style="display: none;">
                                         <label for="modelo" class="form-label font-weight-bold small">Modelo:</label>
                                         <select id="modelo" name="modelo" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -61,7 +61,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     </div>
 
                                     <!-- Filtros específicos PROVEEDORES -->
-                                    <div class="col-md-3 mb-3 f-proveedor" style="display: none;">
+                                    <div id="estadoPd" class="col-md-3 mb-3 f-proveedor" style="display: none;">
                                         <label for="estadoP" class="form-label font-weight-bold small">Estado:</label>
                                         <select id="estadoP" name="estadoP" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -71,7 +71,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     </div>
 
                                     <!-- Filtros específicos RUTAS -->
-                                    <div class="col-md-2 mb-3 f-ruta" style="display: none;">
+                                    <div id="tipoRd" class="col-md-2 mb-3 f-ruta" style="display: none;">
                                         <label for="tipoR" class="form-label font-weight-bold small">Tipo de Ruta:</label>
                                         <select id="tipoR" name="tipoR" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -80,13 +80,13 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <option value="Vacacional">Vacacional</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 mb-3 f-ruta" style="display: none;">
+                                    <div id="partidad" class="col-md-2 mb-3 f-ruta" style="display: none;">
                                         <label for="partida" class="form-label font-weight-bold small">Punto Partida:</label>
                                         <select id="partida" name="partida" class="form-control form-control-sm">
                                             <option value="">Todos</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 mb-3 f-ruta" style="display: none;">
+                                    <div id="destinod" class="col-md-2 mb-3 f-ruta" style="display: none;">
                                         <label for="destino" class="form-label font-weight-bold small">Punto Destino:</label>
                                         <select id="destino" name="destino" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -94,13 +94,13 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     </div>
 
                                     <!-- Filtros específicos REPUESTOS -->
-                                    <div class="col-md-2 mb-3 f-repuesto" style="display: none;">
+                                    <div id="proveedor_red" class="col-md-2 mb-3 f-repuesto" style="display: none;">
                                         <label for="proveedor_re" class="form-label font-weight-bold small">Proveedor:</label>
                                         <select id="proveedor_re" name="proveedor_re" class="form-control form-control-sm">
                                             <option value="">Todos</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 mb-3 f-repuesto" style="display: none;">
+                                    <div id="estadoREd" class="col-md-2 mb-3 f-repuesto" style="display: none;">
                                         <label for="estadoRE" class="form-label font-weight-bold small">Estado:</label>
                                         <select id="estadoRE" name="estadoRE" class="form-control form-control-sm">
                                             <option value="">Todos</option>
@@ -111,7 +111,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                     </div>
                                 </div>
 
-                                <div class="row g-3 f-vehiculo" style="display: none;">
+                                <div id="estadoVd" class="row g-3 f-vehiculo" style="display: none;">
                                     <div class="col-md-2 mb-3">
                                         <label for="estadoV" class="form-label font-weight-bold small">Estado Operativo:</label>
                                         <select id="estadoV" name="estadoV" class="form-control form-control-sm">

@@ -24,27 +24,27 @@ include BASE_PATH . '/app/Views/template/head.php';
                         <div class="card-body">
                             <form id="form-reporte" novalidate>
                                 <div class="row g-3">
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_iniciod" class="col-md-2 mb-3">
                                         <label for="fecha_inicio" class="form-label font-weight-bold small">Fecha Inicio:</label>
                                         <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="fecha_find" class="col-md-2 mb-3">
                                         <label for="fecha_fin" class="form-label font-weight-bold small">Fecha Fin:</label>
                                         <input type="date" id="fecha_fin" name="fecha_fin" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-md-2 mb-3">
+                                    <div id="tipod" class="col-md-2 mb-3">
                                         <label for="tipo" class="form-label font-weight-bold small">Tipo:</label>
                                         <select id="tipo" name="tipo" class="form-control form-control-sm">
                                             <option value="">Todos</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
+                                    <div id="ubicaciond" class="col-md-3 mb-3">
                                         <label for="ubicacion" class="form-label font-weight-bold small">Ubicación:</label>
                                         <select id="ubicacion" name="ubicacion" class="form-control form-control-sm">
                                             <option value="">Todas</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
+                                    <div id="estadod" class="col-md-3 mb-3">
                                         <label for="estado" class="form-label font-weight-bold small">Estado:</label>
                                         <select id="estado" name="estado" class="form-control form-control-sm">
                                             <option value="">Todos</option>
