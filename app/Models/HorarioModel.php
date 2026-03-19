@@ -55,6 +55,9 @@ class HorarioModel extends BusinessModel{
             case 'eliminar_horario':
                 return $this->eliminar_horario();
 
+            case 'obtener_estadisticas':
+                return $this->obtener_estadisticas_horario();
+
             default:
                 throw new Exception('Acción no permitida');
         }
@@ -104,8 +107,8 @@ class HorarioModel extends BusinessModel{
         [$h, $m] = explode(':', $hora);
         $minutos = (int) $h * 60 + (int)$m;
 
-        // Rango permitido: 07:00 (420) a 16:00 (960)
-        if ($minutos < 420 || $minutos > 960) {
+        // Rango permitido: 07:00 (420) a 23:59 (1439)
+        if ($minutos < 420 || $minutos > 1439) {
             return false;
         }
 
@@ -257,6 +260,41 @@ class HorarioModel extends BusinessModel{
             return [
                 'exito' => false,
                 'mensaje' => $e->getMessage()
+            ];
+        }
+    }
+
+    private function obtener_estadisticas_horario(){
+        try {
+            // 1. Psicólogos activos (con al menos un horario)
+            $sqlActivos = "SELECT COUNT(DISTINCT id_empleado) FROM horario";
+            $psicologos_con_horario = $this->conn->query($sqlActivos)->fetchColumn();
+
+            // 2. Horas semanales totales
+            $sqlHoras = "SELECT SUM(TIME_TO_SEC(TIMEDIFF(hora_fin, hora_inicio))) / 3600 FROM horario";
+            $horas_semanales = $this->conn->query($sqlHoras)->fetchColumn();
+            $horas_semanales = round($horas_semanales ?: 0, 1);
+
+            // 3. Día más activo (el que más psicólogos tiene trabajando)
+            $sqlDia = "SELECT dia_semana 
+                      FROM horario 
+                      GROUP BY dia_semana 
+                      ORDER BY COUNT(DISTINCT id_empleado) DESC, 
+                               FIELD(dia_semana, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado') ASC 
+                      LIMIT 1";
+            $dia_mas_activo = $this->conn->query($sqlDia)->fetchColumn() ?: 'Ninguno';
+
+            return [
+                'psicologos_con_horario' => $psicologos_con_horario ?: 0,
+                'horas_semanales' => $horas_semanales,
+                'dia_mas_activo' => $dia_mas_activo
+            ];
+        } catch (Throwable $e) {
+            error_log("Error en obtener_estadisticas_horario: " . $e->getMessage());
+            return [
+                'psicologos_con_horario' => 0,
+                'horas_semanales' => 0,
+                'dia_mas_activo' => 'Error'
             ];
         }
     }

@@ -4,6 +4,7 @@ use App\Models\HorarioModel;
 use App\Models\BitacoraModel;
 use App\Models\PermisosModel;
 use App\Models\NotificacionesModel;
+use App\Models\CitasModel;
 
 function crear_horario()
 {
@@ -18,6 +19,18 @@ function crear_horario()
         if (!$permisos->manejarAccion('Verificar')) {
             throw new Exception('No tienes permiso para realizar esta acción');
         }
+
+        // Obtener estadísticas para los cards superiores
+        $modeloHorario = new HorarioModel();
+        $statsHorario = $modeloHorario->manejarAccion('obtener_estadisticas');
+        
+        $psicologos_con_horario = $statsHorario['psicologos_con_horario'];
+        $total_horas_semanales = $statsHorario['horas_semanales'];
+        $dia_mas_activo = $statsHorario['dia_mas_activo'];
+
+        $modeloCitas = new CitasModel();
+        $statsCitas = $modeloCitas->manejarAccion('estadisticas');
+        $citas_atendidas = $statsCitas['data']['atendidas'] ?? 0;
 
         require_once BASE_PATH . '/app/Views/horario/crear_horario.php';
     } catch (Throwable $e) {
@@ -92,42 +105,60 @@ function registrar_horario()
         if (!$permisos->manejarAccion('Verificar')) {
             throw new Exception('No tienes permiso para realizar esta acción');
         }
-
         $id_empleado = filter_input(INPUT_POST, 'id_empleado', FILTER_SANITIZE_NUMBER_INT);
-        $dia_semana = $_POST['dia_semana'] ?? null;
-        $hora_inicio = filter_input(INPUT_POST, 'hora_inicio', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $hora_fin = filter_input(INPUT_POST, 'hora_fin', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $empleado = $_SESSION['nombre'];
+        $horarios = $_POST['horarios'] ?? [];
+        $empleado_sesion = $_SESSION['nombre'];
 
-        if (!$id_empleado || !$dia_semana || !$hora_inicio || !$hora_fin) {
-            throw new Exception('Todos los campos son obligatorios');
+        if (!$id_empleado || empty($horarios)) {
+            throw new Exception('Debe seleccionar un psicólogo y al menos un horario');
         }
 
-        $datos = [
-            'id_empleado' => $id_empleado,
-            'dia_semana' => $dia_semana,
-            'hora_inicio' => $hora_inicio,
-            'hora_fin' => $hora_fin
-        ];
-        foreach ($datos as $atributo => $valor) {
-            $modelo->__set($atributo, $valor);
-        }
+        $exitos = 0;
+        $errores = [];
+        $nombre_modelo_empleado = '';
 
-        $registro = $modelo->manejarAccion('registrar_horario');
-        $empleado_data = $modelo->manejarAccion('obtener_empleado_horario');
+        foreach ($horarios as $index => $horario) {
+            $dia_semana = $horario['dia_semana'] ?? null;
+            $hora_inicio = $horario['hora_inicio'] ?? null;
+            $hora_fin = $horario['hora_fin'] ?? null;
 
-        if ($registro['exito'] === true) {
-            // Construir nombre completo
-            $nombre_empleado = '';
-            if (is_array($empleado_data) && isset($empleado_data['nombre'], $empleado_data['apellido'])) {
-                $nombre_empleado = $empleado_data['nombre'] . ' ' . $empleado_data['apellido'];
+            if (!$id_empleado || !$dia_semana || !$hora_inicio || !$hora_fin) {
+                $errores[] = "Fila #$index: Faltan datos obligatorios";
+                continue;
             }
 
+            $datos = [
+                'id_empleado' => $id_empleado,
+                'dia_semana' => $dia_semana,
+                'hora_inicio' => $hora_inicio,
+                'hora_fin' => $hora_fin
+            ];
+
+            foreach ($datos as $atributo => $valor) {
+                $modelo->__set($atributo, $valor);
+            }
+
+            $registro = $modelo->manejarAccion('registrar_horario');
+            
+            if ($registro['exito'] === true) {
+                $exitos++;
+                // Obtener el nombre para la bitácora (solo la primera vez o si cambia)
+                if (empty($nombre_modelo_empleado)) {
+                    $empleado_data = $modelo->manejarAccion('obtener_empleado_horario');
+                    $nombre_modelo_empleado = ($empleado_data['nombre'] ?? '') . ' ' . ($empleado_data['apellido'] ?? '');
+                }
+            } else {
+                $errores[] = "Error en $dia_semana: " . $registro['mensaje'];
+            }
+        }
+
+        if ($exitos > 0) {
+            // Registro en bitácora
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => $modulo,
-                'accion' => 'Registro',
-                'descripcion' => "El empleado $empleado registró un horario para el empleado $nombre_empleado"
+                'accion' => 'Registro Múltiple',
+                'descripcion' => "El empleado $empleado_sesion registró $exitos horario(s) para el empleado $nombre_modelo_empleado"
             ];
 
             foreach ($bitacora_data as $atributo => $valor) {
@@ -137,11 +168,11 @@ function registrar_horario()
 
             // Notificación
             $notificacion_data = [
-                'titulo' => 'Registro de Horario',
+                'titulo' => 'Registro Múltiple de Horarios',
                 'url' => 'consultar_horarios',
                 'tipo' => 'horario',
                 'id_emisor' => $_SESSION['id_empleado'],
-                'id_receptor' => 1, //Administrador
+                'id_receptor' => 1, // Administrador
                 'leido' => 0
             ];
             foreach ($notificacion_data as $atributo => $valor) {
@@ -151,11 +182,11 @@ function registrar_horario()
 
             echo json_encode([
                 'exito' => true,
-                'mensaje' => $registro['mensaje']
+                'mensaje' => "Se registraron $exitos horario(s) exitosamente." . (count($errores) > 0 ? " Errores: " . implode(", ", $errores) : "")
             ]);
             exit();
         } else {
-            throw new Exception($registro['mensaje']);
+            throw new Exception("No se pudo registrar ningún horario. " . implode(", ", $errores));
         }
     } catch (Throwable $e) {
         echo json_encode([

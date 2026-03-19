@@ -217,11 +217,31 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <!-- Clave -->
                                             <div id="clave-input" class="col-md-4 mb-3">
                                                 <label for="clave" class="form-label">Contraseña</label>
-                                                <input type="password" class="form-control" id="clave" name="clave"
-                                                    autocomplete="false" placeholder="Escribe una contraseña"
-                                                    maxlength="50">
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="clave" name="clave"
+                                                        autocomplete="false" placeholder="Escribe una contraseña"
+                                                        maxlength="50">
+                                                    <span class="input-group-text toggle-password-btn" id="btnTogglePassword" style="cursor: pointer; background: white;">
+                                                        <i class="fa-solid fa-eye" id="icon-eye"></i>
+                                                        <i class="fa-solid fa-eye-slash d-none" id="icon-eye-slash"></i>
+                                                    </span>
+                                                </div>
                                                 <div id="claveError" class="form-text text-danger"></div>
                                             </div>
+
+                                            <style>
+                                                .toggle-password-btn {
+                                                    border-left: none;
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    width: 45px;
+                                                    transition: color 0.2s ease;
+                                                }
+                                                .toggle-password-btn:hover {
+                                                    color: #0d6efd;
+                                                }
+                                            </style>
 
                                             <!-- Estatus (Oculto) -->
                                             <div id="estatus-input" class="col-md-4 mb-3">

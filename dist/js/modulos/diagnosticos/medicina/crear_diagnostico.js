@@ -1,94 +1,95 @@
-﻿window.onload = function () {
-  document.getElementById("btn-ayuda").addEventListener("click", function () {
-    const driverObj = window.driver.js.driver({
-      showProgress: true,
-      nextBtnText: "Siguiente",
-      prevBtnText: "Anterior",
-      doneBtnText: "Finalizar",
-      popoverClass: "mi-popover",
-      // popoverOffset: 30,
-      steps: [
-        {
-          element: "#beneficiario-input",
-          popover: {
-            title: "Beneficiario",
-            description:
-              "Selecciona el beneficiario al cual se le asignará esta información.",
-            align: "center",
+document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("click", function (e) {
+    const btnAyuda = e.target.closest("#btn-ayuda");
+    if (btnAyuda) {
+      const driverObj = window.driver.js.driver({
+        showProgress: true,
+        nextBtnText: "Siguiente",
+        prevBtnText: "Anterior",
+        doneBtnText: "Finalizar",
+        popoverClass: "mi-popover",
+        steps: [
+          {
+            element: "#beneficiario-input",
+            popover: {
+              title: "Beneficiario",
+              description:
+                "Selecciona el beneficiario al cual se le asignará esta información.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#patologia-input",
-          popover: {
-            title: "Información Patológica",
-            description: "Selecciona la patología asociada a la consulta.",
-            align: "center",
+          {
+            element: "#patologia-input",
+            popover: {
+              title: "Información Patológica",
+              description: "Selecciona la patología asociada a la consulta.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#antropometricos-input",
-          popover: {
-            title: "Datos Antropométricos",
-            description: "Ingresa la estatura y peso del paciente.",
-            align: "center",
+          {
+            element: "#antropometricos-input",
+            popover: {
+              title: "Datos Antropométricos",
+              description: "Ingresa la estatura y peso del paciente.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#tipo-sangre-input",
-          popover: {
-            title: "Tipo de Sangre",
-            description: "Selecciona el tipo de sangre del paciente.",
-            align: "center",
+          {
+            element: "#tipo-sangre-input",
+            popover: {
+              title: "Tipo de Sangre",
+              description: "Selecciona el tipo de sangre del paciente.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#motivo-visita-input",
-          popover: {
-            title: "Motivo de Visita",
-            description:
-              "Describe el motivo por el cual el paciente asiste a la consulta.",
-            align: "center",
+          {
+            element: "#motivo-visita-input",
+            popover: {
+              title: "Motivo de Visita",
+              description:
+                "Describe el motivo por el cual el paciente asiste a la consulta.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#diagnostico-input",
-          popover: {
-            title: "Diagnóstico",
-            description: "Ingresa el diagnóstico médico de la consulta.",
-            align: "center",
+          {
+            element: "#diagnostico-input",
+            popover: {
+              title: "Diagnóstico",
+              description: "Ingresa el diagnóstico médico de la consulta.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#tratamiento-input",
-          popover: {
-            title: "Tratamiento",
-            description:
-              "Describe el tratamiento recomendado para el paciente.",
-            align: "center",
+          {
+            element: "#tratamiento-input",
+            popover: {
+              title: "Tratamiento",
+              description:
+                "Describe el tratamiento recomendado para el paciente.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#observaciones-input",
-          popover: {
-            title: "Observaciones",
-            description:
-              "Agrega observaciones adicionales, recomendaciones o pronóstico.",
-            align: "center",
+          {
+            element: "#observaciones-input",
+            popover: {
+              title: "Observaciones",
+              description:
+                "Agrega observaciones adicionales, recomendaciones o pronóstico.",
+              align: "center",
+            },
           },
-        },
-        {
-          element: "#insumos-input",
-          popover: {
-            title: "Insumos Utilizados",
-            description:
-              "Agrega los insumos utilizados durante la consulta (opcional).",
-            align: "center",
+          {
+            element: "#insumos-input",
+            popover: {
+              title: "Insumos Utilizados",
+              description:
+                "Agrega los insumos utilizados durante la consulta (opcional).",
+              align: "center",
+            },
           },
-        },
-      ],
-    });
-    driverObj.drive();
-  }
+        ],
+      });
+      driverObj.drive();
+    }
   });
 
   const form = document.getElementById("form-consulta-medica");

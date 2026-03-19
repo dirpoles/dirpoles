@@ -285,7 +285,9 @@ function empleado_registrar(){
 
             echo json_encode([
                 'exito' => true,
-                'mensaje' => $registro['mensaje']
+                'mensaje' => $registro['mensaje'],
+                'id_empleado' => $registro['id_empleado'] ?? null,
+                'nombre_completo' => $nombre . ' ' . $apellido
             ]);
             exit();
         } else{

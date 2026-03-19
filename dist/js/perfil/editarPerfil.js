@@ -257,7 +257,7 @@ function initValidationEditarPerfil() {
 
     function validarClave() {
         const clave = elements.clave.value;
-        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.,]{8,}$/;
 
         // Si está vacío, es válido (opcional)
         if (!clave || clave === "") {
@@ -267,7 +267,7 @@ function initValidationEditarPerfil() {
 
         // Si tiene contenido, validar formato
         if (!regex.test(clave)) {
-            showError(elements.clave, "La clave debe tener al menos 8 caracteres, una letra y un número");
+            showError(elements.clave, "La clave debe tener al menos 8 caracteres, una letra, un número y un carácter especial (!@#$%^&*.,)");
             return false;
         }
 
@@ -324,6 +324,47 @@ function initValidationEditarPerfil() {
     elements.telefono_numero.addEventListener('blur', validarTelefono); // Cambiar a blur
     elements.direccion.addEventListener('input', validarDireccion);
     elements.clave.addEventListener('input', validarClave);
+
+    // Lógica para ver contraseña (Nueva)
+    const btnToggleClave = document.getElementById('btnToggleClave');
+    if (btnToggleClave) {
+        btnToggleClave.addEventListener('click', function() {
+            const iconEye = document.getElementById('icon-eye-clave');
+            const iconEyeSlash = document.getElementById('icon-eye-slash-clave');
+            const isPassword = elements.clave.type === 'password';
+            
+            elements.clave.type = isPassword ? 'text' : 'password';
+            
+            if (isPassword) {
+                iconEye.classList.add('d-none');
+                iconEyeSlash.classList.remove('d-none');
+            } else {
+                iconEye.classList.remove('d-none');
+                iconEyeSlash.classList.add('d-none');
+            }
+        });
+    }
+
+    // Lógica para ver contraseña (Actual)
+    const btnToggleActual = document.getElementById('btnToggleActual');
+    if (btnToggleActual) {
+        btnToggleActual.addEventListener('click', function() {
+            const iconEye = document.getElementById('icon-eye-actual');
+            const iconEyeSlash = document.getElementById('icon-eye-slash-actual');
+            const isPassword = elements.clave_actual.type === 'password';
+            
+            elements.clave_actual.type = isPassword ? 'text' : 'password';
+            
+            if (isPassword) {
+                iconEye.classList.add('d-none');
+                iconEyeSlash.classList.remove('d-none');
+            } else {
+                iconEye.classList.remove('d-none');
+                iconEyeSlash.classList.add('d-none');
+            }
+        });
+    }
+
     elements.clave_actual.addEventListener('blur', validarClaveActual); // Cambiar a blur
 
     // ========== Submit Handler ==========

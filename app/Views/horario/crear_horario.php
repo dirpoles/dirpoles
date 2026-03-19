@@ -128,62 +128,77 @@ include BASE_PATH . '/app/Views/template/head.php';
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Registrar un nuevo horario</h6>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body p-4">
                                     <form action="<?= BASE_URL ?>registrar_horario" method="POST" autocomplete="off" id="formulario-horario">
                                         <div class="row">
                                             <!-- Psicólogo (Empleado) -->
-                                            <div class="col-md-6 mb-3">
-                                                <label for="psicologo" class="form-label">Psicólogo</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="psicologo_nombre" placeholder="Seleccione un psicólogo" readonly>
+                                            <div class="col-md-12 mb-4">
+                                                <label for="psicologo" class="form-label font-weight-bold">Psicólogo Seleccionado</label>
+                                                <div class="input-group shadow-sm">
+                                                    <span class="input-group-text bg-light"><i class="fa-solid fa-user-md"></i></span>
+                                                    <input type="text" class="form-control bg-white" id="psicologo_nombre" placeholder="Seleccione un psicólogo haciendo clic en la lupa -->" readonly style="cursor: default;">
                                                     <input type="hidden" name="id_empleado" id="id_empleado">
-                                                    <button class="btn btn-outline-danger" type="button" id="btnEliminarPsicologo">
-                                                        <i class="fa-solid fa-x"></i>
+                                                    <button class="btn btn-outline-danger" type="button" id="btnEliminarPsicologo" title="Quitar selección">
+                                                        <i class="fa-solid fa-trash"></i>
                                                     </button>
-                                                    <button class="btn btn-outline-secondary" type="button" id="btnSeleccionarPsicologo" data-bs-toggle="modal" data-bs-target="#modalSeleccionarPsicologo">
-                                                        <i class="fas fa-search"></i>
+                                                    <button class="btn btn-primary" type="button" id="btnSeleccionarPsicologo" data-bs-toggle="modal" data-bs-target="#modalSeleccionarPsicologo">
+                                                        <i class="fas fa-search me-1"></i> Buscar Psicólogo
                                                     </button>
                                                 </div>
                                                 <div id="id_empleadoError" class="form-text text-danger"></div>
                                             </div>
+                                        </div>
 
-                                            <!-- Día de la semana -->
-                                            <div class="col-md-6 mb-3">
-                                                <label for="dia_semana" class="form-label">Día de la semana</label>
-                                                <select name="dia_semana" id="dia_semana" class="form-control">
-                                                    <option value="" disabled selected>Seleccione un día</option>
-                                                    <option value="Lunes">Lunes</option>
-                                                    <option value="Martes">Martes</option>
-                                                    <option value="Miércoles">Miércoles</option>
-                                                    <option value="Jueves">Jueves</option>
-                                                    <option value="Viernes">Viernes</option>
-                                                    <option value="Sábado">Sábado</option>
-                                                </select>
-                                                <div id="dia_semanaError" class="form-text text-danger"></div>
+                                        <hr class="mb-4">
+
+                                        <!-- Sección de Horarios Dinámicos -->
+                                        <div class="row mb-4 mt-2">
+                                            <div class="col-12 d-flex justify-content-between align-items-center">
+                                                <h6 class="font-weight-bold text-dark mb-0">
+                                                    <i class="fa-solid fa-calendar-check me-2 text-primary"></i>Configuración de Días y Horas
+                                                </h6>
+                                                <button type="button" id="btnAgregarFila" class="btn btn-success btn-sm shadow-sm px-3">
+                                                    <i class="fa-solid fa-plus me-1"></i> Añadir un Día
+                                                </button>
                                             </div>
                                         </div>
 
-                                        <div class="row">
-                                            <!-- Hora inicio -->
-                                            <div class="col-md-6 mb-3">
-                                                <label for="hora_inicio" class="form-label">Hora de inicio</label>
-                                                <input type="time" class="form-control" name="hora_inicio" id="hora_inicio">
-                                                <div id="hora_inicioError" class="form-text text-danger"></div>
-                                            </div>
+                                        <div class="table-responsive px-1">
+                                            <table class="table table-hover border align-middle mb-0" id="tablaHorarios">
+                                                <thead class="table-light border-bottom">
+                                                    <tr>
+                                                        <th class="py-3" style="width: 30%;">Día de la Semana</th>
+                                                        <th class="py-3" style="width: 30%;">Hora de Inicio</th>
+                                                        <th class="py-3" style="width: 30%;">Hora de Finalización</th>
+                                                        <th class="py-3" style="width: 10%; text-align: center;">Acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="contenedorHorarios">
+                                                    <!-- Las filas se agregarán dinámicamente aquí -->
+                                                    <tr class="fila-vacia">
+                                                        <td colspan="4" class="text-center text-muted py-5">
+                                                            <i class="fa-solid fa-clock-rotate-left fa-2x mb-3 d-block opacity-25"></i>
+                                                            No has añadido ningún día. Haz clic en "Añadir un Día" para comenzar.
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
-                                            <!-- Hora fin -->
-                                            <div class="col-md-6 mb-3">
-                                                <label for="hora_fin" class="form-label">Hora de fin</label>
-                                                <input type="time" class="form-control" name="hora_fin" id="hora_fin">
-                                                <div id="hora_finError" class="form-text text-danger"></div>
+                                        <div class="row mt-3 mb-4">
+                                            <div class="col-12 text-muted small bg-light p-2 rounded border-start border-primary border-4" style="margin-left: 12px; width: calc(100% - 24px);">
+                                                <i class="fa-solid fa-circle-info me-1 text-primary"></i> 
+                                                Puedes registrar hasta 6 días (Lunes a Sábado). <strong>No se permiten días duplicados</strong> ni días que el psicólogo ya tenga registrados.
                                             </div>
                                         </div>
 
-                                        <div class="row">
+                                        <div class="row mt-5">
                                             <div class="col-12">
-                                                <div class="d-flex justify-content-end gap-2">
-                                                    <button type="reset" class="btn btn-secondary" id="btnLimpiarHorario">Limpiar Formulario</button>
-                                                    <button type="submit" id="btnRegistrarHorario" class="btn btn-primary">Registrar Horario</button>
+                                                <div class="d-flex justify-content-end gap-3 border-top pt-4">
+                                                    <button type="reset" class="btn btn-light border px-4" id="btnLimpiarHorario">Limpiar Todo</button>
+                                                    <button type="submit" id="btnRegistrarHorario" class="btn btn-primary shadow-sm px-5 py-2 font-weight-bold" disabled>
+                                                        <i class="fa-solid fa-save me-1"></i> Guardar Todos los Horarios
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -198,12 +213,10 @@ include BASE_PATH . '/app/Views/template/head.php';
                 <!-- End of Main Content -->
                 <?php include BASE_PATH . '/app/Views/horario/modal_horario.php'; ?>
                 <!-- Footer -->
-
+                <?php include BASE_PATH . '/app/Views/template/footer.php'; ?>
                 <!-- End of Footer -->
-
             </div>
             <!-- End of Content Wrapper -->
-            <?php include BASE_PATH . '/app/Views/template/footer.php'; ?>
         </div>
         <!-- End of Page Wrapper -->
 

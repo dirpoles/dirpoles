@@ -108,9 +108,13 @@
 
                         <!-- Contraseña Actual (Requerida) -->
                         <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="password" class="form-control" id="edit_clave_actual" name="clave_actual" placeholder="Contraseña Actual" autocomplete="current-password" required>
+                            <div class="form-floating input-group shadow-sm">
+                                <input type="password" class="form-control" id="edit_clave_actual" name="clave_actual" placeholder="Contraseña Actual" autocomplete="current-password" required style="border-radius: 8px 0 0 8px !important;">
                                 <label for="edit_clave_actual">Contraseña Actual *</label>
+                                <span class="input-group-text toggle-password-btn" id="btnToggleActual" style="cursor: pointer; background: white; border-radius: 0 8px 8px 0 !important;">
+                                    <i class="fa-solid fa-eye" id="icon-eye-actual"></i>
+                                    <i class="fa-solid fa-eye-slash d-none" id="icon-eye-slash-actual"></i>
+                                </span>
                                 <div class="invalid-feedback" id="edit_clave_actualError"></div>
                             </div>
                             <small class="text-muted">Requerida para guardar cambios</small>
@@ -118,13 +122,35 @@
 
                         <!-- Nueva Contraseña (Opcional) -->
                         <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="password" class="form-control" id="edit_clave" name="clave" placeholder="Nueva Contraseña (opcional)" autocomplete="new-password">
+                            <div class="form-floating input-group shadow-sm">
+                                <input type="password" class="form-control" id="edit_clave" name="clave" placeholder="Nueva Contraseña (opcional)" autocomplete="new-password" style="border-radius: 8px 0 0 8px !important;">
                                 <label for="edit_clave">Nueva Contraseña (opcional)</label>
+                                <span class="input-group-text toggle-password-btn" id="btnToggleClave" style="cursor: pointer; background: white; border-radius: 0 8px 8px 0 !important;">
+                                    <i class="fa-solid fa-eye" id="icon-eye-clave"></i>
+                                    <i class="fa-solid fa-eye-slash d-none" id="icon-eye-slash-clave"></i>
+                                </span>
                                 <div class="invalid-feedback" id="edit_claveError"></div>
                             </div>
                             <small class="text-muted">Dejar en blanco para mantener la actual</small>
                         </div>
+
+                        <style>
+                            .toggle-password-btn {
+                                border-left: none;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 45px;
+                                transition: color 0.2s ease;
+                            }
+                            .toggle-password-btn:hover {
+                                color: #0d6efd;
+                            }
+                            #formEditarPerfil .form-floating.input-group > .form-control {
+                                flex: 1 1 auto;
+                                width: 1%;
+                            }
+                        </style>
 
                         <!-- Botones -->
                         <div class="col-12">

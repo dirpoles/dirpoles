@@ -386,7 +386,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function validarClave() {
         const clave = elements.clave.value;
-        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.,]{8,}$/;
 
         if (!clave || clave === "") {
             showError(elements.clave, "La clave es obligatoria");
@@ -394,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (!regex.test(clave)) {
-            showError(elements.clave, "La clave debe tener al menos 8 caracteres, una letra, un número y un carácter especial");
+            showError(elements.clave, "La clave debe tener al menos 8 caracteres, una letra, un número y un carácter especial (!@#$%^&*.,)");
             return false;
         }
 
@@ -468,6 +468,27 @@ document.addEventListener("DOMContentLoaded", function () {
     $('#id_tipo_empleado').on('select2:clear', () => validarTipoEmpleado());
     elements.fecha_nacimiento.addEventListener('input', validarFechaNacimiento);
     elements.clave.addEventListener('input', validarClave);
+
+    // Lógica para ver contraseña
+    const btnTogglePassword = document.getElementById('btnTogglePassword');
+    if (btnTogglePassword) {
+        btnTogglePassword.addEventListener('click', function() {
+            const iconEye = document.getElementById('icon-eye');
+            const iconEyeSlash = document.getElementById('icon-eye-slash');
+            const isPassword = elements.clave.type === 'password';
+            
+            elements.clave.type = isPassword ? 'text' : 'password';
+            
+            if (isPassword) {
+                iconEye.classList.add('d-none');
+                iconEyeSlash.classList.remove('d-none');
+            } else {
+                iconEye.classList.remove('d-none');
+                iconEyeSlash.classList.add('d-none');
+            }
+        });
+    }
+
     elements.estatus.addEventListener('change', validarEstatus);
     elements.direccion.addEventListener('input', validarDireccion);
     form.addEventListener('reset', function () {
@@ -510,8 +531,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     const data = await response.json();
 
                     if (data.exito) {
-                        AlertManager.success("Registro exitoso", data.mensaje).then(() => {
-                            window.location.reload();
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Registro exitoso!',
+                            text: data.mensaje + "\n\n¿Deseas configurar el horario de este empleado ahora?",
+                            showCancelButton: true,
+                            confirmButtonText: '<i class="fa-solid fa-clock"></i> Configurar Horario',
+                            cancelButtonText: 'Luego / Volver',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#aaa',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Redirigir a crear_horario con los datos del nuevo empleado
+                                const nombreParam = encodeURIComponent(data.nombre_completo);
+                                window.location.href = `crear_horario?id_empleado=${data.id_empleado}&nombre=${nombreParam}`;
+                            } else {
+                                window.location.reload();
+                            }
                         });
                     } else {
                         AlertManager.error("Error", data.error || data.mensaje || "Error desconocido");

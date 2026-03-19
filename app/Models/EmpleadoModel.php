@@ -148,7 +148,8 @@ class EmpleadoModel extends SecurityModel{
                 $stmt->bindValue(':estatus', $this->__get('estatus'), PDO::PARAM_INT);
 
                 if ($stmt->execute()) {
-                    return ['exito' => true, 'mensaje' => 'El empleado se registro exitosamente'];
+                    $id = $this->conn_security->lastInsertId();
+                    return ['exito' => true, 'mensaje' => 'El empleado se registro exitosamente', 'id_empleado' => $id];
                 } else {
                     return ['exito' => false, 'error' => 'Error al registrar el empleado'];
                 }

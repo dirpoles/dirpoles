@@ -1,447 +1,326 @@
+// Función global para ser llamada desde el modal (DataTable)
+window.seleccionarPsicologo = async function(id, nombre) {
+    const idEmpleadoInput = document.getElementById('id_empleado');
+    const psicologoNombreInput = document.getElementById('psicologo_nombre');
+    const contenedorHorarios = document.getElementById('contenedorHorarios');
+    
+    if (idEmpleadoInput && psicologoNombreInput) {
+        idEmpleadoInput.value = id;
+        psicologoNombreInput.value = nombre;
+        
+        // Disparar evento de carga de horarios (definido en el scope de DOMContentLoaded)
+        window.dispatchEvent(new CustomEvent('psicologoSeleccionado', { detail: { id: id } }));
+        
+        $('#modalSeleccionarPsicologo').modal('hide');
+        
+        // Si no hay filas, agregar la primera automáticamente
+        if (contenedorHorarios && contenedorHorarios.querySelectorAll('tr:not(.fila-vacia)').length === 0) {
+            const btnAgregar = document.getElementById('btnAgregarFila');
+            if (btnAgregar) btnAgregar.click();
+        }
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('formulario-horario');
+    const contenedorHorarios = document.getElementById('contenedorHorarios');
+    const btnAgregarFila = document.getElementById('btnAgregarFila');
+    const btnRegistrarHorario = document.getElementById('btnRegistrarHorario');
+    const idEmpleadoInput = document.getElementById('id_empleado');
+    const psicologoNombreInput = document.getElementById('psicologo_nombre');
+    const btnEliminarPsicologo = document.getElementById('btnEliminarPsicologo');
 
-    const elements = {
-        hora_inicio: document.getElementById('hora_inicio'),
-        hora_fin: document.getElementById('hora_fin'),
-        dia_semana: document.getElementById('dia_semana'),
-        id_empleado: document.getElementById('id_empleado'),
-        psicologo_nombre: document.getElementById('psicologo_nombre'),
-        btnEliminarPsicologo: document.getElementById('btnEliminarPsicologo'),
-        btnLimpiarHorario: document.getElementById('btnLimpiarHorario')
-    };
+    let horarioActualPsicologo = []; // Días que ya tiene registrados en la DB
 
-    // Variables para almacenar el horario actual del psicólogo
-    let horarioActual = [];
+    // ========== Gestión de Filas Dinámicas ==========
 
-    const showError = (field, msg) => {
-        const errorElement = document.getElementById(`${field.id}Error`);
-        if (errorElement) {
-            errorElement.textContent = msg;
-            errorElement.style.display = 'block';
-        }
-
-        field.classList.add("is-invalid");
-        field.classList.remove("is-valid");
-
-        if ($(field).hasClass('select2')) {
-            $(field).next('.select2-container').find('.select2-selection')
-                .addClass('is-invalid')
-                .removeClass('is-valid');
-        }
-    };
-
-    const clearError = (field) => {
-        const errorElement = document.getElementById(`${field.id}Error`);
-        if (errorElement) {
-            errorElement.textContent = "";
-            errorElement.style.display = 'none';
-        }
-
-        field.classList.remove("is-invalid");
-        field.classList.add("is-valid");
-
-        if ($(field).hasClass('select2')) {
-            $(field).next('.select2-container').find('.select2-selection')
-                .removeClass('is-invalid')
-                .addClass('is-valid');
-        }
-    };
-
-    const resetField = (field) => {
-        const errorElement = document.getElementById(`${field.id}Error`);
-        if (errorElement) {
-            errorElement.textContent = "";
-            errorElement.style.display = 'none';
-        }
-
-        // REMOVER ambas clases, no agregar is-valid
-        field.classList.remove("is-invalid");
-        field.classList.remove("is-valid");
-
-        if ($(field).hasClass('select2')) {
-            $(field).next('.select2-container').find('.select2-selection')
-                .removeClass('is-invalid')
-                .removeClass('is-valid');
-        }
-    };
-
-    // ============================
-    // VALIDACIONES DE PSICÓLOGO
-    // ============================
-    function validarEmpleado() {
-        const id_empleado = elements.id_empleado.value;
-        const psicologo_nombre = elements.psicologo_nombre.value;
-
-        if (id_empleado === "") {
-            showError(elements.id_empleado, "Debe seleccionar un psicólogo");
-            return false;
-        }
-
-        if (psicologo_nombre === "") {
-            showError(elements.psicologo_nombre, "El nombre del psicólogo es obligatorio");
-            return false;
-        }
-
-        clearError(elements.id_empleado);
-        clearError(elements.psicologo_nombre);
-        return true;
+    function actualizarEstadoBotonGuardar() {
+        const filas = contenedorHorarios.querySelectorAll('tr:not(.fila-vacia)');
+        btnRegistrarHorario.disabled = (filas.length === 0 || !idEmpleadoInput.value);
     }
 
-    // ============================
-    // VALIDACIONES DE DÍA DE LA SEMANA
-    // ============================
-    function validarDiaSemana() {
-        const dia_semana = elements.dia_semana.value;
-
-        if (dia_semana === "") {
-            showError(elements.dia_semana, "Debe seleccionar un día de la semana");
-            return false;
+    function mostrarFilaVacia() {
+        if (!contenedorHorarios) return;
+        const filas = contenedorHorarios.querySelectorAll('tr:not(.fila-vacia)');
+        if (filas.length === 0) {
+            contenedorHorarios.innerHTML = `
+                <tr class="fila-vacia">
+                    <td colspan="4" class="text-center text-muted py-4">
+                        No has añadido ningún día. Haz clic en "Añadir un Día" para comenzar.
+                    </td>
+                </tr>`;
+        } else {
+            const filaVacia = contenedorHorarios.querySelector('.fila-vacia');
+            if (filaVacia) filaVacia.remove();
         }
-
-        clearError(elements.dia_semana);
-        return true;
     }
 
-    /**
-     * Valida en tiempo real si el día ya está registrado para el psicólogo
-     */
-    async function validarDiaUnico() {
-        const id_empleado = elements.id_empleado.value;
-        const dia_semana = elements.dia_semana.value;
-
-        if (!id_empleado || !dia_semana) {
-            return true; // No hay datos suficientes para validar
+    function agregarFila() {
+        mostrarFilaVacia();
+        const filasExistentes = contenedorHorarios.querySelectorAll('tr:not(.fila-vacia)').length;
+        
+        if (filasExistentes >= 6) {
+            AlertManager.warning('Límite alcanzado', 'Solo puedes agregar hasta 6 días (Lunes a Sábado).');
+            return;
         }
 
-        try {
-            const response = await fetch('validar_dia_horario', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    id_empleado: id_empleado,
-                    dia_semana: dia_semana
-                })
-            });
+        const tr = document.createElement('tr');
+        const idUnico = Date.now() + Math.floor(Math.random() * 1000);
+        
+        tr.innerHTML = `
+            <td>
+                <select name="horarios[${idUnico}][dia_semana]" class="form-control select-dia" required>
+                    <option value="" disabled selected>Seleccione</option>
+                    <option value="Lunes">Lunes</option>
+                    <option value="Martes">Martes</option>
+                    <option value="Miércoles">Miércoles</option>
+                    <option value="Jueves">Jueves</option>
+                    <option value="Viernes">Viernes</option>
+                    <option value="Sábado">Sábado</option>
+                </select>
+                <div class="invalid-feedback">Día duplicado o ya registrado.</div>
+            </td>
+            <td>
+                <input type="time" name="horarios[${idUnico}][hora_inicio]" class="form-control input-hora-inicio" min="07:00" max="23:59" required>
+            </td>
+            <td>
+                <input type="time" name="horarios[${idUnico}][hora_fin]" class="form-control input-hora-fin" min="07:00" max="23:59" required>
+            </td>
+            <td class="text-center">
+                <button type="button" class="btn btn-outline-danger btn-sm btn-remover-fila" title="Quitar este día">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </td>
+        `;
 
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
-            }
+        contenedorHorarios.appendChild(tr);
+        actualizarEstadoBotonGuardar();
 
-            const data = await response.json();
+        // Eventos para la nueva fila
+        const btnRemover = tr.querySelector('.btn-remover-fila');
+        btnRemover.addEventListener('click', () => {
+            tr.remove();
+            mostrarFilaVacia();
+            actualizarEstadoBotonGuardar();
+            validarTodosLosDias();
+        });
 
-            if (data.existe) {
-                showError(elements.dia_semana,
-                    `El psicólogo ya tiene un horario registrado para los ${dia_semana}. ` +
-                    `Por favor, seleccione otro día o modifique el horario existente.`
-                );
-                return false;
-            } else {
-                clearError(elements.dia_semana);
-                return true;
-            }
-        } catch (error) {
-            console.error('Error al validar día único:', error);
-            // En caso de error, no bloqueamos pero mostramos alerta
-            AlertManager.warning('Advertencia', 'No se pudo verificar la disponibilidad del día. Verifique manualmente.');
+        const selectDia = tr.querySelector('.select-dia');
+        selectDia.addEventListener('change', () => {
+            validarDiaFila(tr);
+            validarTodosLosDias();
+        });
+
+        const inputsHora = tr.querySelectorAll('input[type="time"]');
+        inputsHora.forEach(input => {
+            input.addEventListener('change', () => validarRangoHorasFila(tr));
+        });
+    }
+
+    // ========== Validaciones ==========
+
+    function validarDiaFila(fila) {
+        const select = fila.querySelector('.select-dia');
+        const dia = select.value;
+        
+        if (!dia) return;
+
+        // 1. Validar contra lo que ya tiene en DB
+        const yaExisteEnDB = horarioActualPsicologo.some(h => h.dia_semana === dia);
+        
+        // 2. Validar contra otras filas del formulario
+        const otrasFilas = Array.from(contenedorHorarios.querySelectorAll('tr:not(.fila-vacia)')).filter(f => f !== fila);
+        const duplicadoEnForm = otrasFilas.some(f => f.querySelector('.select-dia').value === dia);
+
+        if (yaExisteEnDB) {
+            select.classList.add('is-invalid');
+            fila.querySelector('.invalid-feedback').textContent = `El psicólogo ya tiene un horario para los ${dia}.`;
+            return false;
+        } else if (duplicadoEnForm) {
+            select.classList.add('is-invalid');
+            fila.querySelector('.invalid-feedback').textContent = `Ya has añadido ${dia} en otra fila.`;
+            return false;
+        } else {
+            select.classList.remove('is-invalid');
+            select.classList.add('is-valid');
             return true;
         }
     }
 
-    // ============================
-    // VALIDACIONES DE HORAS
-    // ============================
-    function validarHoraInicio() {
-        const hora_inicio = elements.hora_inicio.value;
-
-        if (hora_inicio === "") {
-            showError(elements.hora_inicio, "La hora de inicio es obligatoria");
-            return false;
-        }
-
-        // Validar formato HH:MM
-        const horaRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-        if (!horaRegex.test(hora_inicio)) {
-            showError(elements.hora_inicio, "Formato de hora inválido (use HH:MM)");
-            return false;
-        }
-
-        const horaEnMinutos = convertirHoraAMinutos(hora_inicio);
-
-        // Rango estricto: 7:00 AM (420) a 4:00 PM (960)
-        if (horaEnMinutos < 420) {
-            showError(elements.hora_inicio, "La hora de inicio no puede ser antes de las 7:00 AM");
-            return false;
-        }
-
-        if (horaEnMinutos > 960) {
-            showError(elements.hora_inicio, "La hora de inicio no puede ser después de las 4:00 PM");
-            return false;
-        }
-
-        clearError(elements.hora_inicio);
-        return true;
-    }
-
-    function validarHoraFin() {
-        const hora_fin = elements.hora_fin.value;
-
-        if (hora_fin === "") {
-            showError(elements.hora_fin, "La hora de fin es obligatoria");
-            return false;
-        }
-
-        const horaRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-        if (!horaRegex.test(hora_fin)) {
-            showError(elements.hora_fin, "Formato de hora inválido (use HH:MM)");
-            return false;
-        }
-
-        const horaEnMinutos = convertirHoraAMinutos(hora_fin);
-
-        // Rango estricto: 7:00 AM (420) a 4:00 PM (960)
-        if (horaEnMinutos < 420) {
-            showError(elements.hora_fin, "La hora de fin no puede ser antes de las 7:00 AM");
-            return false;
-        }
-
-        if (horaEnMinutos > 960) {
-            showError(elements.hora_fin, "La hora de fin no puede ser después de las 4:00 PM");
-            return false;
-        }
-
-        clearError(elements.hora_fin);
-        return true;
-    }
-
-    /**
- * Valida que la hora de fin sea mayor que la hora de inicio
- * y que el rango completo esté dentro del horario permitido
- */
-    function validarRangoHoras() {
-        const hora_inicio = elements.hora_inicio.value;
-        const hora_fin = elements.hora_fin.value;
-
-        if (!hora_inicio || !hora_fin) {
-            return true; // No hay datos suficientes
-        }
-
-        const inicioMinutos = convertirHoraAMinutos(hora_inicio);
-        const finMinutos = convertirHoraAMinutos(hora_fin);
-
-        // Validar que todo el rango esté dentro de 7:00 AM - 4:00 PM
-        if (inicioMinutos < 420 || inicioMinutos > 960) {
-            showError(elements.hora_inicio, "El horario completo debe estar entre 7:00 AM y 4:00 PM");
-            return false;
-        }
-
-        if (finMinutos < 420 || finMinutos > 960) {
-            showError(elements.hora_fin, "El horario completo debe estar entre 7:00 AM y 4:00 PM");
-            return false;
-        }
-
-        // Validar que la hora de fin sea mayor que la de inicio
-        if (finMinutos <= inicioMinutos) {
-            showError(elements.hora_fin, "La hora de fin debe ser posterior a la hora de inicio");
-            return false;
-        }
-
-        // Validar duración mínima (1 hora = 60 minutos)
-        const duracion = finMinutos - inicioMinutos;
-        if (duracion < 60) {
-            showError(elements.hora_fin, "La duración mínima del horario es de 1 hora");
-            return false;
-        }
-
-        // Validar que no exceda el horario laboral máximo (9 horas)
-        if (duracion > 540) { // 9 horas = 540 minutos
-            showError(elements.hora_fin, "La duración máxima del horario es de 9 horas");
-            return false;
-        }
-
-        clearError(elements.hora_inicio);
-        clearError(elements.hora_fin);
-        return true;
-    }
-
-    function convertirHoraAMinutos(hora) {
-        const [horas, minutos] = hora.split(':').map(Number);
-        return horas * 60 + minutos;
-    }
-
-    // ============================
-    // FUNCIONES AUXILIARES
-    // ============================
-    function toggleBotonEliminar() {
-        if (elements.id_empleado && elements.id_empleado.value && elements.btnEliminarPsicologo) {
-            elements.btnEliminarPsicologo.style.display = 'block';
-        } else if (elements.btnEliminarPsicologo) {
-            elements.btnEliminarPsicologo.style.display = 'none';
-        }
-    }
-
-    /**
-     * Validación global que combina todas las validaciones de horas
-     */
-    function validarHorarioCompleto() {
-        const validaciones = [
-            validarHoraInicio(),
-            validarHoraFin(),
-            validarRangoHoras()
-        ];
-
-        return validaciones.every(val => val === true);
-    }
-
-    /**
-     * Establece los límites en los inputs de tiempo para evitar entradas inválidas
-     */
-    function configurarLimitesInputTime() {
-        // Establecer atributos min y max en los inputs
-        elements.hora_inicio.setAttribute('min', '07:00');
-        elements.hora_inicio.setAttribute('max', '16:00');
-        elements.hora_fin.setAttribute('min', '07:00');
-        elements.hora_fin.setAttribute('max', '16:00');
-
-        // Agregar tooltips informativos
-        elements.hora_inicio.title = "Horario permitido: 7:00 AM - 4:00 PM";
-        elements.hora_fin.title = "Horario permitido: 7:00 AM - 4:00 PM";
-
-        // Evento para validar en tiempo real cuando el usuario interactúa con el input
-        elements.hora_inicio.addEventListener('change', function () {
-            // Si el usuario selecciona una hora fuera del rango, ajustar
-            const hora = this.value;
-            if (hora) {
-                const minutos = convertirHoraAMinutos(hora);
-                if (minutos < 420) {
-                    this.value = '07:00';
-                    AlertManager.warning('Ajuste automático', 'La hora se ajustó al mínimo permitido (7:00 AM)');
-                } else if (minutos > 960) {
-                    this.value = '16:00';
-                    AlertManager.warning('Ajuste automático', 'La hora se ajustó al máximo permitido (4:00 PM)');
-                }
-            }
-            validarHorarioCompleto();
+    function validarTodosLosDias() {
+        const filas = contenedorHorarios.querySelectorAll('tr:not(.fila-vacia)');
+        let todosValidos = true;
+        filas.forEach(fila => {
+            if (!validarDiaFila(fila)) todosValidos = false;
         });
-
-        elements.hora_fin.addEventListener('change', function () {
-            const hora = this.value;
-            if (hora) {
-                const minutos = convertirHoraAMinutos(hora);
-                if (minutos < 420) {
-                    this.value = '07:00';
-                    AlertManager.warning('Ajuste automático', 'La hora se ajustó al mínimo permitido (7:00 AM)');
-                } else if (minutos > 960) {
-                    this.value = '16:00';
-                    AlertManager.warning('Ajuste automático', 'La hora se ajustó al máximo permitido (4:00 PM)');
-                }
-            }
-            validarHorarioCompleto();
-        });
+        return todosValidos;
     }
 
-    function setupEliminarButtons() {
-        // Botón para eliminar psicólogo
-        if (elements.btnEliminarPsicologo) {
-            elements.btnEliminarPsicologo.addEventListener('click', function () {
-                elements.id_empleado.value = '';
-                elements.psicologo_nombre.value = '';
-                resetField(elements.id_empleado);
-                resetField(elements.psicologo_nombre);
-                toggleBotonEliminar();
-                validarEmpleado();
+    function validarRangoHorasFila(fila) {
+        const hInicio = fila.querySelector('.input-hora-inicio');
+        const hFin = fila.querySelector('.input-hora-fin');
+        
+        if (!hInicio.value || !hFin.value) return true;
 
-                // Limpiar horario actual
-                horarioActual = [];
-            });
+        const inicioMin = convertirAMinutos(hInicio.value);
+        const finMin = convertirAMinutos(hFin.value);
+
+        let esValido = true;
+        let msg = "";
+
+        if (inicioMin < 420) { // 7:00 AM
+            msg = "Mínimo 7:00 AM";
+            esValido = false;
+        } else if (finMin > 1439) { // 11:59 PM
+            msg = "Máximo 11:59 PM";
+            esValido = false;
+        } else if (finMin <= inicioMin) {
+            msg = "Fin debe ser después del inicio";
+            esValido = false;
+        } else if ((finMin - inicioMin) < 60) {
+            msg = "Mínimo 1 hora";
+            esValido = false;
         }
+
+        if (!esValido) {
+            hFin.setCustomValidity(msg);
+            hFin.classList.add('is-invalid');
+            AlertManager.warning('Horario inválido', msg);
+        } else {
+            hFin.setCustomValidity("");
+            hFin.classList.remove('is-invalid');
+            hFin.classList.add('is-valid');
+            hInicio.classList.add('is-valid');
+        }
+
+        return esValido;
     }
 
-    /**
-     * Carga el horario actual del psicólogo para referencia
-     */
-    async function cargarHorarioActual(id_empleado) {
+    function convertirAMinutos(hora) {
+        const [h, m] = hora.split(':').map(Number);
+        return h * 60 + m;
+    }
+
+    // ========== Psicólogo e Inicialización ==========
+
+    async function cargarHorarioActual(id) {
+        if (!id) return;
         try {
-            const response = await fetch(`obtener_horario_psicologo?id_empleado=${id_empleado}`);
-            if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-
+            const response = await fetch(`obtener_horario_psicologo?id_empleado=${id}`);
             const data = await response.json();
             if (data.exito) {
-                horarioActual = data.data.horario || [];
-                console.log('Horario actual cargado:', horarioActual);
-
-                // Mostrar advertencia si el psicólogo ya tiene horarios
-                if (horarioActual.length > 0) {
-                    AlertManager.info('Información',
-                        `Este psicólogo ya tiene ${horarioActual.length} día(s) con horario asignado. ` +
-                        `Se validará que no se repita el día seleccionado.`
-                    );
-                }
+                horarioActualPsicologo = data.data.horario || [];
+                validarTodosLosDias();
             }
         } catch (error) {
-            console.error('Error al cargar horario actual:', error);
-            horarioActual = [];
+            console.error('Error cargando horario:', error);
         }
     }
 
-    // ============================
-    // EVENTOS Y CONFIGURACIÓN
-    // ============================
-
-    // Evento para validar día único cuando cambia el select
-    elements.dia_semana.addEventListener('change', async function () {
-        validarDiaSemana();
-        await validarDiaUnico();
+    // Escuchar el evento personalizado desde la función global
+    window.addEventListener('psicologoSeleccionado', (e) => {
+        cargarHorarioActual(e.detail.id);
+        actualizarEstadoBotonGuardar();
     });
 
-    // Eventos de validación en tiempo real
-    elements.hora_inicio.addEventListener('input', function () {
-        validarHoraInicio();
-        // Si ya hay una hora de fin, validar el rango
-        if (elements.hora_fin.value) {
-            validarRangoHoras();
-        }
-    });
+    if (btnAgregarFila) btnAgregarFila.addEventListener('click', agregarFila);
 
-    elements.hora_fin.addEventListener('input', function () {
-        validarHoraFin();
-        // Si ya hay una hora de inicio, validar el rango
-        if (elements.hora_inicio.value) {
-            validarRangoHoras();
-        }
-    });
+    if (btnEliminarPsicologo) {
+        btnEliminarPsicologo.addEventListener('click', () => {
+            idEmpleadoInput.value = "";
+            psicologoNombreInput.value = "";
+            horarioActualPsicologo = [];
+            if (contenedorHorarios) {
+                contenedorHorarios.innerHTML = "";
+                mostrarFilaVacia();
+            }
+            actualizarEstadoBotonGuardar();
+            validarTodosLosDias();
+        });
+    }
 
-    // Evento de blur para validación más estricta
-    elements.hora_inicio.addEventListener('blur', function () {
-        validarHorarioCompleto();
-    });
+    // Botón de Limpiar Todo (reset)
+    const btnLimpiarHorario = document.getElementById('btnLimpiarHorario');
+    if (btnLimpiarHorario) {
+        btnLimpiarHorario.addEventListener('click', (e) => {
+            // No prevenimos el default porque queremos que resetee el form nativamente (id_empleado, etc.)
+            // Pero como id_empleado y psicologo_nombre son readonly/hidden, el reset nativo los limpia
+            // Pero las filas dinámicas NO se limpian solas
+            if (contenedorHorarios) {
+                contenedorHorarios.innerHTML = "";
+                setTimeout(() => {
+                    mostrarFilaVacia();
+                    horarioActualPsicologo = [];
+                    actualizarEstadoBotonGuardar();
+                }, 50); // Pequeño delay para dejar que ocurra el reset nativo
+            }
+        });
+    }
 
-    elements.hora_fin.addEventListener('blur', function () {
-        validarHorarioCompleto();
-    });
+    // ========== Submit ==========
 
-    // Evento cuando se selecciona un psicólogo
-    elements.id_empleado.addEventListener('change', async function () {
-        validarEmpleado();
-        if (elements.id_empleado.value) {
-            await cargarHorarioActual(elements.id_empleado.value);
-        }
-    });
+    if (form) {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-    // Configurar modal de selección de psicólogos
-    function inicializarDataTablePsicologos() {
+            if (!idEmpleadoInput.value) {
+                AlertManager.error('Error', 'Debe seleccionar un psicólogo.');
+                return;
+            }
+
+            if (!validarTodosLosDias()) {
+                AlertManager.error('Error', 'Hay días duplicados o ya registrados.');
+                return;
+            }
+
+            const filas = contenedorHorarios.querySelectorAll('tr:not(.fila-vacia)');
+            for (let fila of filas) {
+                if (!validarRangoHorasFila(fila)) {
+                    AlertManager.error('Error', 'Verifique los rangos de horas.');
+                    return;
+                }
+            }
+
+            const formData = new FormData(form);
+            
+            try {
+                AlertManager.loading('Registrando horarios...');
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.exito) {
+                    AlertManager.success('¡Éxito!', data.mensaje);
+                    setTimeout(() => window.location.href = 'consultar_horarios', 1500);
+                } else {
+                    AlertManager.error('Error', data.mensaje);
+                }
+            } catch (error) {
+                AlertManager.error('Error de red', 'No se pudo conectar con el servidor.');
+            }
+        });
+    }
+
+    // Detectar si venimos de crear_empleado con un ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const idRef = urlParams.get('id_empleado');
+    const nombreRef = urlParams.get('nombre');
+    if (idRef && nombreRef && idEmpleadoInput && psicologoNombreInput) {
+        idEmpleadoInput.value = idRef;
+        psicologoNombreInput.value = decodeURIComponent(nombreRef);
+        cargarHorarioActual(idRef);
+        actualizarEstadoBotonGuardar();
+        agregarFila();
+    }
+});
+
+// Inicialización del DataTable del Modal (fuera del DOMContentLoaded de arriba si se desea, o aquí)
+$(document).ready(function() {
+    if ($('#tablaPsicologosModal').length) {
         $('#tablaPsicologosModal').DataTable({
-            ajax: {
-                url: 'psicologos_data_json',
-                dataSrc: 'data'
-            },
-            searching: true,
-            pageLength: 10,
-            language: {
-                url: 'plugins/DataTables/js/languaje.json'
-            },
+            ajax: { url: 'psicologos_data_json', dataSrc: 'data' },
             columns: [
                 { data: 'cedula_completa' },
                 { data: 'nombre_completo' },
@@ -449,105 +328,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 { data: 'telefono' },
                 {
                     data: 'id_empleado',
-                    orderable: false,
-                    searchable: false,
                     render: function (data, type, row) {
-                        return `
-                            <button class="btn btn-sm btn-primary btn-seleccionar-psicologo" 
-                                    data-id="${data}" 
-                                    data-nombre="${row.nombre_completo}">
-                                <i class="fas fa-check"></i> Seleccionar
-                            </button>
-                        `;
+                        return `<button class="btn btn-sm btn-primary" onclick="seleccionarPsicologo('${data}', '${row.nombre_completo}')">
+                                    <i class="fas fa-check"></i> Seleccionar
+                                </button>`;
                     }
                 }
             ],
-            initComplete: function () {
-                $(document).on('click', '.btn-seleccionar-psicologo', async function () {
-                    const id = $(this).data('id');
-                    const nombre = $(this).data('nombre');
-
-                    elements.id_empleado.value = id;
-                    elements.psicologo_nombre.value = nombre;
-                    clearError(elements.id_empleado);
-                    clearError(elements.psicologo_nombre);
-                    toggleBotonEliminar();
-
-                    $('#modalSeleccionarPsicologo').modal('hide');
-
-                    // Cargar horario actual del psicólogo
-                    await cargarHorarioActual(id);
-                    validarEmpleado();
-
-                    // Disparar evento de cambio
-                    const event = new Event('change');
-                    elements.id_empleado.dispatchEvent(event);
-
-                    AlertManager.success('Psicólogo seleccionado',
-                        `Has seleccionado a ${nombre}. Ahora configure su horario.`
-                    );
-                });
-            }
+            language: { url: 'plugins/DataTables/js/languaje.json' }
         });
     }
-
-    // ============================
-    // VALIDACIÓN FINAL DEL FORMULARIO
-    // ============================
-    form.addEventListener('submit', async function (event) {
-        event.preventDefault();
-
-        // Ejecutar todas las validaciones
-        const validaciones = [
-            validarEmpleado(),
-            validarDiaSemana(),
-            validarHoraInicio(),
-            validarHoraFin(),
-            validarRangoHoras(),
-            validarHorarioCompleto(),
-            await validarDiaUnico()
-        ];
-
-        // Verificar si todas las validaciones pasaron
-        const todasValidas = validaciones.every(val => val === true);
-
-        if (todasValidas) {
-            const formData = new FormData(form);
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData
-            });
-            AlertManager.close();
-
-            const data = await response.json();
-            if (data.exito) {
-                AlertManager.success('Registro exitoso', data.mensaje || 'El horario se ha registrado correctamente.');
-                window.location.reload();
-            } else {
-                AlertManager.error('Error al registrar horario', data.mensaje || 'Ocurrió un error al registrar el horario.');
-            }
-        } else {
-            AlertManager.error('Validación incompleta',
-                'Por favor, corrija los errores marcados en el formulario antes de continuar.'
-            );
-        }
-    });
-
-    // ============================
-    // INICIALIZACIÓN
-    // ============================
-    function inicializar() {
-        setupEliminarButtons();
-        toggleBotonEliminar();
-        inicializarDataTablePsicologos();
-        configurarLimitesInputTime();
-
-        // Validación inicial si hay valores por defecto
-        if (elements.hora_inicio.value || elements.hora_fin.value) {
-            validarHorarioCompleto();
-        }
-    }
-
-    // Iniciar
-    inicializar();
 });
