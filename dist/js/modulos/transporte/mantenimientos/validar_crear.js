@@ -276,6 +276,7 @@ async function enviarFormularioMantenimiento(form, repuestosJSON) {
             // 5. Recargar DataTable específicamente
             if ($.fn.DataTable.isDataTable('#tabla_historial_mantenimientos')) {
                 $('#tabla_historial_mantenimientos').DataTable().ajax.reload(null, false);
+                $('#tabla_repuestos').DataTable().ajax.reload(null, false);
             } else {
                 window.location.reload();
             }

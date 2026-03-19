@@ -273,6 +273,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                                             <th>Nombre</th>
                                                             <th>Descripción</th>
                                                             <th>Cantidad</th>
+                                                            <th>Stock Mínimo</th>
                                                             <th>Proveedor</th>
                                                             <th>Estado</th>
                                                         </tr>

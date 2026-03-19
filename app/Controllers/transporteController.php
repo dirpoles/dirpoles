@@ -691,13 +691,15 @@ function repuestos_registrar()
         $id_proveedor = filter_input(INPUT_POST, 'id_proveedor', FILTER_SANITIZE_NUMBER_INT);
         $fecha_creacion = filter_input(INPUT_POST, 'fecha_creacion', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $estatus_repuesto = filter_input(INPUT_POST, 'estatus_repuesto', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $stock_minimo = filter_input(INPUT_POST, 'stock_minimo', FILTER_SANITIZE_NUMBER_INT);
 
         $repuesto = [
             'nombre_repuesto' => $nombre_repuesto,
             'descripcion' => $descripcion,
             'id_proveedor' => $id_proveedor,
             'fecha_creacion' => $fecha_creacion,
-            'estatus_repuesto' => $estatus_repuesto
+            'estatus_repuesto' => $estatus_repuesto,
+            'stock_minimo' => $stock_minimo
         ];
 
         foreach ($repuesto as $atributo => $valor) {
@@ -1583,13 +1585,15 @@ function repuesto_actualizar()
         $id_proveedor = filter_input(INPUT_POST, 'id_proveedor', FILTER_SANITIZE_NUMBER_INT);
         $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $id_repuesto = filter_input(INPUT_POST, 'id_repuesto', FILTER_SANITIZE_NUMBER_INT);
+        $stock_minimo = filter_input(INPUT_POST, 'stock_minimo', FILTER_SANITIZE_NUMBER_INT);
 
         $repuesto = [
             'nombre' => $nombre,
             'estatus' => $estatus,
             'id_proveedor' => $id_proveedor,
             'descripcion' => $descripcion,
-            'id_repuesto' => $id_repuesto
+            'id_repuesto' => $id_repuesto,
+            'stock_minimo' => $stock_minimo
         ];
 
         foreach ($repuesto as $atributo => $valor) {

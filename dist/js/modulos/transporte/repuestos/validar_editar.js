@@ -9,7 +9,7 @@ function inicializarValidacionesEditarRepuesto() {
         descripcion: form.querySelector("#descripcion"),
         fecha_creacion: form.querySelector("#fecha_creacion"),
         estatus_repuesto: form.querySelector("#estatus_repuesto"),
-        id_proveedor: form.querySelector('#id_proveedor')
+        stock_minimo: form.querySelector("#stock_minimo"),
     };
 
     // Helper functions
@@ -124,12 +124,31 @@ function inicializarValidacionesEditarRepuesto() {
         return true;
     }
 
+    function validarStockMinimo() {
+        const field = elements.stock_minimo;
+        const val = field.value.trim();
+
+        if (!val) {
+            showError(field, "El stock mínimo es obligatorio");
+            return false;
+        }
+
+        if (isNaN(val) || parseInt(val) < 0) {
+            showError(field, "Debe ser un número positivo");
+            return false;
+        }
+
+        clearError(field);
+        return true;
+    }
+
     // Event Listeners para validación en tiempo real
     $(elements.id_proveedor).on("change", validarIdProveedor);
     elements.nombre_repuesto.addEventListener("input", validarNombreRepuesto);
     elements.estatus_repuesto.addEventListener("change", validarEstatus);
     elements.descripcion.addEventListener("input", validarDescripcion);
     elements.fecha_creacion.addEventListener("change", validarFecha);
+    elements.stock_minimo.addEventListener("input", validarStockMinimo);
 
     // Submit Handler
     form.addEventListener("submit", async function (e) {
@@ -141,8 +160,9 @@ function inicializarValidacionesEditarRepuesto() {
         const ProveedorValido = validarIdProveedor();
         const DescripcionValida = validarDescripcion();
         const EstatusValido = validarEstatus();
+        const StockValido = validarStockMinimo();
 
-        if (nombreValido && FechaValida && ProveedorValido && DescripcionValida && EstatusValido) {
+        if (nombreValido && FechaValida && ProveedorValido && DescripcionValida && EstatusValido && StockValido) {
             enviarFormularioRepuesto(form);
         } else {
             AlertManager.warning('Atención', 'Por favor, corrige los errores en el formulario');

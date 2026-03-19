@@ -52,6 +52,9 @@ class InventarioMobModel extends BusinessModel
             case 'obtener_fichas_tecnicas_json':
                 return $this->obtener_fichas_tecnicas_json();
 
+            case 'obtener_estadisticas':
+                return $this->obtenerEstadisticasInventario();
+
             default:
                 throw new Exception('Acción no permitida');
         }
@@ -306,6 +309,44 @@ class InventarioMobModel extends BusinessModel
             return [
                 'exito' => false,
                 'mensaje' => $e->getMessage()
+            ];
+        }
+    }
+
+    private function obtenerEstadisticasInventario()
+    {
+        try {
+            // 1. Total de mobiliarios (suma de cantidades)
+            $sqlMob = "SELECT IFNULL(SUM(cantidad), 0) FROM mobiliario WHERE estatus = 1";
+            $total_mobiliarios = $this->conn->query($sqlMob)->fetchColumn();
+
+            // 2. Total de equipos
+            $sqlEq = "SELECT COUNT(*) FROM equipos WHERE estatus = 1";
+            $total_equipos = $this->conn->query($sqlEq)->fetchColumn();
+
+            // 3. Empleados con Ficha Técnica (responsables únicos)
+            $sqlFichas = "SELECT COUNT(DISTINCT id_empleado_responsable) FROM fichas_tecnicas";
+            $fichas_tecnicas = $this->conn->query($sqlFichas)->fetchColumn();
+
+            // 4. Inventario agregado este mes (mobiliario + equipos)
+            $sqlMes = "SELECT 
+                (SELECT IFNULL(SUM(cantidad), 0) FROM mobiliario WHERE MONTH(fecha_adquisicion) = MONTH(CURRENT_DATE()) AND YEAR(fecha_adquisicion) = YEAR(CURRENT_DATE())) + 
+                (SELECT COUNT(*) FROM equipos WHERE MONTH(fecha_adquisicion) = MONTH(CURRENT_DATE()) AND YEAR(fecha_adquisicion) = YEAR(CURRENT_DATE()))";
+            $inventario_mes = $this->conn->query($sqlMes)->fetchColumn();
+
+            return [
+                'total_mobiliarios' => $total_mobiliarios,
+                'total_equipos' => $total_equipos,
+                'fichas_tecnicas' => $fichas_tecnicas,
+                'inventario_mes' => $inventario_mes
+            ];
+        } catch (Throwable $e) {
+            error_log("Error en obtenerEstadisticasInventario: " . $e->getMessage());
+            return [
+                'total_mobiliarios' => 0,
+                'total_equipos' => 0,
+                'fichas_tecnicas' => 0,
+                'inventario_mes' => 0
             ];
         }
     }

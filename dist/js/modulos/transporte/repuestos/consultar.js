@@ -93,11 +93,12 @@ $('#tabla_repuestos').DataTable({
             deferRender: true,
             render: function (data, type, row) {
                 const cantidad = parseInt(row.cantidad) || 0;
+                const stockMinimo = parseInt(row.stock_minimo) || 5;
                 let statusBadge = '';
 
                 if (cantidad === 0) {
                     statusBadge = '<span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Agotado</span>';
-                } else if (cantidad < 5) {
+                } else if (cantidad <= stockMinimo) {
                     statusBadge = '<span class="badge bg-warning text-dark"><i class="fas fa-exclamation-triangle me-1"></i> Bajo stock</span>';
                 } else {
                     statusBadge = '<span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> Disponible</span>';
@@ -125,8 +126,20 @@ $('#tabla_repuestos').DataTable({
         {
             data: 'cantidad',
             deferRender: true,
-            render: function (data) {
+            render: function (data, type, row) {
+                const cantidad = parseInt(data) || 0;
+                const stockMinimo = parseInt(row.stock_minimo) || 5;
+                if (cantidad <= stockMinimo) {
+                    return `<span class="text-danger font-weight-bold">${cantidad}</span>`;
+                }
                 return data || '<span class="text-muted">0</span>';
+            }
+        },
+        {
+            data: 'stock_minimo',
+            deferRender: true,
+            render: function (data) {
+                return data || '5';
             }
         },
         {

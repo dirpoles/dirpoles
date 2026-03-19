@@ -70,6 +70,12 @@ class TransporteModel extends BusinessModel
                 }
                 break;
 
+            case 'stock_minimo':
+                if (!is_numeric($valor) || $valor < 0) {
+                    throw new InvalidArgumentException("El stock mínimo debe ser un número positivo");
+                }
+                break;
+
             default:
                 // Si el campo no tiene validación específica, lo asignamos sin restricciones
                 $this->atributos[$nombre] = $valor;
@@ -221,8 +227,8 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
             $estadisticas['en_mantenimiento'] = $stmt->fetchColumn();
 
-            // 4. Repuestos Críticos (Asumiendo <= 5 como crítico)
-            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM repuestos_vehiculos WHERE cantidad <= 5");
+            // 4. Repuestos Críticos (Dinámico según stock_minimo)
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM repuestos_vehiculos WHERE cantidad <= stock_minimo");
             $stmt->execute();
             $estadisticas['repuestos_criticos'] = $stmt->fetchColumn();
 
@@ -674,14 +680,15 @@ class TransporteModel extends BusinessModel
                 ];
             }
 
-            $query = "INSERT INTO repuestos_vehiculos (nombre, descripcion, id_proveedor, fecha_creacion, estatus) 
-                VALUES (:nombre_repuesto, :descripcion, :id_proveedor, :fecha_creacion, :estatus_repuesto)";
+            $query = "INSERT INTO repuestos_vehiculos (nombre, descripcion, id_proveedor, fecha_creacion, estatus, stock_minimo) 
+                VALUES (:nombre_repuesto, :descripcion, :id_proveedor, :fecha_creacion, :estatus_repuesto, :stock_minimo)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':nombre_repuesto', $this->__get('nombre_repuesto'));
             $stmt->bindValue(':descripcion', $this->__get('descripcion'));
             $stmt->bindValue(':id_proveedor', $this->__get('id_proveedor'));
             $stmt->bindValue(':fecha_creacion', $this->__get('fecha_creacion'));
             $stmt->bindValue(':estatus_repuesto', $this->__get('estatus_repuesto'));
+            $stmt->bindValue(':stock_minimo', $this->__get('stock_minimo') ?? 5);
             $stmt->execute();
 
             return [
@@ -728,6 +735,8 @@ class TransporteModel extends BusinessModel
             $query2->bindValue(':id_repuesto', $this->__get('id_repuesto'), PDO::PARAM_INT);
             $query2->bindValue(':cantidad', $this->__get('cantidad'), PDO::PARAM_INT);
             $query2->execute();
+
+            $this->verificarNotificacionStock($this->__get('id_repuesto'));
 
             $this->conn->commit();
 
@@ -849,6 +858,8 @@ class TransporteModel extends BusinessModel
             $stmt->bindValue(':cantidad', $cantidad);
             $stmt->bindValue(':id_repuesto', $id_repuesto);
             $stmt->execute();
+
+            $this->verificarNotificacionStock($id_repuesto);
         } catch (Throwable $e) {
             error_log("Error actualizando inventario: " . $e->getMessage());
             throw $e; // Relanzar para manejar en el nivel superior
@@ -1360,7 +1371,8 @@ class TransporteModel extends BusinessModel
                     nombre = :nombre,
                     estatus = :estatus,
                     id_proveedor = :id_proveedor,
-                    descripcion = :descripcion
+                    descripcion = :descripcion,
+                    stock_minimo = :stock_minimo
                 WHERE id_repuesto = :id_repuesto
             ";
 
@@ -1369,8 +1381,11 @@ class TransporteModel extends BusinessModel
             $stmt->bindValue(':estatus', $this->__get('estatus'), PDO::PARAM_STR);
             $stmt->bindValue(':id_proveedor', $this->__get('id_proveedor'), PDO::PARAM_INT);
             $stmt->bindValue(':descripcion', $this->__get('descripcion'), PDO::PARAM_STR);
+            $stmt->bindValue(':stock_minimo', $this->__get('stock_minimo'), PDO::PARAM_INT);
             $stmt->bindValue(':id_repuesto', $this->__get('id_repuesto'), PDO::PARAM_INT);
             $stmt->execute();
+
+            $this->verificarNotificacionStock($this->__get('id_repuesto'));
 
             return [
                 'status' => true,
@@ -1432,6 +1447,38 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error en verificar_repuesto: " . $e->getMessage());
             return false;
+        }
+    }
+
+    private function verificarNotificacionStock($id_repuesto)
+    {
+        try {
+            // 1. Obtener cantidad actual y stock mínimo
+            $query = "SELECT nombre, cantidad, stock_minimo FROM repuestos_vehiculos WHERE id_repuesto = :id_repuesto";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id_repuesto', $id_repuesto, PDO::PARAM_INT);
+            $stmt->execute();
+            $repuesto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($repuesto && $repuesto['cantidad'] <= $repuesto['stock_minimo']) {
+                // 2. Crear notificación
+                $notifModel = new NotificacionesModel();
+                $notifModel->__set('titulo', "Stock Bajo: " . $repuesto['nombre']);
+                $notifModel->__set('url', "transporte_consulta#repuestos"); // Tab de repuestos
+                $notifModel->__set('tipo', "Alerta");
+                $notifModel->__set('id_emisor', 1); // Sistema / Admin principal
+                $notifModel->__set('leido', 0);
+
+                // 3. Notificar a administradores (esto depende de cómo manejen los receptores en el proyecto)
+                // Por ahora, buscaremos un receptor válido o enviaremos a todos los administradores
+                // Comúnmente id_receptor 1 es el admin general
+                $notifModel->__set('id_receptor', 1); 
+                $notifModel->manejarAccion('crear_notificacion');
+                
+                error_log("Notificación de stock bajo enviada para: " . $repuesto['nombre']);
+            }
+        } catch (Throwable $e) {
+            error_log("Error al verificar stock para notificación: " . $e->getMessage());
         }
     }
 }

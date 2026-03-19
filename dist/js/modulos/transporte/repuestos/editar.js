@@ -62,14 +62,14 @@ function editarRepuesto(id) {
                         </div>
 
                         <div class="row">
-                            <div id="fechaRE" class="col-md-6 mb-3">
+                            <div id="fechaRE" class="col-md-4 mb-3">
                                 <label for="fecha_creacion" class="form-label font-weight-bold">Fecha de Registro</label>
                                 <input type="date" name="fecha_creacion" id="fecha_creacion" 
                                     class="form-control" value="${data.fecha_creacion || ''}">
                                 <div id="fecha_creacionError" class="invalid-feedback"></div>
                             </div>
 
-                            <div id="estatusRE" class="col-md-6 mb-3">
+                            <div id="estatusRE" class="col-md-4 mb-3">
                                 <label for="estatus_repuesto" class="form-label font-weight-bold">Estado Actual (Físico)</label>
                                 <select name="estatus" id="estatus_repuesto" class="form-control">
                                     <option value="Nuevo" ${data.estatus === 'Nuevo' ? 'selected' : ''}>Nuevo</option>
@@ -77,6 +77,13 @@ function editarRepuesto(id) {
                                     <option value="Dañado" ${data.estatus === 'Dañado' ? 'selected' : ''}>Dañado</option>
                                 </select>
                                 <div id="estatus_repuestoError" class="invalid-feedback"></div>
+                            </div>
+
+                            <div id="stockMinimoRE" class="col-md-4 mb-3">
+                                <label for="stock_minimo" class="form-label font-weight-bold">Stock Mínimo</label>
+                                <input type="number" name="stock_minimo" id="stock_minimo" class="form-control" 
+                                    placeholder="Ej: 5" min="1" value="${data.stock_minimo || 5}">
+                                <div id="stock_minimoError" class="invalid-feedback"></div>
                             </div>
                         </div>
                     </div>

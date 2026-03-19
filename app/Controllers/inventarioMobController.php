@@ -24,6 +24,13 @@ function crear_inventario_mob()
         $tiposEquipos = $modelo->manejarAccion('obtener_TiposEquipos');
         $servicios = $modelo->manejarAccion('obtener_servicios');
 
+        // Obtener estadísticas para los cards superiores
+        $stats = $modelo->manejarAccion('obtener_estadisticas');
+        $total_mobiliarios = $stats['total_mobiliarios'];
+        $total_equipos = $stats['total_equipos'];
+        $fichas_tecnicas = $stats['fichas_tecnicas'];
+        $inventario_mes = $stats['inventario_mes'];
+
         require_once BASE_PATH . '/app/Views/inventario_mobiliario/crear_inventario_mob.php';
     } catch (Throwable $e) {
         // Si la petición NO es AJAX, mostramos la vista de error
