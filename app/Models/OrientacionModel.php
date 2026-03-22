@@ -161,11 +161,18 @@ class OrientacionModel extends BusinessModel{
                 cm.id_solicitud_serv,
                 ss.id_beneficiario,
                 CONCAT(b.nombres, ' ', b.apellidos, ' (', b.tipo_cedula, '-', b.cedula, ')') AS beneficiario,
-                CONCAT(e.nombre, ' ', e.apellido, ' (', e.tipo_cedula, '-', e.cedula, ')') AS empleado
+                CONCAT(e.nombre, ' ', e.apellido, ' (', e.tipo_cedula, '-', e.cedula, ')') AS empleado,
+                b.nombres AS nombre_beneficiario,
+                b.apellidos AS apellido_beneficiario,
+                b.cedula AS cedula,
+                b.telefono AS telefono,
+                e.nombre AS nombres_empleado,
+                te.tipo
             FROM orientacion cm
             INNER JOIN solicitud_de_servicio ss ON cm.id_solicitud_serv = ss.id_solicitud_serv
             INNER JOIN beneficiario b ON ss.id_beneficiario = b.id_beneficiario
             INNER JOIN dirpoles_security.empleado e ON ss.id_empleado = e.id_empleado
+            LEFT JOIN dirpoles_security.tipo_empleado te ON e.id_tipo_empleado = te.id_tipo_emp
             WHERE cm.id_orientacion = :id_orientacion";
 
             $stmt = $this->conn->prepare($query);

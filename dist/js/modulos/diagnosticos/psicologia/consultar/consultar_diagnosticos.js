@@ -183,25 +183,37 @@ $(function () {
                     width: '140px',
                     render: function (data, type, row) {
                         return `
-                            <div class="btn-group btn-group-sm" role="group">
-                                <button id="btn-ver" class="btn btn-primary btn-ver" 
+                            <div class="d-flex justify-content-center gap-1 flex-wrap" role="group">
+                                <button id="btn-ver" class="btn btn-sm btn-primary btn-ver" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Ver detalles">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button id="btn-editar" class="btn btn-info btn-editar" 
+                                <button id="btn-editar" class="btn btn-sm btn-info btn-editar" 
                                         data-id="${data}"
                                         data-bs-toggle="tooltip"
                                         title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button id="btn-eliminar" class="btn btn-danger btn-eliminar" 
+                                <button id="btn-eliminar" class="btn btn-sm btn-danger btn-eliminar" 
                                         data-id="${data}"
                                         data-id-solicitud="${row.id_solicitud_serv}"
                                         data-bs-toggle="tooltip"
                                         title="Eliminar">
                                     <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="btn btn-sm btn-success btn-constancia" 
+                                        data-id="${data}"
+                                        data-bs-toggle="tooltip"
+                                        title="Generar Constancia">
+                                    <i class="fas fa-file-contract"></i>
+                                </button>
+                                <button class="btn btn-sm btn-secondary btn-referencia" 
+                                        data-id="${data}"
+                                        data-bs-toggle="tooltip"
+                                        title="Generar Referencia">
+                                    <i class="fas fa-file-export"></i>
                                 </button>
                             </div>
                         `;
@@ -241,8 +253,19 @@ $(function () {
         $(document).off('click', '.btn-ver');
         $(document).off('click', '.btn-editar');
         $(document).off('click', '.btn-eliminar');
+        $(document).off('click', '.btn-constancia');
+        $(document).off('click', '.btn-referencia');
 
         // Asignar nuevos eventos con delegación
+        $(document).on('click', '.btn-constancia', function () {
+            const id = $(this).data('id');
+            window.open(`generar_constancia_psicologia?id_psicologia=${id}`, '_blank');
+        });
+
+        $(document).on('click', '.btn-referencia', function () {
+            const id = $(this).data('id');
+            window.open(`generar_referencia_psicologia?id_psicologia=${id}`, '_blank');
+        });
         $(document).on('click', '.btn-ver', function () {
             const id = $(this).data('id');
             if (typeof verDiagnostico !== 'undefined') {

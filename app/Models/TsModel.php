@@ -603,11 +603,18 @@ class TsModel extends BusinessModel{
                         b.direccion_pdf,
                         ben.id_beneficiario,
                         CONCAT(ben.nombres, ' ', ben.apellidos, ' (', ben.tipo_cedula, '-', ben.cedula, ')') AS beneficiario,
-                        CONCAT(e.nombre, ' ', e.apellido, ' (', e.tipo_cedula, '-', e.cedula, ')') AS empleado
+                        CONCAT(e.nombre, ' ', e.apellido, ' (', e.tipo_cedula, '-', e.cedula, ')') AS empleado,
+                        ben.nombres,
+                        ben.apellidos,
+                        ben.cedula,
+                        ben.telefono,
+                        e.nombre AS nombres_empleado,
+                        te.tipo
                       FROM becas b
                       INNER JOIN solicitud_de_servicio s ON b.id_solicitud_serv = s.id_solicitud_serv
                       INNER JOIN beneficiario ben ON s.id_beneficiario = ben.id_beneficiario
                       INNER JOIN dirpoles_security.empleado e ON s.id_empleado = e.id_empleado
+                      LEFT JOIN dirpoles_security.tipo_empleado te ON e.id_tipo_empleado = te.id_tipo_emp
                       WHERE b.id_becas = :id_becas";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':id_becas', $this->__get('id_becas'), PDO::PARAM_INT);
@@ -690,11 +697,18 @@ class TsModel extends BusinessModel{
                         e.carnet_discapacidad,
                         ben.id_beneficiario,
                         CONCAT(ben.nombres, ' ', ben.apellidos, ' (', ben.tipo_cedula, '-', ben.cedula, ')') AS beneficiario,
-                        CONCAT(emp.nombre, ' ', emp.apellido, ' (', emp.tipo_cedula, '-', emp.cedula, ')') AS empleado
+                        CONCAT(emp.nombre, ' ', emp.apellido, ' (', emp.tipo_cedula, '-', emp.cedula, ')') AS empleado,
+                        ben.nombres,
+                        ben.apellidos,
+                        ben.cedula,
+                        ben.telefono,
+                        emp.nombre AS nombres_empleado,
+                        te.tipo
                       FROM exoneracion e
                       INNER JOIN solicitud_de_servicio s ON e.id_solicitud_serv = s.id_solicitud_serv
                       INNER JOIN beneficiario ben ON s.id_beneficiario = ben.id_beneficiario
                       INNER JOIN dirpoles_security.empleado emp ON s.id_empleado = emp.id_empleado
+                      LEFT JOIN dirpoles_security.tipo_empleado te ON emp.id_tipo_empleado = te.id_tipo_emp
                       WHERE e.id_exoneracion = :id_exoneracion";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':id_exoneracion', $this->__get('id_exoneracion'), PDO::PARAM_INT);
@@ -768,13 +782,20 @@ class TsModel extends BusinessModel{
                 dp.id_patologia,
                 p.nombre_patologia as patologia,
                 CONCAT(ben.nombres, ' ', ben.apellidos, ' (', ben.tipo_cedula, '-', ben.cedula, ')') AS beneficiario,
-                CONCAT(emp.nombre, ' ', emp.apellido, ' (', emp.tipo_cedula, '-', emp.cedula, ')') AS empleado
+                CONCAT(emp.nombre, ' ', emp.apellido, ' (', emp.tipo_cedula, '-', emp.cedula, ')') AS empleado,
+                ben.nombres,
+                ben.apellidos,
+                ben.cedula,
+                ben.telefono,
+                emp.nombre AS nombres_empleado,
+                te.tipo
             FROM fames f
             INNER JOIN detalle_patologia dp ON f.id_detalle_patologia = dp.id_detalle_patologia
             INNER JOIN patologia p ON dp.id_patologia = p.id_patologia
             INNER JOIN solicitud_de_servicio s ON f.id_solicitud_serv = s.id_solicitud_serv
             INNER JOIN beneficiario ben ON s.id_beneficiario = ben.id_beneficiario
             INNER JOIN dirpoles_security.empleado emp ON s.id_empleado = emp.id_empleado
+            LEFT JOIN dirpoles_security.tipo_empleado te ON emp.id_tipo_empleado = te.id_tipo_emp
             WHERE f.id_fames = :id_fames";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':id_fames', $this->__get('id_fames'), PDO::PARAM_INT);

@@ -49,3 +49,13 @@ Router::get('stats_discapacidad', function() {
     load_controller('discapacidadController.php');
     stats_discapacidad(); 
 });
+
+Router::get('generar_constancia_discapacidad', function() {
+    load_controller('discapacidadController.php');
+    generar_constancia_discapacidad();
+});
+
+Router::get('generar_referencia_discapacidad', function() {
+    load_controller('discapacidadController.php');
+    generar_referencia_discapacidad();
+});

@@ -107,3 +107,13 @@ Router::get('stats_ts', function() {
     load_controller('tsController.php');
     stats_ts();
 });
+
+Router::get('generar_constancia_ts', function() {
+    load_controller('tsController.php');
+    generar_constancia_ts();
+});
+
+Router::get('generar_referencia_ts', function() {
+    load_controller('tsController.php');
+    generar_referencia_ts();
+});

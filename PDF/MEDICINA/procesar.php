@@ -29,7 +29,7 @@ $pdf->Cell(100, 10, utf8_decode($consulta['cedula']));
 
 // Fecha
 $pdf->SetXY(16, 42); // Ajusta la posición X, Y
-$pdf->Cell(40, 10, date('d/m/Y', strtotime($consulta['fecha_creacion'])));
+$pdf->Cell(40, 10, date('d/m/Y'));
 
 // Médico
 $pdf->SetXY(50, 6);
@@ -78,7 +78,7 @@ $pdf->Cell(100, 10, utf8_decode($consulta['cedula']));
 
 // Fecha
 $pdf->SetXY(120, 40); // Ajusta la posición X, Y
-$pdf->Cell(40, 10, date('d/m/Y', strtotime($consulta['fecha_creacion'])));
+$pdf->Cell(40, 10, date('d/m/Y'));
 
 // Médico
 $pdf->SetXY(150, 6);

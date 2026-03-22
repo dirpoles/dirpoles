@@ -141,28 +141,42 @@ function cargarTabla(tipo) {
                 width: '140px',
                 render: function (data, type, row) {
                     return `
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button id="btn-ver" class="btn btn-primary btn-ver" 
+                        <div class="d-flex justify-content-center gap-1 flex-wrap" role="group">
+                            <button id="btn-ver" class="btn btn-sm btn-primary btn-ver" 
                                     data-id="${data}"
                                     data-tipo="becas"
                                     data-bs-toggle="tooltip"
                                     title="Ver detalles">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button id="btn-editar" class="btn btn-info btn-editar" 
+                            <button id="btn-editar" class="btn btn-sm btn-info btn-editar" 
                                     data-id="${data}"
                                     data-tipo="becas"
                                     data-bs-toggle="tooltip"
                                     title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button id="btn-eliminar" class="btn btn-danger btn-eliminar" 
+                            <button id="btn-eliminar" class="btn btn-sm btn-danger btn-eliminar" 
                                     data-id="${data}"
                                     data-tipo="becas"
                                     data-id-solicitud="${row.id_solicitud_serv}"
                                     data-bs-toggle="tooltip"
                                     title="Eliminar">
                                 <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success btn-constancia-ts" 
+                                    data-id="${data}"
+                                    data-tipo="becas"
+                                    data-bs-toggle="tooltip"
+                                    title="Generar Constancia">
+                                <i class="fas fa-file-contract"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary btn-referencia-ts" 
+                                    data-id="${data}"
+                                    data-tipo="becas"
+                                    data-bs-toggle="tooltip"
+                                    title="Generar Referencia">
+                                <i class="fas fa-file-export"></i>
                             </button>
                         </div>
                     `;
@@ -219,28 +233,42 @@ function cargarTabla(tipo) {
                 width: '140px',
                 render: function (data, type, row) {
                     return `
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button id="btn-ver" class="btn btn-primary btn-ver" 
+                        <div class="d-flex justify-content-center gap-1 flex-wrap" role="group">
+                            <button id="btn-ver" class="btn btn-sm btn-primary btn-ver" 
                                     data-id="${data}"
                                     data-tipo="exoneraciones"
                                     data-bs-toggle="tooltip"
                                     title="Ver detalles">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button id="btn-editar" class="btn btn-info btn-editar" 
+                            <button id="btn-editar" class="btn btn-sm btn-info btn-editar" 
                                     data-id="${data}"
                                     data-tipo="exoneraciones"
                                     data-bs-toggle="tooltip"
                                     title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button id="btn-eliminar" class="btn btn-danger btn-eliminar" 
+                            <button id="btn-eliminar" class="btn btn-sm btn-danger btn-eliminar" 
                                     data-id="${data}"
                                     data-tipo="exoneraciones"
                                     data-id-solicitud="${row.id_solicitud_serv}"
                                     data-bs-toggle="tooltip"
                                     title="Eliminar">
                                 <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success btn-constancia-ts" 
+                                    data-id="${data}"
+                                    data-tipo="exoneraciones"
+                                    data-bs-toggle="tooltip"
+                                    title="Generar Constancia">
+                                <i class="fas fa-file-contract"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary btn-referencia-ts" 
+                                    data-id="${data}"
+                                    data-tipo="exoneraciones"
+                                    data-bs-toggle="tooltip"
+                                    title="Generar Referencia">
+                                <i class="fas fa-file-export"></i>
                             </button>
                         </div>
                     `;
@@ -285,22 +313,22 @@ function cargarTabla(tipo) {
                 width: '140px',
                 render: function (data, type, row) {
                     return `
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button id="btn-ver" class="btn btn-primary btn-ver" 
+                        <div class="d-flex justify-content-center gap-1 flex-wrap" role="group">
+                            <button id="btn-ver" class="btn btn-sm btn-primary btn-ver" 
                                     data-id="${data}"
                                     data-tipo="fames"
                                     data-bs-toggle="tooltip"
                                     title="Ver detalles">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button id="btn-editar" class="btn btn-info btn-editar" 
+                            <button id="btn-editar" class="btn btn-sm btn-info btn-editar" 
                                     data-id="${data}"
                                     data-tipo="fames"
                                     data-bs-toggle="tooltip"
                                     title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button id="btn-eliminar" class="btn btn-danger btn-eliminar" 
+                            <button id="btn-eliminar" class="btn btn-sm btn-danger btn-eliminar" 
                                     data-id="${data}"
                                     data-tipo="fames"
                                     data-id-solicitud="${row.id_solicitud_serv}"
@@ -308,6 +336,20 @@ function cargarTabla(tipo) {
                                     data-bs-toggle="tooltip"
                                     title="Eliminar">
                                 <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success btn-constancia-ts" 
+                                    data-id="${data}"
+                                    data-tipo="fames"
+                                    data-bs-toggle="tooltip"
+                                    title="Generar Constancia">
+                                <i class="fas fa-file-contract"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary btn-referencia-ts" 
+                                    data-id="${data}"
+                                    data-tipo="fames"
+                                    data-bs-toggle="tooltip"
+                                    title="Generar Referencia">
+                                <i class="fas fa-file-export"></i>
                             </button>
                         </div>
                     `;
@@ -486,3 +528,16 @@ function cargarScriptTipo(tipo) {
     script.src = `dist/js/modulos/diagnosticos/trabajo_social/${tipo}/consultar_${tipo}.js`;
     document.body.appendChild(script);
 }
+
+// Eventos delegados para PDFs de Trabajo Social
+$(document).on('click', '.btn-constancia-ts', function () {
+    const id = $(this).data('id');
+    const tipo = $(this).data('tipo');
+    window.open(`generar_constancia_ts?tipo=${tipo}&id=${id}`, '_blank');
+});
+
+$(document).on('click', '.btn-referencia-ts', function () {
+    const id = $(this).data('id');
+    const tipo = $(this).data('tipo');
+    window.open(`generar_referencia_ts?tipo=${tipo}&id=${id}`, '_blank');
+});

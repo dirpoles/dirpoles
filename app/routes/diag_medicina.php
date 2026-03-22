@@ -52,3 +52,18 @@ Router::get('medicina_stats_json', function() {
     load_controller('medicinaController.php');
     medicina_stats_json();
 });
+
+Router::get('generar_constancia_medicina', function() {
+    load_controller('medicinaController.php');
+    generar_constancia_medicina();
+});
+
+Router::get('generar_recipe_medicina', function() {
+    load_controller('medicinaController.php');
+    generar_recipe_medicina();
+});
+
+Router::get('generar_referencia_medicina', function() {
+    load_controller('medicinaController.php');
+    generar_referencia_medicina();
+});

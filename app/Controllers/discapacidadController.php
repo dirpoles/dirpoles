@@ -406,5 +406,44 @@ function stats_discapacidad(){
     $estadisticas = $modelo->manejarAccion('stats_empleado');
     
     header('Content-Type: application/json');
-    echo json_encode($estadisticas);
+}
+
+function generar_constancia_discapacidad()
+{
+    $modelo = new DiscapacidadModel();
+    $id_discapacidad = $_GET['id_discapacidad'] ?? 0;
+    if ($id_discapacidad == 0) {
+        die("ID Inválido para generar constancia.");
+    }
+    
+    $modelo->__set('id_discapacidad', $id_discapacidad);
+    $data = $modelo->manejarAccion('discapacidad_detalle');
+    
+    if (!$data) {
+        die("No se encontró el diagnóstico de discapacidad.");
+    }
+
+    $beneficiario = $data['nombre_beneficiario'] . " " . $data['apellido_beneficiario'];
+    $cedula = $data['cedula'] ?? "";
+    $fecha = $data['fecha_creacion'];
+
+    require_once BASE_PATH . 'PDF/constancia/procesar.php';
+}
+
+function generar_referencia_discapacidad()
+{
+    $modelo = new DiscapacidadModel();
+    $id_discapacidad = $_GET['id_discapacidad'] ?? 0;
+    if ($id_discapacidad == 0) {
+        die("ID Inválido para generar referencia.");
+    }
+    
+    $modelo->__set('id_discapacidad', $id_discapacidad);
+    $discapacidad = $modelo->manejarAccion('discapacidad_detalle');
+    
+    if (!$discapacidad) {
+        die("No se encontró el diagnóstico de discapacidad.");
+    }
+
+    require_once BASE_PATH . 'PDF/referencia/procesar.php';
 }

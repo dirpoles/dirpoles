@@ -47,3 +47,13 @@ Router::get('stats_orientacion', function() {
     load_controller('orientacionController.php');
     stats_orientacion();
 });
+
+Router::get('generar_constancia_orientacion', function() {
+    load_controller('orientacionController.php');
+    generar_constancia_orientacion();
+});
+
+Router::get('generar_referencia_orientacion', function() {
+    load_controller('orientacionController.php');
+    generar_referencia_orientacion();
+});

@@ -485,3 +485,61 @@ function medicina_stats_json()
         ]);
     }
 }
+
+function generar_constancia_medicina()
+{
+    $modelo = new MedicinaModel();
+    $id_consulta_med = $_GET['id_consulta_med'] ?? 0;
+    if ($id_consulta_med == 0) {
+        die("ID Inválido para generar constancia.");
+    }
+    
+    $modelo->__set('id_consulta_med', $id_consulta_med);
+    $data = $modelo->manejarAccion('medicina_detalle');
+    
+    if (!$data) {
+        die("No se encontró la consulta médica.");
+    }
+
+    $beneficiario = $data['nombre_beneficiario'] . " " . $data['apellido_beneficiario'];
+    $cedula = $data['cedula'] ?? "";
+    $fecha = $data['fecha_creacion'];
+
+    require_once BASE_PATH . 'PDF/constancia/procesar.php';
+}
+
+function generar_recipe_medicina()
+{
+    $modelo = new MedicinaModel();
+    $id_consulta_med = $_GET['id_consulta_med'] ?? 0;
+    if ($id_consulta_med == 0) {
+        die("ID Inválido para generar récipe.");
+    }
+    
+    $modelo->__set('id_consulta_med', $id_consulta_med);
+    $consulta = $modelo->manejarAccion('medicina_detalle');
+    
+    if (!$consulta) {
+        die("No se encontró la consulta médica.");
+    }
+
+    require_once BASE_PATH . 'PDF/MEDICINA/procesar.php';
+}
+
+function generar_referencia_medicina()
+{
+    $modelo = new MedicinaModel();
+    $id_consulta_med = $_GET['id_consulta_med'] ?? 0;
+    if ($id_consulta_med == 0) {
+        die("ID Inválido para generar referencia.");
+    }
+    
+    $modelo->__set('id_consulta_med', $id_consulta_med);
+    $medicina = $modelo->manejarAccion('medicina_detalle');
+    
+    if (!$medicina) {
+        die("No se encontró la consulta médica.");
+    }
+
+    require_once BASE_PATH . 'PDF/referencia/procesar.php';
+}

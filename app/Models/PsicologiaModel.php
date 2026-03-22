@@ -223,11 +223,20 @@ class PsicologiaModel extends BusinessModel{
                 cp.id_detalle_patologia,
                 CONCAT(b.nombres, ' ', b.apellidos, ' (', b.tipo_cedula, '-', b.cedula, ')') AS beneficiario,
                 CONCAT(e.nombre, ' ', e.apellido, ' (', e.tipo_cedula, '-', e.cedula, ')') AS empleado,
+                b.nombres AS nombre_beneficiario,
+                b.apellidos AS apellido_beneficiario,
+                b.cedula AS cedula_beneficiario,
+                b.cedula AS cedula,
+                b.telefono AS telefono,
+                e.nombre AS nombres_empleado,
+                te.tipo,
+                cp.fecha_creacion AS fecha_psicologia,
                 p.nombre_patologia AS patologia
             FROM consulta_psicologica cp
             INNER JOIN solicitud_de_servicio ss ON cp.id_solicitud_serv = ss.id_solicitud_serv
             INNER JOIN beneficiario b ON ss.id_beneficiario = b.id_beneficiario
             INNER JOIN dirpoles_security.empleado e ON ss.id_empleado = e.id_empleado
+            LEFT JOIN dirpoles_security.tipo_empleado te ON e.id_tipo_empleado = te.id_tipo_emp
             LEFT JOIN detalle_patologia dp ON cp.id_detalle_patologia = dp.id_detalle_patologia
             LEFT JOIN patologia p ON dp.id_patologia = p.id_patologia
             WHERE cp.id_psicologia = :id_psicologia";

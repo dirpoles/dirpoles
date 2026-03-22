@@ -57,3 +57,13 @@ Router::get('psicologia_stats_json', function() {
     load_controller('psicologiaController.php');
     get_stats_psicologia_json();
 });
+
+Router::get('generar_constancia_psicologia', function() {
+    load_controller('psicologiaController.php');
+    generar_constancia_psicologia();
+});
+
+Router::get('generar_referencia_psicologia', function() {
+    load_controller('psicologiaController.php');
+    generar_referencia_psicologia();
+});

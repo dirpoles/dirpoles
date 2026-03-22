@@ -1408,3 +1408,84 @@ function stats_ts(){
     header('Content-Type: application/json');
     echo json_encode($estadisticas);
 }
+
+function generar_constancia_ts()
+{
+    $modelo = new TsModel();
+    $tipo = $_GET['tipo'] ?? '';
+    $id = $_GET['id'] ?? 0;
+
+    if (!$tipo || !$id) {
+        die("Parámetros inválidos para generar constancia.");
+    }
+
+    $data = null;
+    switch ($tipo) {
+        case 'becas':
+            $modelo->__set('id_becas', $id);
+            $data = $modelo->manejarAccion('detalle_beca');
+            break;
+        case 'exoneraciones':
+            $modelo->__set('id_exoneracion', $id);
+            $data = $modelo->manejarAccion('detalle_exoneracion');
+            break;
+        case 'fames':
+            $modelo->__set('id_fames', $id);
+            $data = $modelo->manejarAccion('detalle_fames');
+            break;
+        default:
+            die("Tipo de constancia no soportado.");
+    }
+
+    if (!$data) {
+        die("No se encontró el registro de $tipo.");
+    }
+
+    $beneficiario = $data['nombres'] . " " . $data['apellidos'];
+    $cedula = $data['cedula'] ?? "";
+    $fecha = $data['fecha_creacion'];
+
+    require_once BASE_PATH . 'PDF/constancia/procesar.php';
+}
+
+function generar_referencia_ts()
+{
+    $modelo = new TsModel();
+    $tipo = $_GET['tipo'] ?? '';
+    $id_val = $_GET['id'] ?? 0;
+
+    if (!$tipo || !$id_val) {
+        die("Parámetros inválidos para generar referencia.");
+    }
+
+    $bd = null;
+    $id = null;
+    $id_beca = null;
+    $id_ex = null;
+
+    switch ($tipo) {
+        case 'becas':
+            $modelo->__set('id_becas', $id_val);
+            $bd = $modelo->manejarAccion('detalle_beca');
+            $id_beca = $id_val;
+            break;
+        case 'exoneraciones':
+            $modelo->__set('id_exoneracion', $id_val);
+            $bd = $modelo->manejarAccion('detalle_exoneracion');
+            $id_ex = $id_val;
+            break;
+        case 'fames':
+            $modelo->__set('id_fames', $id_val);
+            $bd = $modelo->manejarAccion('detalle_fames');
+            $id = $id_val;
+            break;
+        default:
+            die("Tipo de referencia no soportado.");
+    }
+
+    if (!$bd) {
+        die("No se encontró el registro de $tipo.");
+    }
+
+    require_once BASE_PATH . 'PDF/referencia/procesar.php';
+}

@@ -32,7 +32,7 @@ $meses = [
     'December' => 'Diciembre'
 ];
 
-$date = DateTime::createFromFormat('Y-m-d', $fecha);
+$date = new DateTime();
 $diaIngles = $date->format('l');
 $mesIngles = $date->format('F');
 

@@ -388,3 +388,43 @@ function stats_orientacion(){
     header('Content-Type: application/json');
     echo json_encode($estadisticas);
 }
+
+function generar_constancia_orientacion()
+{
+    $modelo = new OrientacionModel();
+    $id_orientacion = $_GET['id_orientacion'] ?? 0;
+    if ($id_orientacion == 0) {
+        die("ID Inválido para generar constancia.");
+    }
+    
+    $modelo->__set('id_orientacion', $id_orientacion);
+    $data = $modelo->manejarAccion('orientacion_detalle');
+    
+    if (!$data) {
+        die("No se encontró el diagnóstico de orientación.");
+    }
+
+    $beneficiario = $data['nombre_beneficiario'] . " " . $data['apellido_beneficiario'];
+    $cedula = $data['cedula'] ?? "";
+    $fecha = $data['fecha_creacion'];
+
+    require_once BASE_PATH . 'PDF/constancia/procesar.php';
+}
+
+function generar_referencia_orientacion()
+{
+    $modelo = new OrientacionModel();
+    $id_orientacion = $_GET['id_orientacion'] ?? 0;
+    if ($id_orientacion == 0) {
+        die("ID Inválido para generar referencia.");
+    }
+    
+    $modelo->__set('id_orientacion', $id_orientacion);
+    $orientacion = $modelo->manejarAccion('orientacion_detalle');
+    
+    if (!$orientacion) {
+        die("No se encontró el diagnóstico de orientación.");
+    }
+
+    require_once BASE_PATH . 'PDF/referencia/procesar.php';
+}

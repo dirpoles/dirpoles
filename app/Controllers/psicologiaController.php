@@ -632,3 +632,43 @@ function session_start_if_not_started() {
         session_start();
     }
 }
+
+function generar_constancia_psicologia()
+{
+    $modelo = new PsicologiaModel();
+    $id_psicologia = $_GET['id_psicologia'] ?? 0;
+    if ($id_psicologia == 0) {
+        die("ID Inválido para generar constancia.");
+    }
+    
+    $modelo->__set('id_psicologia', $id_psicologia);
+    $data = $modelo->manejarAccion('diagnostico_detalle');
+    
+    if (!$data) {
+        die("No se encontró el diagnóstico de psicología.");
+    }
+
+    $beneficiario = $data['nombre_beneficiario'] . " " . $data['apellido_beneficiario'];
+    $cedula = $data['cedula'] ?? "";
+    $fecha = $data['fecha_psicologia']; // Usamos el alias que creamos
+
+    require_once BASE_PATH . 'PDF/constancia/procesar.php';
+}
+
+function generar_referencia_psicologia()
+{
+    $modelo = new PsicologiaModel();
+    $id_psicologia = $_GET['id_psicologia'] ?? 0;
+    if ($id_psicologia == 0) {
+        die("ID Inválido para generar referencia.");
+    }
+    
+    $modelo->__set('id_psicologia', $id_psicologia);
+    $psicologia = $modelo->manejarAccion('diagnostico_detalle');
+    
+    if (!$psicologia) {
+        die("No se encontró el diagnóstico de psicología.");
+    }
+
+    require_once BASE_PATH . 'PDF/referencia/procesar.php';
+}

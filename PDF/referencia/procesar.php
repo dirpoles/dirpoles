@@ -69,22 +69,40 @@ $empleado = mb_convert_encoding($empleado, 'ISO-8859-1', 'UTF-8');
 
 
 
-$date = DateTime::createFromFormat('Y-m-d', $fecha);
+$date = new DateTime();
 
-$formatter = new IntlDateFormatter('es_ES', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+// Alternativa para fechas en español sin intl
+$dias = [
+    'Monday' => 'Lunes',
+    'Tuesday' => 'Martes',
+    'Wednesday' => 'Miércoles',
+    'Thursday' => 'Jueves',
+    'Friday' => 'Viernes',
+    'Saturday' => 'Sábado',
+    'Sunday' => 'Domingo'
+];
 
-$formatter->setPattern('EEEE'); // Día completo
-$diaTexto = $formatter->format($date);
-$diaTexto = ucfirst($diaTexto);
+$meses = [
+    'January' => 'Enero',
+    'February' => 'Febrero',
+    'March' => 'Marzo',
+    'April' => 'Abril',
+    'May' => 'Mayo',
+    'June' => 'Junio',
+    'July' => 'Julio',
+    'August' => 'Agosto',
+    'September' => 'Septiembre',
+    'October' => 'Octubre',
+    'November' => 'Noviembre',
+    'December' => 'Diciembre'
+];
 
-$diaTexto = mb_convert_encoding($diaTexto, 'ISO-8859-1', 'UTF-8');
+$diaIngles = $date->format('l');
+$mesIngles = $date->format('F');
 
+$diaTexto = $dias[$diaIngles] ?? $diaIngles;
+$mesTexto = $meses[$mesIngles] ?? $mesIngles;
 $numeroDia = $date->format('d');
-
-$formatter->setPattern('MMMM'); // Mes completo
-$mesTexto = $formatter->format($date);
-$mesTexto = ucfirst($mesTexto);
-
 $anio = $date->format('y');
 
 $pdf = new FPDF();
