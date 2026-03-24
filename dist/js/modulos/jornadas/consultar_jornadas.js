@@ -222,8 +222,8 @@ $(function () {
                                 </button>
                                 <a id="btn-detallar" href="detallar_jornada?id_jornada=${data}" class="btn btn-danger btn-detallar-jornada" 
                                         data-bs-toggle="tooltip"
-                                        title="Detallar Jornada">
-                                    <i class="fas fa-info-circle"></i>
+                                        title="Agregar beneficiarios">
+                                    <i class="fas fa-plus"></i>
                                 </a>
                             </div>
                         `;

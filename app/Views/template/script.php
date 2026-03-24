@@ -29,6 +29,7 @@
 <script src="<?= BASE_URL ?>dist/js/core/AlertManager.js"></script>
 <script src="<?= BASE_URL ?>dist/js/core/logout.js"></script>
 <script src="<?= BASE_URL ?>dist/js/dashboard/sidebar-active.js"></script>
+<script src="<?= BASE_URL ?>dist/js/dashboard/sidebar-scroll-enhancement.js"></script>
 <script src="<?= BASE_URL ?>dist/js/core/select-2-init.js"></script>
 <script src="<?= BASE_URL ?>dist/js/modulos/notificaciones/control.js"></script>
 <script src="<?= BASE_URL ?>dist/js/perfil/verPerfil.js"></script>

@@ -131,11 +131,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: 'Acciones',
                 orderable: false,
                 searchable: false,
-                width: '140px',
+                width: '180px',
                 render: function (data, type, row) {
                     const tieneDiagnostico = parseInt(row.tiene_diagnostico) === 1;
                     const btnAgregarClass = tieneDiagnostico ? 'btn-secondary disabled' : 'btn-success btn-agregar-diagnostico';
                     const titleAgregar = tieneDiagnostico ? 'Diagnóstico ya registrado' : 'Agregar Diagnóstico';
+                    
+                    // Determinar si se puede eliminar (sin diagnóstico y jornada no finalizada)
+                    const puedeEliminar = !tieneDiagnostico;
+                    const btnEliminarClass = puedeEliminar ? 'btn-danger btn-eliminar-beneficiario' : 'btn-secondary disabled';
+                    const titleEliminar = puedeEliminar ? 'Eliminar Beneficiario' : 'No se puede eliminar (tiene diagnóstico)';
 
                     return `
                         <div class="btn-group btn-group-sm" role="group">
@@ -160,6 +165,16 @@ document.addEventListener('DOMContentLoaded', function () {
                                     data-bs-toggle="tooltip"
                                     title="Editar Diagnóstico">
                                 <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn ${btnEliminarClass}"
+                                    data-id_jornada_beneficiario="${data}"
+                                    data-nombres="${row.nombres}"
+                                    data-apellidos="${row.apellidos}"
+                                    data-cedula="${row.tipo_cedula}-${row.cedula}"
+                                    data-bs-toggle="tooltip"
+                                    title="${titleEliminar}"
+                                    ${!puedeEliminar ? 'disabled' : ''}>
+                                <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     `;
@@ -402,6 +417,8 @@ function asignarEventosBotonesBeneficiarios() {
     // Eliminar eventos anteriores para evitar duplicados
     $(document).off('click', '.btn-agregar-diagnostico');
     $(document).off('click', '.btn-ver-diagnostico');
+    $(document).off('click', '.btn-editar-diagnostico');
+    $(document).off('click', '.btn-eliminar-beneficiario');
 
     // Evento para agregar diagnóstico
     $(document).on('click', '.btn-agregar-diagnostico', function () {
@@ -438,4 +455,79 @@ function asignarEventosBotonesBeneficiarios() {
             AlertManager.error('Error', 'No se pudo cargar el editor de diagnósticos.');
         }
     });
+
+    // Evento para eliminar beneficiario
+    $(document).on('click', '.btn-eliminar-beneficiario', function () {
+        const id_jornada_beneficiario = $(this).data('id_jornada_beneficiario');
+        const nombres = $(this).data('nombres');
+        const apellidos = $(this).data('apellidos');
+        const cedula = $(this).data('cedula');
+
+        console.log('Eliminar beneficiario:', { id_jornada_beneficiario, nombres, apellidos, cedula });
+
+        eliminarBeneficiarioJornada(id_jornada_beneficiario, nombres, apellidos, cedula);
+    });
+}
+
+// ==================== FUNCIÓN PARA ELIMINAR BENEFICIARIO DE JORNADA ====================
+async function eliminarBeneficiarioJornada(idJornadaBeneficiario, nombres, apellidos, cedula) {
+    // Confirmación con SweetAlert
+    const result = await Swal.fire({
+        title: '¿Está seguro?',
+        html: `¿Desea eliminar al beneficiario <strong>${nombres} ${apellidos}</strong> (CI: ${cedula}) de esta jornada?<br><br>
+               <small class="text-muted">Esta acción no se puede deshacer.</small>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    });
+
+    if (!result.isConfirmed) {
+        return;
+    }
+
+    try {
+        // Mostrar loading
+        AlertManager.loading('Eliminando beneficiario...');
+
+        const formData = new FormData();
+        formData.append('id_jornada_beneficiario', idJornadaBeneficiario);
+
+        const response = await fetch('eliminar_beneficiario_jornada', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        AlertManager.close();
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data.exito) {
+                AlertManager.success('Eliminación exitosa', data.mensaje);
+                
+                // Recargar la tabla de beneficiarios
+                tablaBeneficiarios.ajax.reload(null, false);
+                
+                // Actualizar contador de aforo
+                beneficiariosActuales--;
+                actualizarContadorAforo();
+                
+            } else {
+                AlertManager.error('Error al eliminar', data.mensaje || 'No se pudo eliminar el beneficiario');
+            }
+        } else {
+            AlertManager.error('Error', 'Error en la petición al servidor');
+        }
+    } catch (error) {
+        AlertManager.close();
+        console.error('Error:', error);
+        AlertManager.error('Error', 'Ocurrió un error inesperado al eliminar el beneficiario');
+    }
 }

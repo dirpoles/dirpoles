@@ -49,6 +49,11 @@ Router::post('agregar_beneficiario_jornada', function () {
     agregar_beneficiario_jornada();
 });
 
+Router::post('eliminar_beneficiario_jornada', function () {
+    load_controller('jornadasController.php');
+    eliminar_beneficiario_jornada();
+});
+
 Router::post('agregar_diagnostico_jornada', function () {
     load_controller('jornadasController.php');
     agregar_diagnostico_jornada();

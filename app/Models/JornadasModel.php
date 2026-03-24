@@ -54,6 +54,12 @@ class JornadasModel extends BusinessModel
             case 'obtener_estadisticas':
                 return $this->obtenerEstadisticas();
 
+            case 'eliminar_beneficiario_jornada':
+                return $this->eliminarBeneficiarioJornada();
+
+            case 'consultar_beneficiario_individual':
+                return $this->consultarBeneficiarioIndividual();
+
             default:
                 throw new Exception('Accion no valida');
         }
@@ -435,6 +441,96 @@ class JornadasModel extends BusinessModel
             ];
         } catch (Throwable $e) {
             throw new Exception('Error al obtener estadisticas: ' . $e->getMessage());
+        }
+    }
+
+    private function eliminarBeneficiarioJornada()
+    {
+        try {
+            // Validar que el beneficiario exista y verificar si tiene diagnóstico
+            $query = "SELECT jb.id_jornada_beneficiario, jb.id_jornada, jb.nombres, jb.apellidos, jb.tipo_cedula, jb.cedula,
+                            j.estatus as estatus_jornada, j.fecha_fin,
+                            (SELECT COUNT(*) FROM jornada_diagnosticos jd WHERE jd.id_jornada_beneficiario = jb.id_jornada_beneficiario) as tiene_diagnostico
+                     FROM jornada_beneficiarios jb
+                     INNER JOIN jornadas_medicas j ON jb.id_jornada = j.id_jornada
+                     WHERE jb.id_jornada_beneficiario = :id_jornada_beneficiario";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id_jornada_beneficiario', $this->__get('id_jornada_beneficiario'), PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $beneficiario = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$beneficiario) {
+                return [
+                    'exito' => false,
+                    'mensaje' => 'El beneficiario no existe o ya fue eliminado'
+                ];
+            }
+
+            // Validación 1: Que no tenga diagnóstico asociado
+            if ($beneficiario['tiene_diagnostico'] > 0) {
+                return [
+                    'exito' => false,
+                    'mensaje' => 'No se puede eliminar el beneficiario porque ya tiene un diagnóstico asociado'
+                ];
+            }
+
+            // Validación 2: Que la jornada no haya finalizado
+            $estatus_jornada = $beneficiario['estatus_jornada'];
+            $fecha_fin = $beneficiario['fecha_fin'];
+            $hoy = date('Y-m-d');
+            
+            if ($estatus_jornada === 'Finalizada' || ($fecha_fin && $fecha_fin < $hoy)) {
+                return [
+                    'exito' => false,
+                    'mensaje' => 'No se puede eliminar el beneficiario porque la jornada ya ha finalizado'
+                ];
+            }
+
+            // Eliminar el beneficiario
+            $query = "DELETE FROM jornada_beneficiarios WHERE id_jornada_beneficiario = :id_jornada_beneficiario";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id_jornada_beneficiario', $this->__get('id_jornada_beneficiario'), PDO::PARAM_INT);
+            $stmt->execute();
+
+            return [
+                'exito' => true,
+                'mensaje' => 'Beneficiario eliminado exitosamente de la jornada',
+                'beneficiario_info' => [
+                    'nombres' => $beneficiario['nombres'],
+                    'apellidos' => $beneficiario['apellidos'],
+                    'tipo_cedula' => $beneficiario['tipo_cedula'],
+                    'cedula' => $beneficiario['cedula']
+                ]
+            ];
+
+        } catch (Throwable $e) {
+            return [
+                'exito' => false,
+                'mensaje' => 'Error al eliminar el beneficiario: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function consultarBeneficiarioIndividual()
+    {
+        try {
+            $query = "SELECT jb.*, j.nombre_jornada
+                     FROM jornada_beneficiarios jb
+                     INNER JOIN jornadas_medicas j ON jb.id_jornada = j.id_jornada
+                     WHERE jb.id_jornada_beneficiario = :id_jornada_beneficiario";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id_jornada_beneficiario', $this->__get('id_jornada_beneficiario'), PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Throwable $e) {
+            return [
+                'exito' => false,
+                'mensaje' => 'Error al consultar beneficiario: ' . $e->getMessage()
+            ];
         }
     }
 }

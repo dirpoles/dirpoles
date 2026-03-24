@@ -20,7 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function toggleSidebarPersist() {
         body.classList.toggle('sidebar-toggled');
-        if (sidebar) sidebar.classList.toggle('toggled');
+        if (sidebar) {
+            sidebar.classList.toggle('toggled');
+            // Adjust scroll behavior when toggling
+            adjustSidebarScroll();
+        }
         try {
             localStorage.setItem(SIDEBAR_TOGGLED_KEY, sidebar && sidebar.classList.contains('toggled') ? '1' : '0');
         } catch (e) { }
@@ -64,7 +68,45 @@ document.addEventListener('DOMContentLoaded', function () {
         if (window.innerWidth < 768) {
             closeAllSidebarCollapses();
         }
+        
+        // Adjust sidebar scroll behavior on resize
+        if (sidebar) {
+            adjustSidebarScroll();
+        }
     });
+
+    // Function to adjust sidebar scroll based on content and viewport
+    function adjustSidebarScroll() {
+        if (!sidebar) return;
+        
+        const sidebarHeight = sidebar.scrollHeight;
+        const viewportHeight = window.innerHeight;
+        const isToggled = sidebar.classList.contains('toggled');
+        
+        // Enable/disable scroll based on content height and viewport
+        if (sidebarHeight > viewportHeight && !isToggled) {
+            sidebar.style.overflowY = 'auto';
+        } else if (isToggled) {
+            sidebar.style.overflowY = 'visible';
+        }
+    }
+
+    // Initial scroll adjustment
+    if (sidebar) {
+        adjustSidebarScroll();
+        
+        // Observe sidebar content changes
+        const observer = new MutationObserver(function(mutations) {
+            adjustSidebarScroll();
+        });
+        
+        observer.observe(sidebar, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
 
     // Smooth scroll to top if you have anchor .scroll-to-top
     document.querySelectorAll('a.scroll-to-top').forEach(a => {

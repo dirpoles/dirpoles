@@ -440,6 +440,66 @@ function agregar_beneficiario_jornada()
     }
 }
 
+function eliminar_beneficiario_jornada()
+{
+    $modelo = new JornadasModel();
+    $bitacora = new BitacoraModel();
+    $permisos = new PermisosModel();
+    $modulo = 'Jornadas';
+
+    try {
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Eliminar', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        $id_jornada_beneficiario = filter_input(INPUT_POST, 'id_jornada_beneficiario', FILTER_SANITIZE_NUMBER_INT);
+
+        if (empty($id_jornada_beneficiario)) {
+            throw new Exception('ID de beneficiario no especificado');
+        }
+
+        // Eliminar el beneficiario directamente (el modelo ya obtiene la información necesaria para la bitácora)
+        $modelo->__set('id_jornada_beneficiario', $id_jornada_beneficiario);
+        $resultado = $modelo->manejarAccion('eliminar_beneficiario_jornada');
+
+        if ($resultado['exito']) {
+            // Obtener información del beneficiario para bitácora (después de eliminar, necesitamos buscarla antes)
+            $beneficiario_info = $resultado['beneficiario_info'] ?? null;
+            
+            if ($beneficiario_info) {
+                // Registrar en bitácora
+                $bitacora_data = [
+                    'id_empleado' => $_SESSION['id_empleado'],
+                    'modulo' => $modulo,
+                    'accion' => 'Eliminación',
+                    'descripcion' => "El Empleado {$_SESSION['nombre']} eliminó al beneficiario {$beneficiario_info['nombres']} {$beneficiario_info['apellidos']} (CI: {$beneficiario_info['tipo_cedula']}-{$beneficiario_info['cedula']}) de la jornada"
+                ];
+                foreach ($bitacora_data as $atributo => $valor) {
+                    $bitacora->__set($atributo, $valor);
+                }
+                $bitacora->manejarAccion('registrar_bitacora');
+            }
+
+            echo json_encode([
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
+            ]);
+        } else {
+            throw new Exception($resultado['mensaje']);
+        }
+    } catch (Throwable $e) {
+        echo json_encode([
+            'exito' => false,
+            'mensaje' => $e->getMessage()
+        ]);
+    }
+}
+
 function agregar_diagnostico_jornada()
 {
     $modelo = new JornadasModel();

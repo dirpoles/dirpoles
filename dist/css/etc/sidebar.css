@@ -18,6 +18,9 @@
     border-bottom: 1px solid #e3e6f0; /* Separador sutil */
     height: 4.375rem; /* Altura estándar de SB Admin 2 topbar */
     text-decoration: none !important;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .sidebar-brand-custom .sidebar-brand-icon i {
@@ -140,4 +143,177 @@
 #accordionSidebar .nav-link[aria-expanded="true"] .fa-chevron-down,
 #accordionSidebar .nav-link[aria-expanded="true"] .submenu-caret {
     transform: rotate(180deg);
+}
+
+/* --- Scroll responsivo para el sidebar --- */
+/* Contenedor principal del sidebar */
+body #wrapper #content-wrapper {
+    min-height: 100vh;
+}
+
+/* Sidebar con scroll para pantallas pequeñas */
+.sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+/* Para pantallas grandes (desktop) - comportamiento normal */
+@media (min-width: 768px) {
+    .sidebar {
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    /* Cuando el sidebar está colapsado en desktop */
+    .sidebar.toggled {
+        overflow-y: visible;
+    }
+}
+
+/* Para pantallas pequeñas (mobile) */
+@media (max-width: 767.98px) {
+    .sidebar {
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Asegurar que el sidebar no cubra todo el contenido en mobile */
+    body:not(.sidebar-toggled) .sidebar {
+        transform: translateX(0);
+    }
+    
+    body.sidebar-toggled .sidebar {
+        transform: translateX(-100%);
+    }
+}
+
+/* Scrollbar personalizado para el sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 68, 255, 0.05);
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 68, 255, 0.2);
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 68, 255, 0.3);
+}
+
+/* Ajustar el content wrapper cuando hay scroll en sidebar */
+@media (min-width: 768px) {
+    #content-wrapper {
+        margin-left: 0;
+        transition: margin-left 0.3s ease;
+    }
+    
+    /* Cuando el sidebar no está colapsado */
+    body:not(.sidebar-toggled) #content-wrapper {
+        margin-left: 14rem; /* Ancho del sidebar expandido */
+    }
+}
+
+/* Asegurar que el botón de cerrar sesión quede visible al final */
+.sidebar .nav-item:last-child {
+    margin-bottom: 1rem;
+}
+
+/* Clase para cuando se necesita scroll */
+.sidebar-scroll-needed {
+    padding-bottom: 2rem;
+}
+
+/* Mejoras para el scroll en móviles */
+@media (max-width: 767.98px) {
+    .sidebar-scroll-needed {
+        padding-bottom: 3rem;
+    }
+    
+    /* Asegurar que el brand no se pierda al hacer scroll */
+    .sidebar-brand-custom {
+        backdrop-filter: blur(8px);
+        background-color: rgba(255, 255, 255, 0.95) !important;
+    }
+}
+
+/* Animación suave para el scroll */
+.sidebar {
+    scroll-behavior: smooth;
+}
+
+/* Sombra sutil cuando hay scroll para indicar que hay más contenido */
+.sidebar-scroll-needed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    background: linear-gradient(to bottom, transparent, rgba(240, 244, 255, 0.8));
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Ocultar la sombra cuando está al final del scroll */
+.sidebar:not(:hover)::-webkit-scrollbar-thumb {
+    background: rgba(0, 68, 255, 0.1);
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 68, 255, 0.3);
+}
+
+/* Para Firefox */
+.sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 68, 255, 0.2) rgba(0, 68, 255, 0.05);
+}
+
+/* Asegurar que los submenús sean visibles al hacer scroll */
+.sidebar .collapse {
+    position: relative;
+    z-index: 6;
+}
+
+/* Mejorar accesibilidad del botón de cerrar sesión */
+.sidebar .nav-item:last-child .nav-link {
+    font-weight: 600;
+    border-top: 1px solid rgba(227, 230, 240, 0.5);
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+}
+
+/* Indicador visual cuando hay scroll disponible */
+@media (min-width: 768px) {
+    body:not(.sidebar-toggled) .sidebar-scroll-needed::before {
+        content: '⟳';
+        position: absolute;
+        top: 5rem;
+        right: 0.5rem;
+        color: rgba(0, 68, 255, 0.3);
+        font-size: 0.75rem;
+        animation: pulse 2s infinite;
+        z-index: 10;
+        pointer-events: none;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
 }
