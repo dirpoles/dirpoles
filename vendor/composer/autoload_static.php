@@ -14,13 +14,13 @@ class ComposerStaticInitd7bc942b73447a05b8c2cf841ae556e4
     );
 
     public static $prefixLengthsPsr4 = array (
-        'S' => 
+        'S' =>
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Routing\\' => 26,
             'Symfony\\Component\\HttpFoundation\\' => 33,
         ),
-        'R' => 
+        'R' =>
         array (
             'React\\Stream\\' => 13,
             'React\\Socket\\' => 13,
@@ -31,83 +31,83 @@ class ComposerStaticInitd7bc942b73447a05b8c2cf841ae556e4
             'Ratchet\\RFC6455\\' => 16,
             'Ratchet\\' => 8,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\Http\\Message\\' => 17,
         ),
-        'G' => 
+        'G' =>
         array (
             'GuzzleHttp\\Psr7\\' => 16,
         ),
-        'E' => 
+        'E' =>
         array (
             'Evenement\\' => 10,
         ),
-        'A' => 
+        'A' =>
         array (
             'App\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symfony\\Polyfill\\Mbstring\\' => 
+        'Symfony\\Polyfill\\Mbstring\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Component\\Routing\\' => 
+        'Symfony\\Component\\Routing\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/routing',
         ),
-        'Symfony\\Component\\HttpFoundation\\' => 
+        'Symfony\\Component\\HttpFoundation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
         ),
-        'React\\Stream\\' => 
+        'React\\Stream\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/stream/src',
         ),
-        'React\\Socket\\' => 
+        'React\\Socket\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/socket/src',
         ),
-        'React\\Promise\\' => 
+        'React\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/promise/src',
         ),
-        'React\\EventLoop\\' => 
+        'React\\EventLoop\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/event-loop/src',
         ),
-        'React\\Dns\\' => 
+        'React\\Dns\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/dns/src',
         ),
-        'React\\Cache\\' => 
+        'React\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/cache/src',
         ),
-        'Ratchet\\RFC6455\\' => 
+        'Ratchet\\RFC6455\\' =>
         array (
             0 => __DIR__ . '/..' . '/ratchet/rfc6455/src',
         ),
-        'Ratchet\\' => 
+        'Ratchet\\' =>
         array (
             0 => __DIR__ . '/..' . '/cboden/ratchet/src/Ratchet',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
             1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'GuzzleHttp\\Psr7\\' => 
+        'GuzzleHttp\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'Evenement\\' => 
+        'Evenement\\' =>
         array (
             0 => __DIR__ . '/..' . '/evenement/evenement/src',
         ),
-        'App\\' => 
+        'App\\' =>
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
@@ -119,16 +119,26 @@ class ComposerStaticInitd7bc942b73447a05b8c2cf841ae556e4
         'App\\Models\\BeneficiarioModel' => __DIR__ . '/../..' . '/app/Models/BeneficiarioModel.php',
         'App\\Models\\BitacoraModel' => __DIR__ . '/../..' . '/app/Models/BitacoraModel.php',
         'App\\Models\\BusinessModel' => __DIR__ . '/../..' . '/app/Models/BusinessModel.php',
+        'App\\Models\\CalendarioModel' => __DIR__ . '/../..' . '/app/Models/CalendarioModel.php',
         'App\\Models\\CitasModel' => __DIR__ . '/../..' . '/app/Models/CitasModel.php',
+        'App\\Models\\ConfigModel' => __DIR__ . '/../..' . '/app/Models/ConfigModel.php',
+        'App\\Models\\DiscapacidadModel' => __DIR__ . '/../..' . '/app/Models/DiscapacidadModel.php',
         'App\\Models\\EmpleadoModel' => __DIR__ . '/../..' . '/app/Models/EmpleadoModel.php',
         'App\\Models\\HorarioModel' => __DIR__ . '/../..' . '/app/Models/HorarioModel.php',
         'App\\Models\\InvMedicinaModel' => __DIR__ . '/../..' . '/app/Models/InvMedicinaModel.php',
+        'App\\Models\\InventarioMobModel' => __DIR__ . '/../..' . '/app/Models/InventarioMobModel.php',
+        'App\\Models\\JornadasModel' => __DIR__ . '/../..' . '/app/Models/JornadasModel.php',
         'App\\Models\\MedicinaModel' => __DIR__ . '/../..' . '/app/Models/MedicinaModel.php',
         'App\\Models\\NotificacionesModel' => __DIR__ . '/../..' . '/app/Models/NotificacionesModel.php',
         'App\\Models\\OrientacionModel' => __DIR__ . '/../..' . '/app/Models/OrientacionModel.php',
+        'App\\Models\\PerfilModel' => __DIR__ . '/../..' . '/app/Models/PerfilModel.php',
         'App\\Models\\PermisosModel' => __DIR__ . '/../..' . '/app/Models/PermisosModel.php',
         'App\\Models\\PsicologiaModel' => __DIR__ . '/../..' . '/app/Models/PsicologiaModel.php',
+        'App\\Models\\ReferenciasModel' => __DIR__ . '/../..' . '/app/Models/ReferenciasModel.php',
+        'App\\Models\\ReportesModel' => __DIR__ . '/../..' . '/app/Models/ReportesModel.php',
         'App\\Models\\SecurityModel' => __DIR__ . '/../..' . '/app/Models/SecurityModel.php',
+        'App\\Models\\TransporteModel' => __DIR__ . '/../..' . '/app/Models/TransporteModel.php',
+        'App\\Models\\TsModel' => __DIR__ . '/../..' . '/app/Models/TsModel.php',
         'App\\Models\\loginModel' => __DIR__ . '/../..' . '/app/Models/loginModel.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Evenement\\EventEmitter' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitter.php',

@@ -1,6 +1,6 @@
 <?php
 $titulo = "Login";
-include "app/views/template/head.php"; ?>
+include "app/Views/template/head.php"; ?>
 
 <body class="bg-light">
 

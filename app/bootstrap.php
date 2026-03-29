@@ -28,7 +28,7 @@ function load_controller(string $file): void
 
     // Normalizar path
     $file = ltrim($file, '/\\');
-    $path = rtrim(BASE_PATH, '/\\') . '/app/controllers/' . $file;
+    $path = rtrim(BASE_PATH, '/\\') . '/app/Controllers/' . $file;
 
     if (isset($loaded[$path])) {
         // ya cargado
@@ -51,7 +51,7 @@ function load_controller(string $file): void
  */
 function preload_all_controllers(): void
 {
-    foreach (glob(rtrim(BASE_PATH, '/\\') . '/app/controllers/*.php') as $controlador) {
+    foreach (glob(rtrim(BASE_PATH, '/\\') . '/app/Controllers/*.php') as $controlador) {
         require_once $controlador;
     }
 }

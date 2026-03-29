@@ -3,7 +3,7 @@ namespace App\Core;
 use PDO;
 use Throwable;
 
-require_once 'app/Config/config.php';
+require_once BASE_PATH . 'app/Config/config.php';
 
 abstract class Database {
     protected $conn;
