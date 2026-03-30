@@ -72,7 +72,7 @@ include "app/Views/template/head.php"; ?>
 
     <?php include 'template/script.php'; ?>
     <link rel="stylesheet" href="<?= BASE_URL ?>dist/css/etc/login.css">
-    <script src="<?= BASE_URL ?>dist/js/login/login.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/login/login.js?v=<?= time() ?>"></script>
 
     <?php if (!empty($_SESSION['mensaje_redireccion'])):
         // Decodificar y limpiar para evitar que se muestre de nuevo

@@ -13,3 +13,6 @@ const DB_SECURITY_PASS = '';
 
 // Precarga de controladores
 const PRELOAD_CONTROLLERS = false;
+// Configuración de JWT
+define('JWT_SECRET', $_ENV['JWT_SECRET'] ?? 'default_secret_key');
+define('JWT_EXP', $_ENV['JWT_EXPIRATION'] ?? 28800); // 8 horas por defecto

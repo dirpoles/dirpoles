@@ -4,9 +4,15 @@ const BASE_URL = '/DIRPOLES_4/';
 
 session_start();
 
+require_once BASE_PATH . 'vendor/autoload.php';
+// Cargar variables de entorno inmediatamente
+if (file_exists(BASE_PATH . '.env')) {
+    $dotenv = \Dotenv\Dotenv::createImmutable(BASE_PATH);
+    $dotenv->load();
+}
+
 require_once BASE_PATH . 'app/Config/config.php';
 require_once BASE_PATH . 'app/bootstrap.php';
-require_once BASE_PATH . 'vendor/autoload.php';
 require_once BASE_PATH . 'app/routes.php';
 
 //Ejecutar el Router

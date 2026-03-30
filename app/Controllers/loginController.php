@@ -6,6 +6,7 @@ use App\Models\PermisosModel;
 use App\Models\EmpleadoModel;
 use App\Models\NotificacionesModel;
 use App\Models\BeneficiarioModel;
+use App\Core\JwtHandler;
 
 function showLogin()
 {
@@ -96,7 +97,7 @@ function iniciar_sesion()
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Login',
-                'action' => 'Inicio de sesión',
+                'accion' => 'Inicio de sesión',
                 'descripcion' => "El empleado " . $_SESSION['nombre'] . " ha iniciado sesión.",
                 'fecha' => date('Y-m-d H:i:s')
             ];
@@ -105,15 +106,27 @@ function iniciar_sesion()
             }
 
             $bitacora_result = $bitacora->manejarAccion('registrar_bitacora');
-            if (!$bitacora_result['estado']) {
+            if (isset($bitacora_result['exito']) && !$bitacora_result['exito']) {
                 error_log("Error al registrar en la bitácora: " . $bitacora_result['mensaje']);
             }
+
+            // --- GENERAR JWT PARA FUTUROS MICROSERVICIOS ---
+            $jwtHandler = new JwtHandler();
+            $jwtData = [
+                'id_empleado' => $_SESSION['id_empleado'],
+                'nombre' => $_SESSION['nombre'],
+                'id_tipo_empleado' => $_SESSION['id_tipo_empleado'],
+                'tipo_empleado' => $_SESSION['tipo_empleado']
+            ];
+            $jwtHandler->__set('data', $jwtData);
+            $jwtResult = $jwtHandler->manejarAccion('generar');
 
             //Mostrar mensaje de exito en la vista
             $mensaje = [
                 'estado' => 'exito',
                 'titulo' => '¡Bienvenido!',
-                'mensaje' => 'Has iniciado sesión correctamente.'
+                'mensaje' => 'Has iniciado sesión correctamente.',
+                'token' => $jwtResult['token'] ?? null // Enviamos el token al frontend
             ];
 
             header('Content-Type: application/json; charset=utf-8');

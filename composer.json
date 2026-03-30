@@ -13,6 +13,8 @@
     "require": {
         "cboden/ratchet": "^0.4.4",
         "react/event-loop": "^1.6",
-        "react/socket": "^1.17"
+        "react/socket": "^1.17",
+        "firebase/php-jwt": "^7.0",
+        "vlucas/phpdotenv": "^5.6"
     }
 }
