@@ -233,13 +233,13 @@ class TransporteModel extends BusinessModel
             $estadisticas['repuestos_criticos'] = $stmt->fetchColumn();
 
             return [
-                'status' => true,
+                'exito' => true,
                 'data' => $estadisticas
             ];
         } catch (Throwable $e) {
             error_log("Error al obtener estadísticas de transporte: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener las estadísticas: ' . $e->getMessage()
             ];
         }
@@ -255,7 +255,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los valores: ' . $e->getMessage()
             ];
         }
@@ -273,7 +273,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al consultar los vehiculos: ' . $e->getMessage()
             ];
         }
@@ -291,7 +291,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al consultar los vehiculos: ' . $e->getMessage()
             ];
         }
@@ -309,7 +309,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al consultar los vehiculos sin mantenimiento: ' . $e->getMessage()
             ];
         }
@@ -336,13 +336,13 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Vehiculo registrado exitosamente"
             ];
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al registrar el vehículo: ' . $e->getMessage()
             ];
         }
@@ -391,13 +391,13 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Proveedor registrado exitosamente"
             ];
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al registrar el proveedor: ' . $e->getMessage()
             ];
         }
@@ -452,13 +452,13 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Ruta registrada exitosamente"
             ];
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al registrar la ruta: ' . $e->getMessage()
             ];
         }
@@ -476,7 +476,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los proveedores: ' . $e->getMessage()
             ];
         }
@@ -496,7 +496,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los proveedores: ' . $e->getMessage()
             ];
         }
@@ -531,13 +531,13 @@ class TransporteModel extends BusinessModel
             $stmt->bindValue(':estatus', $this->__get('estatus'));
             $stmt->execute();
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Asignación de recursos exitosa"
             ];
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al asignar los recuros a la ruta: ' . $e->getMessage()
             ];
         }
@@ -575,7 +575,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los valores: ' . $e->getMessage()
             ];
         }
@@ -630,7 +630,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los detalles de la ruta: ' . $e->getMessage()
             ];
         }
@@ -653,7 +653,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los valores: ' . $e->getMessage()
             ];
         }
@@ -675,7 +675,7 @@ class TransporteModel extends BusinessModel
         try {
             if ($this->validar_repuesto()) {
                 return [
-                    "status" => false,
+                    'exito' => false,
                     "mensaje" => "El repuesto ya está registrado"
                 ];
             }
@@ -692,13 +692,13 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Repuesto registrado exitosamente"
             ];
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al registrar el repuesto: ' . $e->getMessage()
             ];
         }
@@ -824,13 +824,13 @@ class TransporteModel extends BusinessModel
             error_log("Repuestos recibidos: " . print_r($this->__get('repuestos'), true));
             $this->conn->commit();
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Mantenimiento registrado exitosamente"
             ];
         } catch (Throwable $e) {
             $this->conn->rollBack();
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al registrar el mantenimiento: ' . $e->getMessage()
             ];
         }
@@ -881,7 +881,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los valores: ' . $e->getMessage()
             ];
         }
@@ -930,12 +930,12 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Vehiculo actualizado exitosamente"
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al actualizar el vehiculo: ' . $e->getMessage()
             ];
         }
@@ -994,12 +994,12 @@ class TransporteModel extends BusinessModel
             $stmt->bindValue(':id_vehiculo', $this->__get('id_vehiculo'));
             $stmt->execute();
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Vehiculo eliminado exitosamente"
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al eliminar el vehiculo: ' . $e->getMessage()
             ];
         }
@@ -1047,7 +1047,7 @@ class TransporteModel extends BusinessModel
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener los documentos: ' . $e->getMessage()
             ];
         }
@@ -1099,12 +1099,12 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Proveedor actualizado exitosamente"
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al actualizar el proveedor: ' . $e->getMessage()
             ];
         }
@@ -1155,10 +1155,10 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
             $ruta = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            return $ruta ?: ['status' => false, 'mensaje' => 'No se encontró ninguna ruta con el ID especificado'];
+            return $ruta ?: ['exito' => false, 'mensaje' => 'No se encontró ninguna ruta con el ID especificado'];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al consultar la ruta específica: ' . $e->getMessage()
             ];
         }
@@ -1199,12 +1199,12 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Ruta actualizada exitosamente"
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al actualizar la ruta: ' . $e->getMessage()
             ];
         }
@@ -1225,12 +1225,12 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Ruta eliminada exitosamente"
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al eliminar el registro: ' . $e->getMessage()
             ];
         }
@@ -1260,12 +1260,12 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Asignación eliminada exitosamente"
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al eliminar el registro: ' . $e->getMessage()
             ];
         }
@@ -1319,7 +1319,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener el repuesto: ' . $e->getMessage()
             ];
         }
@@ -1354,7 +1354,7 @@ class TransporteModel extends BusinessModel
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al obtener las asignaciones de rutas: ' . $e->getMessage()
             ];
         }
@@ -1388,13 +1388,13 @@ class TransporteModel extends BusinessModel
             $this->verificarNotificacionStock($this->__get('id_repuesto'));
 
             return [
-                'status' => true,
+                'exito' => true,
                 'mensaje' => 'Repuesto actualizado correctamente.'
             ];
         } catch (Throwable $e) {
             error_log("Error: " . $e->getMessage());
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al actualizar el repuesto: ' . $e->getMessage()
             ];
         }
@@ -1416,12 +1416,12 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
 
             return [
-                "status" => true,
+                'exito' => true,
                 "mensaje" => "Repuesto eliminado exitosamente."
             ];
         } catch (Throwable $e) {
             return [
-                'status' => false,
+                'exito' => false,
                 'mensaje' => 'Error al eliminar el registro: ' . $e->getMessage()
             ];
         }

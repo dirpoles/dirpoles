@@ -49,7 +49,7 @@ function transporte_estadisticas()
     try {
         $resultado = $modelo->manejarAccion('Consultar_estadisticas_dashboard');
 
-        if ($resultado['status']) {
+        if ($resultado['exito']) {
             echo json_encode([
                 'exito' => true,
                 'data' => $resultado['data']
@@ -116,16 +116,18 @@ function vehiculos_registrar()
     try {
         if (!$permisos->manejarAccion('Verificar')) {
             echo json_encode([
-                "status" => "error",
-                "message" => "No tienes permiso para realizar esta acción"
+                "exito" => false,
+                "mensaje" => "No tienes permiso para realizar esta acción"
             ]);
+            exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode([
-                "status" => "error",
-                "message" => "Los valores no han sido enviados correctamente"
+                "exito" => false,
+                "mensaje" => "Los valores no han sido enviados correctamente"
             ]);
+            exit;
         }
 
         $placa = filter_input(INPUT_POST, 'placa', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -154,7 +156,7 @@ function vehiculos_registrar()
         // Insertar en la base de datos
         $resultado = $modeloT->manejarAccion('Registrar_vehiculo');
 
-        if (isset($resultado['status']) && $resultado['status'] === true) {
+        if (isset($resultado['exito']) && $resultado['exito'] === true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -166,13 +168,14 @@ function vehiculos_registrar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             $notificacion_data = [
-                'titulo' => 'Registro de Vehiculo',
-                'url' => '#',
+                'titulo' => 'Registro de vehiculo',
+                'url' => 'transporte_consulta',
+                'tipo' => 'inventario',
                 'id_emisor' => $_SESSION['id_empleado'],
                 'id_receptor' => 1,
                 'leido' => 0
@@ -183,24 +186,24 @@ function vehiculos_registrar()
             }
 
             $noti_resultado = $notificacion->manejarAccion('crear_notificacion');
-            if (!$noti_resultado['status']) {
-                error_log("Error al registrar la notificación: " . $noti_resultado['mensaje']);
+            if (isset($noti_resultado['exito']) && !$noti_resultado['exito']) {
+                error_log("Error al registrar la notificación: " . ($noti_resultado['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Vehículo."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Vehículo."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -291,7 +294,7 @@ function proveedor_registrar()
 
         $resultado = $modelo->manejarAccion('Registrar_proveedor');
 
-        if (isset($resultado['status']) && $resultado['status'] === true) {
+        if (isset($resultado['exito']) && $resultado['exito'] === true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -303,13 +306,14 @@ function proveedor_registrar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             $notificacion_data = [
                 'titulo' => 'Registro de Proveedor',
                 'url' => '#',
+                'tipo' => 'inventario',
                 'id_emisor' => $_SESSION['id_empleado'],
                 'id_receptor' => 1,
                 'leido' => 0
@@ -320,24 +324,24 @@ function proveedor_registrar()
             }
 
             $noti_resultado = $notificacion->manejarAccion('crear_notificacion');
-            if (!$noti_resultado['status']) {
-                error_log("Error al registrar la notificación: " . $noti_resultado['mensaje']);
+            if (isset($noti_resultado['exito']) && !$noti_resultado['exito']) {
+                error_log("Error al registrar la notificación: " . ($noti_resultado['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Proveedor."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Proveedor."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
 }
@@ -428,7 +432,7 @@ function ruta_registrar()
 
         $resultado = $modelo->manejarAccion('Registrar_ruta');
 
-        if (isset($resultado['status']) && $resultado['status'] === true) {
+        if (isset($resultado['exito']) && $resultado['exito'] === true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -440,13 +444,14 @@ function ruta_registrar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             $notificacion_data = [
                 'titulo' => 'Registro de Ruta',
                 'url' => '#',
+                'tipo' => 'inventario',
                 'id_emisor' => $_SESSION['id_empleado'],
                 'id_receptor' => 1,
                 'leido' => 0
@@ -457,24 +462,24 @@ function ruta_registrar()
             }
 
             $noti_resultado = $notificacion->manejarAccion('crear_notificacion');
-            if (!$noti_resultado['status']) {
-                error_log("Error al registrar la notificación: " . $noti_resultado['mensaje']);
+            if (isset($noti_resultado['exito']) && !$noti_resultado['exito']) {
+                error_log("Error al registrar la notificación: " . ($noti_resultado['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Proveedor."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Proveedor."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
 }
@@ -534,7 +539,7 @@ function asignar_recursos()
 
         $resultado = $modelo->manejarAccion('Registrar_asignacion');
 
-        if (isset($resultado['status']) && $resultado['status'] === true) {
+        if (isset($resultado['exito']) && $resultado['exito'] === true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -546,13 +551,14 @@ function asignar_recursos()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             $notificacion_data = [
                 'titulo' => 'Asignación de recursos a ruta',
                 'url' => '#',
+                'tipo' => 'inventario',
                 'id_emisor' => $_SESSION['id_empleado'],
                 'id_receptor' => 1,
                 'leido' => 0
@@ -563,24 +569,24 @@ function asignar_recursos()
             }
 
             $noti_resultado = $notificacion->manejarAccion('crear_notificacion');
-            if (!$noti_resultado['status']) {
-                error_log("Error al registrar la notificación: " . $noti_resultado['mensaje']);
+            if (isset($noti_resultado['exito']) && !$noti_resultado['exito']) {
+                error_log("Error al registrar la notificación: " . ($noti_resultado['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Proveedor."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Proveedor."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -638,13 +644,13 @@ function obtener_detalles_ruta()
         }
 
         echo json_encode([
-            'success' => true,
+            'exito' => true,
             'data' => $detalles
         ]);
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -708,7 +714,7 @@ function repuestos_registrar()
 
         $resultado = $modelo->manejarAccion('Registrar_repuesto');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -720,13 +726,14 @@ function repuestos_registrar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             $notificacion_data = [
                 'titulo' => 'Registro de Repuesto',
                 'url' => '#',
+                'tipo' => 'inventario',
                 'id_emisor' => $_SESSION['id_empleado'],
                 'id_receptor' => 1,
                 'leido' => 0
@@ -737,24 +744,24 @@ function repuestos_registrar()
             }
 
             $noti_resultado = $notificacion->manejarAccion('crear_notificacion');
-            if (!$noti_resultado['status']) {
-                error_log("Error al registrar la notificación: " . $noti_resultado['mensaje']);
+            if (isset($noti_resultado['exito']) && !$noti_resultado['exito']) {
+                error_log("Error al registrar la notificación: " . ($noti_resultado['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
 }
@@ -826,13 +833,14 @@ function repuestos_entrada()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             $notificacion_data = [
                 'titulo' => 'Entrada de repuesto',
                 'url' => 'transporte_consulta',
+                'tipo' => 'inventario',
                 'id_emisor' => $_SESSION['id_empleado'],
                 'id_receptor' => 1,
                 'leido' => 0
@@ -843,8 +851,8 @@ function repuestos_entrada()
             }
 
             $noti_resultado = $notificacion->manejarAccion('crear_notificacion');
-            if (!$noti_resultado['status']) {
-                error_log("Error al registrar la notificación: " . $noti_resultado['mensaje']);
+            if (isset($noti_resultado['exito']) && !$noti_resultado['exito']) {
+                error_log("Error al registrar la notificación: " . ($noti_resultado['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
@@ -947,7 +955,7 @@ function registrar_mantenimiento_vehiculo()
         // Registrar en base de datos
         $resultado = $modelo->manejarAccion('Registrar_mantenimiento');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -959,24 +967,24 @@ function registrar_mantenimiento_vehiculo()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -1037,7 +1045,7 @@ function vehiculo_actualizar()
         // Actualizar en base de datos
         $resultado = $modelo->manejarAccion('Actualizar_vehiculo');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1049,24 +1057,24 @@ function vehiculo_actualizar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -1105,7 +1113,7 @@ function vehiculo_eliminar()
         // Eliminar en base de datos
         $resultado = $modelo->manejarAccion('Eliminar_vehiculo');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1117,8 +1125,8 @@ function vehiculo_eliminar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
@@ -1206,7 +1214,7 @@ function proveedor_actualizar()
         // Actualizar en base de datos
         $resultado = $modelo->manejarAccion('Actualizar_proveedor');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1218,24 +1226,24 @@ function proveedor_actualizar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
-                'success' => true,
-                'message' => $resultado['mensaje']
+                'exito' => true,
+                'mensaje' => $resultado['mensaje']
             ]);
         } else {
             echo json_encode([
-                'success' => false,
-                'message' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
+                'exito' => false,
+                'mensaje' => $resultado['mensaje'] ?? "Error al registrar el Repuesto."
             ]);
         }
     } catch (Exception $e) {
         echo json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
+            'exito' => false,
+            'mensaje' => $e->getMessage()
         ]);
     }
     exit;
@@ -1286,8 +1294,8 @@ function proveedor_eliminar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
@@ -1374,7 +1382,7 @@ function ruta_actualizar()
         // Actualizar en base de datos
         $resultado = $modelo->manejarAccion('Actualizar_ruta');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1386,8 +1394,8 @@ function ruta_actualizar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
@@ -1442,7 +1450,7 @@ function ruta_eliminar()
         // Eliminar en base de datos
         $resultado = $modelo->manejarAccion('Eliminar_ruta');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1454,8 +1462,8 @@ function ruta_eliminar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
@@ -1510,7 +1518,7 @@ function asignaciones_eliminar()
         // Eliminar en base de datos
         $resultado = $modelo->manejarAccion('Eliminar_asignacion');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1522,8 +1530,8 @@ function asignaciones_eliminar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
@@ -1603,7 +1611,7 @@ function repuesto_actualizar()
         // Actualizar en base de datos
         $resultado = $modelo->manejarAccion('Actualizar_repuesto');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1615,8 +1623,8 @@ function repuesto_actualizar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
@@ -1671,7 +1679,7 @@ function repuesto_eliminar()
         // Eliminar en base de datos
         $resultado = $modelo->manejarAccion('Eliminar_repuesto');
 
-        if (isset($resultado['status']) && $resultado['status'] == true) {
+        if (isset($resultado['exito']) && $resultado['exito'] == true) {
             $bitacora_data = [
                 'id_empleado' => $_SESSION['id_empleado'],
                 'modulo' => 'Transporte',
@@ -1683,8 +1691,8 @@ function repuesto_eliminar()
                 $bitacoraModel->__set($atributo, $valor);
             }
             $resultado_bitacora = $bitacoraModel->manejarAccion('registrar_bitacora');
-            if (!$resultado_bitacora['status']) {
-                error_log("Error al registrar en al bitácora: " . $resultado_bitacora['msj']);
+            if (isset($resultado_bitacora['exito']) && !$resultado_bitacora['exito']) {
+                error_log("Error al registrar en al bitácora: " . ($resultado_bitacora['mensaje'] ?? 'Error desconocido'));
             }
 
             echo json_encode([
