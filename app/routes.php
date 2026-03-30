@@ -53,9 +53,10 @@ Router::antes('ALL', '.*', function () {
         // Token inválido, expirado o no proporcionado
         error_log("Fallo de validación JWT para ruta: " . $rutaActual . " - Razon: " . ($validacion['mensaje'] ?? 'Sin mensaje'));
         
-        // Destruir sesión por seguridad (Verificación Dual fallida)
-        session_unset();
-        session_destroy();
+        // Limpiar acceso de sesión (mantenemos la sesión activa solo para mostrar el mensaje en el login)
+        unset($_SESSION['id_empleado']);
+        unset($_SESSION['nombre']);
+        
         // Limpiar cookie de JWT
         setcookie('jwt_token', '', time() - 3600, '/');
         
@@ -66,8 +67,10 @@ Router::antes('ALL', '.*', function () {
     if ($validacion['data']['id_empleado'] != $_SESSION['id_empleado']) {
         error_log("Discrepancia detectada: JWT id_empleado (" . $validacion['data']['id_empleado'] . ") vs SESIÓN id_empleado (" . $_SESSION['id_empleado'] . ")");
         
-        session_unset();
-        session_destroy();
+        // Limpiar acceso
+        unset($_SESSION['id_empleado']);
+        unset($_SESSION['nombre']);
+
         setcookie('jwt_token', '', time() - 3600, '/');
         
         redirigirLogin('Se ha detectado una inconsistencia en su sesión.', 'Fallo de Integridad');
