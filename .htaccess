@@ -5,3 +5,45 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
+
+# ==================== OPTIMIZACIÓN DE CACHÉ ====================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Fuentes (1 año)
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    
+    # Imágenes (1 año)
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 week"
+    
+    # JS y CSS (1 año)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    
+    # Documentos
+    ExpiresDefault "access plus 2 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(ttf|woff2|jpg|jpeg|png|ico|css|js)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+</IfModule>
+
+# ==================== COMPRESIÓN GZIP (mod_deflate) ====================
+<IfModule mod_deflate.c>
+    # Forzar compresión para los tipos mime comunes
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
