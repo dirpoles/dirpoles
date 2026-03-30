@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Router;
+use App\Core\JwtHandler;
 
 // ==================== MIDDLEWARE GLOBAL ====================
 Router::antes('ALL', '.*', function () {
@@ -40,6 +41,36 @@ Router::antes('ALL', '.*', function () {
         unset($_SESSION['nombre']);
         unset($_SESSION['estatus']);
         redirigirLogin($msg, 'Cuenta bloqueada');
+    }
+
+    // 4. VERIFICACIÓN DUAL (JWT)
+    $jwtToken = JwtHandler::obtenerToken();
+    $jwtHandler = new JwtHandler();
+    $jwtHandler->__set('token', $jwtToken);
+    $validacion = $jwtHandler->manejarAccion('validar');
+
+    if ($validacion['estado'] !== 'exito') {
+        // Token inválido, expirado o no proporcionado
+        error_log("Fallo de validación JWT para ruta: " . $rutaActual . " - Razon: " . ($validacion['mensaje'] ?? 'Sin mensaje'));
+        
+        // Destruir sesión por seguridad (Verificación Dual fallida)
+        session_unset();
+        session_destroy();
+        // Limpiar cookie de JWT
+        setcookie('jwt_token', '', time() - 3600, '/');
+        
+        redirigirLogin('Error de validación de seguridad (JWT). Por favor, inicie sesión de nuevo.', 'Error de Seguridad');
+    }
+
+    // 5. INTEGRIDAD DE DATOS (Sesión vs JWT)
+    if ($validacion['data']['id_empleado'] != $_SESSION['id_empleado']) {
+        error_log("Discrepancia detectada: JWT id_empleado (" . $validacion['data']['id_empleado'] . ") vs SESIÓN id_empleado (" . $_SESSION['id_empleado'] . ")");
+        
+        session_unset();
+        session_destroy();
+        setcookie('jwt_token', '', time() - 3600, '/');
+        
+        redirigirLogin('Se ha detectado una inconsistencia en su sesión.', 'Fallo de Integridad');
     }
 });
 

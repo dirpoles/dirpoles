@@ -22,6 +22,24 @@ class JwtHandler
     }
 
     /**
+     * Extrae el token JWT del entorno (Header Authorization o Cookie).
+     * @return string|null
+     */
+    public static function obtenerToken()
+    {
+        // 1. Intentar desde el encabezado Authorization (Bearer <token>)
+        $headers = function_exists('getallheaders') ? getallheaders() : [];
+        $authHeader = $headers['Authorization'] ?? $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+
+        if ($authHeader && preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            return $matches[1];
+        }
+
+        // 2. Intentar desde la cookie
+        return $_COOKIE['jwt_token'] ?? null;
+    }
+
+    /**
      * Controlador de acciones de la clase.
      * Sigue la estructura estándar del sistema DIRPOLES_4.
      */

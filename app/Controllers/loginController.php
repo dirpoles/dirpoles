@@ -110,7 +110,7 @@ function iniciar_sesion()
                 error_log("Error al registrar en la bitácora: " . $bitacora_result['mensaje']);
             }
 
-            // --- GENERAR JWT PARA FUTUROS MICROSERVICIOS ---
+            // --- GENERAR JWT PARA SISTEMA DE SEGURIDAD DUAL ---
             $jwtHandler = new JwtHandler();
             $jwtData = [
                 'id_empleado' => $_SESSION['id_empleado'],
@@ -121,12 +121,21 @@ function iniciar_sesion()
             $jwtHandler->__set('data', $jwtData);
             $jwtResult = $jwtHandler->manejarAccion('generar');
 
+            if ($jwtResult['estado'] === 'exito') {
+                setcookie('jwt_token', $jwtResult['token'], [
+                    'expires' => $jwtResult['expiracion'],
+                    'path' => '/',
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]);
+            }
+
             //Mostrar mensaje de exito en la vista
             $mensaje = [
                 'estado' => 'exito',
                 'titulo' => '¡Bienvenido!',
                 'mensaje' => 'Has iniciado sesión correctamente.',
-                'token' => $jwtResult['token'] ?? null // Enviamos el token al frontend
+                // 'token' => $jwtResult['token'] ?? null // Ya no es estrictamente necesario en JSON por las cookies
             ];
 
             header('Content-Type: application/json; charset=utf-8');
@@ -231,6 +240,9 @@ function cerrar_sesion()
             $params["httponly"]
         );
     }
+
+    // Eliminar cookie de JWT
+    setcookie('jwt_token', '', time() - 3600, '/');
 
     // Redirigir
     header('Location: ' . BASE_URL . 'login?logout=true');

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Detectar si se llegó desde un logout exitoso
     if (window.location.search.includes("logout=true")) {
-        localStorage.removeItem('jwt_token'); // Limpiar token al cerrar sesión
+        // El token en cookie ya fue eliminado por el servidor al redirigir aquí.
         if (typeof AlertManager !== 'undefined') {
             AlertManager.success('Sesión cerrada', 'Has cerrado sesión exitosamente.');
         } else if (typeof Swal !== 'undefined') {
@@ -175,10 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Esperamos un objeto JSON con al menos 'estado' y opcionalmente 'mensaje'
             if (data && data.estado === 'exito') {
-                // Guardar token para futuros microservicios
-                if (data.token) {
-                    localStorage.setItem('jwt_token', data.token);
-                }
+                // Éxito: El servidor ya envió el JWT por cookie HttpOnly.
 
                 // Éxito: mostrar SweetAlert y redirigir a 'inicio'
                 if (typeof Swal !== 'undefined' && Swal.fire) {

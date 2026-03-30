@@ -33,7 +33,7 @@
     <script src="<?= BASE_URL ?>dist/js/perfil/verPerfil.js" defer></script>
     <script src="<?= BASE_URL ?>dist/js/perfil/editarPerfil.js" defer></script>
     <script src="<?= BASE_URL ?>dist/js/core/PDFCustomizer.js" defer></script>
-    
+
     <!-- Driver.js -->
     <script src="<?= BASE_URL ?>plugins/driver.js/driver.js.iife.js" defer></script>
 <?php endif; ?>
@@ -45,9 +45,9 @@
 <script src="<?= BASE_URL ?>dist/js/core/logout.js" defer></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         if (typeof $ !== 'undefined' && $.fn.tooltip) {
             $('[data-toggle="tooltip"]').tooltip();
         }
     });
-</script>
+</script>
