@@ -685,3 +685,47 @@ function reportes_transporte_data()
         exit();
     }
 }
+
+
+//============================= ENDPOINTS DEL MICROSERVICIO DE IA ================================
+
+
+function reportes_analisis_ia()
+{
+    $permisos = new PermisosModel();
+    $modelo = new ReportesModel();
+    $modulo = 'Reportes';
+
+    try {
+        // 1. Verificar permisos (como siempre)
+        $verificar = ['Modulo' => $modulo, 'Permiso' => 'Leer', 'Rol' => $_SESSION['id_tipo_empleado']];
+        foreach ($verificar as $atributo => $valor) {
+            $permisos->__set($atributo, $valor);
+        }
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para realizar esta acción');
+        }
+
+        // 2. Obtener los datos del reporte desde la BD
+        $tipoReporte = $_GET['tipo'] ?? 'general';
+        $datosReporte = $modelo->manejarAccion('reporteGeneral');
+
+        // 3. Enviar los datos al microservicio de IA
+        require_once BASE_PATH . 'app/Core/MicroservicioIA.php';
+        $ia = new MicroservicioIA();
+        $analisis = $ia->analizar($tipoReporte, $datosReporte);
+
+        // 4. Devolver el análisis al frontend
+        header('Content-Type: application/json');
+        echo json_encode($analisis);
+
+    } catch (Throwable $e) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'exito' => false,
+            'mensaje' => $e->getMessage()
+        ]);
+        exit();
+    }
+}

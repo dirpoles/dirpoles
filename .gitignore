@@ -1,2 +1,13 @@
-logs/
+# Seguridad
 .env
+
+# Dependencias (se regeneran)
+/vendor/
+/node_modules/
+/dist/
+/.vscode/
+
+# Archivos generados y temporales
+/uploads/*
+!/uploads/.gitkeep
+/logs/*.log
