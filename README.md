@@ -59,7 +59,7 @@ El sistema utiliza un esquema de bases de datos separadas para optimizar la segu
 
 ### 5. Microservicio de IA
 El sistema requiere que el microservicio de Python esté ejecutándose (usualmente en el **puerto 8000**) para habilitar las funciones de análisis estadístico y lógica predictiva.
-* Para más detalles, consulta: `guia_microservicio_fastapi.md`.
+* El microservicio aun esta en fase de implementacion.
 
 ---
 
