@@ -71,4 +71,4 @@ Para documentación técnica avanzada sobre:
 * Seguridad mediante **JWT HttpOnly**.
 * Estructura del **Core** del sistema.
 
-📖 Lee la [Guía de Arquitectura de DIRPOLES](guia_architectura_dirpoles.md).
+📖 Lee la [Guía de Arquitectura de DIRPOLES](guia_arquitectura_dirpoles.md).
