@@ -5,7 +5,7 @@ use App\Core\JwtHandler;
 
 // ==================== MIDDLEWARE GLOBAL ====================
 Router::antes('ALL', '.*', function () {
-    $rutasPublicas = ['', 'login', 'iniciar_sesion', 'error', 'logout'];
+    $rutasPublicas = ['', 'login', 'iniciar_sesion', 'error', 'logout', 'api/movil'];
 
     // Obtener ruta solicitada
     $rutaSolicitada = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -52,27 +52,27 @@ Router::antes('ALL', '.*', function () {
     if ($validacion['estado'] !== 'exito') {
         // Token inválido, expirado o no proporcionado
         error_log("Fallo de validación JWT para ruta: " . $rutaActual . " - Razon: " . ($validacion['mensaje'] ?? 'Sin mensaje'));
-        
+
         // Limpiar acceso de sesión (mantenemos la sesión activa solo para mostrar el mensaje en el login)
         unset($_SESSION['id_empleado']);
         unset($_SESSION['nombre']);
-        
+
         // Limpiar cookie de JWT
         setcookie('jwt_token', '', time() - 3600, '/');
-        
+
         redirigirLogin('Error de validación de seguridad (JWT). Por favor, inicie sesión de nuevo.', 'Error de Seguridad');
     }
 
     // 5. INTEGRIDAD DE DATOS (Sesión vs JWT)
     if ($validacion['data']['id_empleado'] != $_SESSION['id_empleado']) {
         error_log("Discrepancia detectada: JWT id_empleado (" . $validacion['data']['id_empleado'] . ") vs SESIÓN id_empleado (" . $_SESSION['id_empleado'] . ")");
-        
+
         // Limpiar acceso
         unset($_SESSION['id_empleado']);
         unset($_SESSION['nombre']);
 
         setcookie('jwt_token', '', time() - 3600, '/');
-        
+
         redirigirLogin('Se ha detectado una inconsistencia en su sesión.', 'Fallo de Integridad');
     }
 });
@@ -122,6 +122,7 @@ Router::get('logout', function () {
     load_controller('loginController.php');
     cerrar_sesion();
 });
+
 
 // ==================== RUTA DE INICIO (protegida) ====================
 Router::get('inicio', function () {

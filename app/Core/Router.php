@@ -49,6 +49,13 @@ class Router {
     }
 
     /**
+     * Registrar ruta OPTIONS (necesario para CORS pre-flight)
+     */
+    public static function options($patron, $manejador) {
+        self::agregarRuta('OPTIONS', $patron, $manejador);
+    }
+
+    /**
      * Agregar una ruta a la colección
      */
     private static function agregarRuta($metodo, $patron, $manejador) {
