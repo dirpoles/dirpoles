@@ -1,6 +1,10 @@
 <?php
 
 use App\Models\loginModel;
+use App\Models\BeneficiarioModel;
+use App\Models\PermisosModel;
+use App\Models\BitacoraModel;
+use App\Models\NotificacionesModel;
 use App\Core\JwtHandler;
 
 /**
@@ -46,6 +50,14 @@ function manejarPeticionMovil()
 
         case 'me':
             movilGetEmpleado($datos);
+            break;
+
+        case 'obtener_pnf':
+            obtener_PNF();
+            break;
+            
+        case 'registrar_beneficiario':
+            movilRegistrarBeneficiario($datos);
             break;
 
         // Aquí podrás agregar más acciones en el futuro:
@@ -214,3 +226,158 @@ function movilGetEmpleado(array $datos)
         exit();
     }
 }
+
+/**
+ * Helper: Verifica el token JWT enviado en el header
+ * Devuelve los datos del empleado si es válido o termina la ejecución si no.
+ */
+function verificarTokenMovil()
+{
+    $headers = function_exists('getallheaders') ? getallheaders() : [];
+    
+    $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+
+    if (!$authHeader || !preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+        http_response_code(401);
+        echo json_encode(['estado' => 'error', 'mensaje' => 'Sesión expirada o inválida.']);
+        exit();
+    }
+
+    $jwtHandler = new JwtHandler();
+    $jwtHandler->__set('token', $matches[1]);
+    $validacion = $jwtHandler->manejarAccion('validar');
+
+    if ($validacion['estado'] !== 'exito') {
+        http_response_code(401);
+        echo json_encode(['estado' => 'error', 'mensaje' => 'Token inválido o expirado.']);
+        exit();
+    }
+
+    return (array) $validacion['data'];
+}
+
+/**
+ * Acción: registrar_beneficiario
+ */
+function movilRegistrarBeneficiario(array $datos)
+{
+    // 1. Verificar Identidad
+    $empleado = verificarTokenMovil();
+    $id_empleado = $empleado['id_empleado'];
+    $id_tipo_empleado = $empleado['id_tipo_empleado'];
+
+    // Simular sesión para compatibilidad con Modelos
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    $_SESSION['id_empleado'] = $id_empleado;
+    $_SESSION['nombre'] = $empleado['nombre'];
+    $_SESSION['id_tipo_empleado'] = $id_tipo_empleado;
+
+    try {
+        // 2. Verificar Permisos
+        $permisos = new PermisosModel();
+        $permisos->__set('Modulo', 'Beneficiarios');
+        $permisos->__set('Permiso', 'Crear');
+        $permisos->__set('Rol', $id_tipo_empleado);
+
+        if (!$permisos->manejarAccion('Verificar')) {
+            throw new Exception('No tienes permiso para registrar beneficiarios.');
+        }
+
+        // 3. Sanitizar Datos
+        $nombres = htmlspecialchars(trim($datos['nombres'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $apellidos = htmlspecialchars(trim($datos['apellidos'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $tipo_cedula = htmlspecialchars(trim($datos['tipo_cedula'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $cedula = htmlspecialchars(trim($datos['cedula'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $correo = filter_var($datos['correo'] ?? '', FILTER_SANITIZE_EMAIL);
+        $telefono = htmlspecialchars(trim($datos['telefono'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $fecha_nac = htmlspecialchars(trim($datos['fecha_nac'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $direccion = htmlspecialchars(trim($datos['direccion'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $genero = htmlspecialchars(trim($datos['genero'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $id_pnf = htmlspecialchars(trim($datos['id_pnf'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $seccion = htmlspecialchars(trim($datos['seccion'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+        // Validar campos obligatorios
+        if (empty($nombres) || empty($cedula) || empty($id_pnf)) {
+            throw new Exception('Faltan datos obligatorios para el registro.');
+        }
+
+        // 4. Registrar en BD
+        $modelo = new BeneficiarioModel();
+        $beneficiarioData = [
+            'nombres' => $nombres,
+            'apellidos' => $apellidos,
+            'tipo_cedula' => $tipo_cedula,
+            'cedula' => $cedula,
+            'correo' => $correo,
+            'telefono' => $telefono,
+            'fecha_nac' => $fecha_nac,
+            'direccion' => $direccion,
+            'genero' => $genero,
+            'id_pnf' => $id_pnf,
+            'seccion' => $seccion,
+            'estatus' => 1
+        ];
+
+        foreach ($beneficiarioData as $attr => $val) {
+            $modelo->__set($attr, $val);
+        }
+
+        $registro = $modelo->manejarAccion('registrar_beneficiario');
+        
+        if ($registro['exito'] !== true) {
+            throw new Exception($registro['mensaje'] ?? 'Error al registrar en la base de datos.');
+        }
+
+        // 5. Bitácora
+        $bitacora = new BitacoraModel();
+        $bitacora->__set('id_empleado', $id_empleado);
+        $bitacora->__set('modulo', 'Beneficiarios');
+        $bitacora->__set('accion', 'Registro');
+        $bitacora->__set('descripcion', "El empleado {$empleado['nombre']} registró desde la App al beneficiario: $nombres ($tipo_cedula-$cedula)");
+        $bitacora->manejarAccion('registrar_bitacora');
+
+        // 6. Notificación
+        $notificacion = new NotificacionesModel();
+        $notificacion->__set('titulo', 'Registro de Beneficiario (Móvil)');
+        $notificacion->__set('url', 'consultar_beneficiarios');
+        $notificacion->__set('tipo', 'beneficiario');
+        $notificacion->__set('id_emisor', $id_empleado);
+        $notificacion->__set('id_receptor', 1); // Admin
+        $notificacion->__set('leido', 0);
+        $notificacion->manejarAccion('crear_notificacion');
+
+        echo json_encode([
+            'estado' => 'exito',
+            'mensaje' => 'Beneficiario registrado exitosamente.'
+        ]);
+
+    } catch (Exception $e) {
+        http_response_code(400);
+        echo json_encode([
+            'estado' => 'error',
+            'mensaje' => $e->getMessage()
+        ]);
+    }
+    exit();
+}
+
+/**
+ * Acción: obtener_pnf
+ * Devuelve la lista de PNFs disponibles.
+ */
+function obtener_PNF()
+{
+    $modelo = new BeneficiarioModel();
+    try {
+        $pnfs = $modelo->manejarAccion('obtener_pnf');
+        http_response_code(200);
+        echo json_encode(['estado' => 'exito', 'datos' => $pnfs]);
+    } catch (\Throwable $th) {
+        http_response_code(500);
+        echo json_encode([
+            'estado' => 'error',
+            'mensaje' => 'Error al obtener PNFs.'
+        ]);
+        exit();
+    }
+}
