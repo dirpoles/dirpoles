@@ -60,11 +60,17 @@ function manejarPeticionMovil()
             movilRegistrarBeneficiario($datos);
             break;
 
+        case 'consultar_beneficiarios':
+            consultar_beneficiarios($datos);
+            break;
+
         // Aquí podrás agregar más acciones en el futuro:
         // case 'beneficiarios': movilBeneficiarios($datos); break;
         // case 'citas':         movilCitas($datos); break;
         // case 'inventario':    movilInventario($datos); break;
-        // case 'logout':        movilLogout($datos); break;
+        case 'logout':
+            movilLogout($datos);
+            break;
 
         default:
             http_response_code(404);
@@ -380,4 +386,55 @@ function obtener_PNF()
         ]);
         exit();
     }
-}
+}
+
+function consultar_beneficiarios($datos){
+    $modelo = new BeneficiarioModel();
+    try {
+        $beneficiarios = $modelo->manejarAccion('consultar_beneficiarios');
+        http_response_code(200);
+        echo json_encode(['estado' => 'exito', 'datos' => $beneficiarios]);
+    } catch (\Throwable $th) {
+        http_response_code(500);
+        echo json_encode([
+            'estado' => 'error',
+            'mensaje' => 'Error al obtener beneficiarios.'
+        ]);
+        exit();
+    }
+}
+
+/**
+ * Acción: logout
+ * Registra la salida en la bitácora y confirma el cierre.
+ */
+function movilLogout(array $datos)
+{
+    try {
+        // Verificar identidad para saber quién está saliendo
+        $empleado = verificarTokenMovil();
+
+        // Registrar en bitácora
+        $bitacora = new BitacoraModel();
+        $bitacora->__set('id_empleado', $empleado['id_empleado']);
+        $bitacora->__set('modulo', 'Seguridad');
+        $bitacora->__set('accion', 'Logout');
+        $bitacora->__set('descripcion', "El empleado {$empleado['nombre']} cerró sesión desde la App.");
+        $bitacora->manejarAccion('registrar_bitacora');
+
+        http_response_code(200);
+        echo json_encode([
+            'estado' => 'exito',
+            'mensaje' => 'Sesión cerrada correctamente.'
+        ]);
+    } catch (\Throwable $th) {
+        // Si el token ya expiró o es inválido, igual devolvemos éxito 
+        // para que la app proceda a limpiar los datos locales.
+        http_response_code(200);
+        echo json_encode([
+            'estado' => 'exito',
+            'mensaje' => 'Sesión finalizada.'
+        ]);
+    }
+    exit();
+}
