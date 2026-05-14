@@ -151,6 +151,9 @@ class BeneficiarioModel extends BusinessModel{
             case 'eliminar_beneficiario':
                 return $this->eliminar_beneficiario();
 
+            case 'desactivar_beneficiario':
+                return $this->desactivar_beneficiario();
+
 
             default:
                 throw new Exception('Acción no permitida');
@@ -576,6 +579,53 @@ class BeneficiarioModel extends BusinessModel{
         } catch (Throwable $e){
             error_log("Error validando beneficiario en referencias: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public function verificar_duplicado($campo, $valor, $id_excluir = null) {
+        try {
+            // Validar que el campo sea uno de los permitidos para evitar SQL Injection
+            $camposPermitidos = ['cedula', 'correo', 'telefono'];
+            if (!in_array($campo, $camposPermitidos)) {
+                return false;
+            }
+
+            $query = "SELECT id_beneficiario FROM beneficiario WHERE $campo = :valor";
+            if ($id_excluir) {
+                $query .= " AND id_beneficiario != :id_excluir";
+            }
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':valor', $valor, PDO::PARAM_STR);
+            if ($id_excluir) {
+                $stmt->bindValue(':id_excluir', $id_excluir, PDO::PARAM_INT);
+            }
+            
+            $stmt->execute();
+            return $stmt->rowCount() > 0; // True si existe (duplicado)
+        } catch (Throwable $e) {
+            error_log("Error en verificar_duplicado: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    private function desactivar_beneficiario(){
+        try {
+            $query = "UPDATE beneficiario SET estatus = 0 WHERE id_beneficiario = :id_beneficiario";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id_beneficiario', $this->__get('id_beneficiario'), PDO::PARAM_INT);
+            $ejecucion = $stmt->execute();
+            
+            return [
+                'exito' => $ejecucion,
+                'mensaje' => $ejecucion ? 'Beneficiario desactivado correctamente' : 'No se pudo actualizar el estatus'
+            ];
+        } catch (Throwable $e) {
+            error_log("Error en desactivar_beneficiario: " . $e->getMessage());
+            return [
+                'exito' => false,
+                'error' => $e->getMessage()
+            ];
         }
     }
 }

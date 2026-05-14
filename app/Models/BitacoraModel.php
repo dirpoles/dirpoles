@@ -25,7 +25,7 @@ class BitacoraModel extends SecurityModel {
                 break;
 
             case 'accion':
-                $acciones_validas = ['Registro', 'Lectura', 'Actualización', 'Eliminación', 'Inicio de sesión', 'Cierre de sesión'];
+                $acciones_validas = ['Registro', 'Lectura', 'Actualización', 'Eliminación','Desactivación','Activación', 'Inicio de sesión', 'Cierre de sesión'];
                 if (!in_array($valor, $acciones_validas)) {
                     throw new InvalidArgumentException("Acción inválida. Debe ser una de: " . implode(', ', $acciones_validas));
                 }
