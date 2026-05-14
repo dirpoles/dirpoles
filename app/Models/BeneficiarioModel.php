@@ -623,10 +623,32 @@ class BeneficiarioModel extends BusinessModel
                 return false;
             }
 
-            $query = "SELECT id_beneficiario FROM beneficiario WHERE $campo = :valor";
-            if ($id_excluir) {
-                $query .= " AND id_beneficiario != :id_excluir";
-            }
+            // Mapeo de nombres de columna para proveedores (usa num_documento en lugar de cedula)
+            $campoProveedor = ($campo === 'cedula') ? 'num_documento' : $campo;
+            
+            // Usamos la constante definida en config.php para la base de datos de seguridad
+            $db_security = DB_SECURITY_NAME;
+
+            // Construir la consulta con UNION para verificar en las 3 tablas
+            // Solo aplicamos id_excluir a la tabla beneficiario porque es de donde proviene el registro actual
+            $query = "
+                SELECT 1 FROM (
+                    -- Verificar en beneficiario
+                    SELECT $campo as valor_campo FROM beneficiario
+                    WHERE $campo = :valor " . ($id_excluir ? " AND id_beneficiario != :id_excluir" : "") . "
+                    
+                    UNION ALL
+                    
+                    -- Verificar en empleado (base de datos de seguridad)
+                    SELECT $campo as valor_campo FROM $db_security.empleado
+                    WHERE $campo = :valor
+                    
+                    UNION ALL
+                    
+                    -- Verificar en proveedores
+                    SELECT $campoProveedor as valor_campo FROM proveedores
+                    WHERE $campoProveedor = :valor
+                ) as consulta_duplicados LIMIT 1";
 
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':valor', $valor, PDO::PARAM_STR);
@@ -635,7 +657,7 @@ class BeneficiarioModel extends BusinessModel
             }
 
             $stmt->execute();
-            return $stmt->rowCount() > 0; // True si existe (duplicado)
+            return $stmt->rowCount() > 0; // True si existe en alguna de las tablas
         } catch (Throwable $e) {
             error_log("Error en verificar_duplicado: " . $e->getMessage());
             return false;
