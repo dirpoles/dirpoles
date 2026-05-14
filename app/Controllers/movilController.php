@@ -39,33 +39,6 @@ function manejarPeticionMovil()
     $modulo = $datos['modulo'] ?? null;
     $accion = $datos['accion'];
 
-    // --- LÓGICA DE COMPATIBILIDAD (Fallback) ---
-    // Si la app móvil actual no envía el parámetro "modulo", 
-    // inferimos el módulo basándonos en la "accion" solicitada.
-    if (!$modulo) {
-        $acciones_beneficiarios = [
-            'obtener_pnf', 
-            'registrar_beneficiario', 
-            'consultar_beneficiarios', 
-            'actualizar_beneficiario', 
-            'desactivar_beneficiario', 
-            'validar_duplicado'
-        ];
-        $acciones_general = [
-            'login', 
-            'me', 
-            'logout'
-        ];
-
-        if (in_array($accion, $acciones_beneficiarios)) {
-            $modulo = 'beneficiarios';
-        } elseif (in_array($accion, $acciones_general)) {
-            $modulo = 'general';
-        } else {
-            $modulo = 'general'; // Default fallback
-        }
-    }
-
     // 4. Incluir el helper de Auth para que esté disponible globalmente
     // ya que verificarTokenMovil() es usado por varios módulos.
     require_once __DIR__ . '/Movil/General.php';
@@ -82,11 +55,10 @@ function manejarPeticionMovil()
             procesarGeneral($datos);
             break;
 
-        // Aquí agregarás los futuros módulos:
-        // case 'citas':
-        //     require_once __DIR__ . '/Movil/Citas.php';
-        //     procesarCitas($datos);
-        //     break;
+        case 'citas':
+            require_once __DIR__ . '/Movil/Citas.php';
+            procesarCitas($datos);
+            break;
 
         default:
             http_response_code(404);
