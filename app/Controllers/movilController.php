@@ -55,7 +55,7 @@ function manejarPeticionMovil()
         case 'obtener_pnf':
             obtener_PNF();
             break;
-            
+
         case 'registrar_beneficiario':
             movilRegistrarBeneficiario($datos);
             break;
@@ -63,7 +63,7 @@ function manejarPeticionMovil()
         case 'consultar_beneficiarios':
             consultar_beneficiarios($datos);
             break;
-            
+
         case 'actualizar_beneficiario':
             movilActualizarBeneficiario($datos);
             break;
@@ -252,7 +252,7 @@ function movilGetEmpleado(array $datos)
 function verificarTokenMovil()
 {
     $headers = function_exists('getallheaders') ? getallheaders() : [];
-    
+
     $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? $_SERVER['HTTP_AUTHORIZATION'] ?? null;
 
     if (!$authHeader || !preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
@@ -285,7 +285,8 @@ function movilRegistrarBeneficiario(array $datos)
     $id_tipo_empleado = $empleado['id_tipo_empleado'];
 
     // Simular sesión para compatibilidad con Modelos
-    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (session_status() === PHP_SESSION_NONE)
+        session_start();
     $_SESSION['id_empleado'] = $id_empleado;
     $_SESSION['nombre'] = $empleado['nombre'];
     $_SESSION['id_tipo_empleado'] = $id_tipo_empleado;
@@ -341,7 +342,7 @@ function movilRegistrarBeneficiario(array $datos)
         }
 
         $registro = $modelo->manejarAccion('registrar_beneficiario');
-        
+
         if ($registro['exito'] !== true) {
             throw new Exception($registro['mensaje'] ?? 'Error al registrar en la base de datos.');
         }
@@ -400,7 +401,8 @@ function obtener_PNF()
     }
 }
 
-function consultar_beneficiarios($datos){
+function consultar_beneficiarios($datos)
+{
     $modelo = new BeneficiarioModel();
     try {
         $beneficiarios = $modelo->manejarAccion('consultar_beneficiarios');
@@ -462,7 +464,8 @@ function movilActualizarBeneficiario(array $datos)
     $id_tipo_empleado = $empleado['id_tipo_empleado'];
 
     // Simular sesión para compatibilidad con Modelos
-    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (session_status() === PHP_SESSION_NONE)
+        session_start();
     $_SESSION['id_empleado'] = $id_empleado;
     $_SESSION['nombre'] = $empleado['nombre'];
     $_SESSION['id_tipo_empleado'] = $id_tipo_empleado;
@@ -521,7 +524,7 @@ function movilActualizarBeneficiario(array $datos)
         }
 
         $actualizacion = $modelo->manejarAccion('actualizar_beneficiario');
-        
+
         if ($actualizacion['exito'] !== true) {
             throw new Exception($actualizacion['error'] ?? $actualizacion['mensaje'] ?? 'Error al actualizar en la base de datos.');
         }
@@ -564,7 +567,7 @@ function movilDesactivarBeneficiario(array $datos)
 
         $modelo = new BeneficiarioModel();
         $modelo->__set('id_beneficiario', $id_beneficiario);
-        
+
         // Ejecutamos la acción específica en el modelo
         $resultado = $modelo->manejarAccion('desactivar_beneficiario');
 
@@ -605,7 +608,10 @@ function movilValidarDuplicado(array $datos)
         }
 
         $modelo = new BeneficiarioModel();
-        $existe = $modelo->verificar_duplicado($campo, $valor, $id_excluir);
+        $modelo->__set('campo', $campo);
+        $modelo->__set('valor', $valor);
+        $modelo->__set('id_excluir', $id_excluir);
+        $existe = $modelo->manejarAccion('verificar_duplicado');
 
         echo json_encode([
             'estado' => 'exito',
