@@ -9,7 +9,7 @@ function procesarCitas(array $datos)
 {
     switch ($datos['accion']) {
         case 'consultar_citas':
-            movilConsultarCitas();
+            movilConsultarCitas($datos);
             break;
 
         default:
@@ -22,9 +22,19 @@ function procesarCitas(array $datos)
     }
 }
 
-function movilConsultarCitas()
+function movilConsultarCitas(array $datos)
 {
+
     $modelo = new CitasModel();
+
+    // Inyectar los datos del empleado enviados directamente desde la App
+    if (isset($datos['id_empleado'])) {
+        $modelo->__set('id_empleado', $datos['id_empleado']);
+    }
+    if (isset($datos['tipo_empleado'])) {
+        $modelo->__set('tipo_empleado', $datos['tipo_empleado']);
+    }
+
     try {
         $citas = $modelo->manejarAccion('consultar_citas');
         http_response_code(200);
@@ -38,4 +48,3 @@ function movilConsultarCitas()
         exit();
     }
 }
-
