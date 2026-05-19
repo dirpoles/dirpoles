@@ -60,6 +60,11 @@ function manejarPeticionMovil()
             procesarCitas($datos);
             break;
 
+        case 'inventario':
+            require_once __DIR__ . '/Movil/Inventario.php';
+            procesarInventario($datos);
+            break;
+
         default:
             http_response_code(404);
             echo json_encode([
