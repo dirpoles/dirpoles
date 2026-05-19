@@ -51,7 +51,6 @@ function manejarPeticionMovil()
             break;
 
         case 'general':
-            // General.php ya fue incluido arriba
             procesarGeneral($datos);
             break;
 
@@ -63,6 +62,16 @@ function manejarPeticionMovil()
         case 'inventario':
             require_once __DIR__ . '/Movil/Inventario.php';
             procesarInventario($datos);
+            break;
+
+        case 'perfil':
+            require_once __DIR__ . '/Movil/Perfil.php';
+            procesarPerfil($datos);
+            break;
+
+        case 'reportes':
+            require_once __DIR__ . '/Movil/Reportes.php';
+            procesarReportes($datos);
             break;
 
         default:
