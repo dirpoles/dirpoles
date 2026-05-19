@@ -169,7 +169,6 @@ function movilRegistrarBeneficiario(array $datos)
             'estado' => 'exito',
             'mensaje' => 'Beneficiario registrado exitosamente.'
         ]);
-
     } catch (Exception $e) {
         http_response_code(400);
         echo json_encode([
@@ -268,7 +267,6 @@ function movilActualizarBeneficiario(array $datos)
             'estado' => 'exito',
             'mensaje' => 'Beneficiario actualizado exitosamente.'
         ]);
-
     } catch (Exception $e) {
         http_response_code(400);
         echo json_encode([
@@ -311,7 +309,6 @@ function movilDesactivarBeneficiario(array $datos)
         } else {
             throw new Exception($resultado['error'] ?? 'Error al desactivar en BD.');
         }
-
     } catch (\Throwable $e) {
         http_response_code(400);
         echo json_encode(['estado' => 'error', 'mensaje' => $e->getMessage()]);
@@ -345,7 +342,6 @@ function movilValidarDuplicado(array $datos)
             'existe' => $existe,
             'mensaje' => $existe ? "Este {$campo} ya está registrado." : "Disponible."
         ]);
-
     } catch (\Throwable $e) {
         http_response_code(400);
         echo json_encode(['estado' => 'error', 'mensaje' => $e->getMessage()]);
