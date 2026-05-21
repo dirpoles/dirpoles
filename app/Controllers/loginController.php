@@ -66,7 +66,22 @@ function iniciar_sesion()
 
     try {
         $correo = filter_input(INPUT_POST, 'correo', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $password = $_POST['password'] ?? '';
+
+        // --- Descifrado RSA de la contraseña ---
+        $keyPath = BASE_PATH . 'app/Config/Keys/login_private.pem';
+        if (!file_exists($keyPath)) {
+            throw new Exception("Llave privada de login no encontrada.");
+        }
+        $privateKey = file_get_contents($keyPath);
+        
+        $encryptedPass = base64_decode($password);
+        $decryptedPass = '';
+        if (!openssl_private_decrypt($encryptedPass, $decryptedPass, $privateKey)) {
+            throw new Exception("Fallo al descifrar la contraseña.");
+        }
+        $password = $decryptedPass; // Reemplazamos la cifrada por la cruda
+        // ---------------------------------------
 
         $usuario = [
             'correo' => $correo,

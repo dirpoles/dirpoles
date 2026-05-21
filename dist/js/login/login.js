@@ -150,9 +150,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 elements.submitBtn.innerHTML = 'Ingresando...';
             }
 
+            let passwordValue = elements.password.value.trim();
+
+            if (window.LOGIN_PUBLIC_KEY) {
+                try {
+                    const encrypt = new JSEncrypt();
+                    encrypt.setPublicKey(window.LOGIN_PUBLIC_KEY);
+                    const encrypted = encrypt.encrypt(passwordValue);
+                    if (!encrypted) {
+                        throw new Error("Fallo al cifrar datos.");
+                    }
+                    passwordValue = encrypted;
+                } catch (rsaErr) {
+                    console.error("Error de cifrado asimétrico:", rsaErr);
+                    if (typeof Swal !== 'undefined' && Swal.fire) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de Seguridad',
+                            text: 'No se pudo procesar la solicitud de forma segura.'
+                        });
+                    }
+                    return;
+                }
+            }
+
             const payload = new URLSearchParams();
             payload.append('correo', elements.correo.value.trim());
-            payload.append('password', elements.password.value.trim());
+            payload.append('password', passwordValue);
 
             const response = await fetch(form.action, {
                 method: 'POST',

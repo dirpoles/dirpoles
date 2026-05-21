@@ -10,17 +10,8 @@
 
 function manejarPeticionMovil()
 {
-    // 1. Cabeceras CORS para permitir peticiones desde la app
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization, Accept');
+    // 1. Content-Type (CORS ahora es manejado globalmente en index.php)
     header('Content-Type: application/json; charset=utf-8');
-
-    // Pre-flight OPTIONS (Axios manda esto antes de cada petición real)
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        http_response_code(200);
-        exit;
-    }
 
     // 2. Leer el JSON que manda la app
     $rawBody = file_get_contents('php://input');

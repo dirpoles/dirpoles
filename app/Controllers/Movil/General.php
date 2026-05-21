@@ -42,6 +42,32 @@ function movilLogin(array $datos)
         ]);
         exit();
     }
+    
+    // --- Descifrado RSA de la contraseña ---
+    try {
+        $keyPath = BASE_PATH . 'app/Config/Keys/login_private.pem';
+        if (!file_exists($keyPath)) {
+            throw new \Exception("Llave privada de login no encontrada.");
+        }
+        $privateKey = file_get_contents($keyPath);
+        
+        $encryptedPass = base64_decode($password);
+        $decryptedPass = '';
+        if (!openssl_private_decrypt($encryptedPass, $decryptedPass, $privateKey)) {
+            throw new \Exception("Fallo al descifrar la contraseña.");
+        }
+        $password = $decryptedPass; // Reemplazamos la cifrada por la cruda
+    } catch (\Throwable $e) {
+        error_log('[movilController] Error RSA: ' . $e->getMessage());
+        http_response_code(400);
+        echo json_encode([
+            'estado' => 'error',
+            'mensaje' => 'Error de seguridad al procesar credenciales.'
+        ]);
+        exit();
+    }
+    // ---------------------------------------
+
     try {
         $modelo = new loginModel();
         $modelo->__set('correo', $correo);

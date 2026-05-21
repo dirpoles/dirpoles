@@ -70,7 +70,15 @@ class JwtHandler
                 'data' => $this->__get('data') ?? []          // Datos del usuario (id, nombre, etc)
             ];
 
-            $jwt = JWT::encode($payload, JWT_SECRET, 'HS256');
+            // 1. Leer llave privada RSA
+            $keyPath = BASE_PATH . 'app/Config/Keys/jwt_private.pem';
+            if (!file_exists($keyPath)) {
+                throw new Exception("Llave privada JWT no encontrada.");
+            }
+            $privateKey = file_get_contents($keyPath);
+
+            // 2. Firmar con RS256
+            $jwt = JWT::encode($payload, $privateKey, 'RS256');
 
             return [
                 'estado' => 'exito',
@@ -97,7 +105,15 @@ class JwtHandler
                 return ['estado' => 'error', 'mensaje' => 'Token no proporcionado'];
             }
 
-            $decoded = JWT::decode($token, new Key(JWT_SECRET, 'HS256'));
+            // 1. Leer llave pública RSA
+            $keyPath = BASE_PATH . 'app/Config/Keys/jwt_public.pem';
+            if (!file_exists($keyPath)) {
+                throw new Exception("Llave pública JWT no encontrada.");
+            }
+            $publicKey = file_get_contents($keyPath);
+
+            // 2. Validar firma con RS256
+            $decoded = JWT::decode($token, new Key($publicKey, 'RS256'));
 
             return [
                 'estado' => 'exito',

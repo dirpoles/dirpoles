@@ -27,8 +27,8 @@ include "app/Views/template/head.php"; ?>
                                     <span class="input-group-text input-icon">
                                         <i class="fa-solid fa-circle-user"></i>
                                     </span>
-                                    <input type="text" name="correo" id="correo" autocomplete="email" class="form-control form-control-lg"
-                                        placeholder="Correo Electrónico">
+                                    <input type="text" name="correo" id="correo" autocomplete="email"
+                                        class="form-control form-control-lg" placeholder="Correo Electrónico">
                                 </div>
                                 <small id="correoError" class="text-danger mt-1 d-block"></small>
                             </div>
@@ -40,9 +40,11 @@ include "app/Views/template/head.php"; ?>
                                     <span class="input-group-text input-icon">
                                         <i class="fa-solid fa-lock"></i>
                                     </span>
-                                    <input type="password" name="password" id="password" class="form-control form-control-lg"
-                                        placeholder="Contraseña" maxlength="8" autocomplete="current-password">
-                                    <span class="input-group-text bg-white border-start-0 toggle-password-btn" id="btnTogglePassword">
+                                    <input type="password" name="password" id="password"
+                                        class="form-control form-control-lg" placeholder="Contraseña" maxlength="8"
+                                        autocomplete="current-password">
+                                    <span class="input-group-text bg-white border-start-0 toggle-password-btn"
+                                        id="btnTogglePassword">
                                         <i class="fa-solid fa-eye" id="icon-eye"></i>
                                         <i class="fa-solid fa-eye-slash d-none" id="icon-eye-slash"></i>
                                     </span>
@@ -71,6 +73,21 @@ include "app/Views/template/head.php"; ?>
     </div>
 
     <?php include 'template/script.php'; ?>
+
+    <!-- Librería JSEncrypt para cifrado asimétrico en cliente -->
+    <script src="<?= BASE_URL ?>plugins/jsencrypt/jsencrypt.min.js"></script>
+
+    <?php
+    $publicKeyPath = BASE_PATH . 'app/Config/Keys/login_public.pem';
+    $loginPublicKey = '';
+    if (file_exists($publicKeyPath)) {
+        $loginPublicKey = file_get_contents($publicKeyPath);
+    }
+    ?>
+    <script>
+        window.LOGIN_PUBLIC_KEY = `<?= trim($loginPublicKey) ?>`;
+    </script>
+
     <script src="<?= BASE_URL ?>dist/js/login/login.js?v=<?= time() ?>" defer></script>
 
     <?php if (!empty($_SESSION['mensaje_redireccion'])):
@@ -79,7 +96,7 @@ include "app/Views/template/head.php"; ?>
         unset($_SESSION['mensaje_redireccion']);
         // Asegurarnos de escapar bien la cadena JSON
         $jsMsg = json_encode($msg, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-    ?>
+        ?>
         <script>
             // objeto global, usado por login.js
             window.REDIRECT_MESSAGE = <?= $jsMsg ?>;
@@ -110,11 +127,11 @@ include "app/Views/template/head.php"; ?>
     </style>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const togglePassword = document.querySelector('#btnTogglePassword');
             const password = document.querySelector('#password');
 
-            togglePassword.addEventListener('click', function() {
+            togglePassword.addEventListener('click', function () {
                 // 1. Alternar el tipo de input
                 const isPassword = password.getAttribute('type') === 'password';
                 password.setAttribute('type', isPassword ? 'text' : 'password');
