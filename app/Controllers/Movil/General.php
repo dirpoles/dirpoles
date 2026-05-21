@@ -32,6 +32,7 @@ function procesarGeneral(array $datos)
  */
 function movilLogin(array $datos)
 {
+    $bitacora = new BitacoraModel();
     $correo = trim($datos['correo'] ?? '');
     $password = trim($datos['password'] ?? '');
     if (empty($correo) || empty($password)) {
@@ -125,6 +126,23 @@ function movilLogin(array $datos)
                 'tipo_empleado' => $usuario['nombre_tipo'],
             ]
         ]);
+
+        //Registrar en la bitácora
+        $bitacora_data = [
+            'id_empleado' => $usuario['id_empleado'],
+            'modulo' => 'Login',
+            'accion' => 'Inicio de sesión',
+            'descripcion' => "El empleado " . $usuario['nombre'] . " ha iniciado sesión desde la aplicación móvil.",
+            'fecha' => date('Y-m-d H:i:s')
+        ];
+        foreach ($bitacora_data as $atributo => $valor) {
+            $bitacora->__set($atributo, $valor);
+        }
+
+        $bitacora_result = $bitacora->manejarAccion('registrar_bitacora');
+        if (isset($bitacora_result['exito']) && !$bitacora_result['exito']) {
+            error_log("Error al registrar en la bitácora: " . $bitacora_result['mensaje']);
+        }
         exit();
     } catch (\Throwable $e) {
         error_log('[movilController] Error en login: ' . $e->getMessage());
