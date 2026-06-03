@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-02-2026 a las 14:43:45
+-- Tiempo de generación: 03-06-2026 a las 20:33:37
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -540,7 +540,45 @@ INSERT INTO `bitacora` (`id_bitacora`, `id_empleado`, `modulo`, `accion`, `descr
 (494, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-02-26 14:48:16'),
 (495, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-02-26 17:27:21'),
 (496, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-02-26 22:39:53'),
-(497, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-02-26 23:02:59');
+(497, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-02-26 23:02:59'),
+(498, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-05-19 13:37:05'),
+(499, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-05-19 13:37:11'),
+(500, 1, 'Inventario Medico', 'Registro', 'El empleado Roberth registró desde la App el insumo: Confortex en el inventario médico.', '2026-05-19 15:40:54'),
+(501, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-05-19 15:41:13'),
+(502, 1, 'Inventario Medico', 'Registro', 'El empleado Roberth actualizó desde la App el insumo: Confortex en el inventario médico.', '2026-05-19 15:48:57'),
+(503, 1, 'Perfil', 'Actualización', 'El empleado Roberth actualizó sus datos de perfil personal desde la aplicación móvil.', '2026-05-19 17:41:51'),
+(504, 1, 'Reportes', 'Lectura', 'El empleado Roberth consultó los reportes estadísticos consolidados desde la aplicación móvil.', '2026-05-19 17:50:46'),
+(505, 1, 'Reportes', 'Lectura', 'El empleado Roberth consultó los reportes estadísticos consolidados desde la aplicación móvil.', '2026-05-19 17:58:16'),
+(506, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-05-19 18:44:28'),
+(507, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-05-21 14:50:03'),
+(508, 1, 'Beneficiarios', 'Actualización', 'El empleado Roberth actualizó un dato del beneficiario: Prueba Pruebas (V - 12999292)', '2026-05-21 14:50:20'),
+(509, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-05-21 14:57:57'),
+(510, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-05-21 15:01:04'),
+(511, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-05-21 15:03:31'),
+(512, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-05-21 16:10:10'),
+(513, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión desde la aplicación móvil.', '2026-05-21 16:17:29'),
+(514, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-05-21 16:20:20'),
+(515, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión desde la aplicación móvil.', '2026-05-22 14:36:51'),
+(516, 1, 'Reportes', 'Lectura', 'El empleado Roberth consultó los reportes estadísticos consolidados desde la aplicación móvil.', '2026-05-22 14:37:01'),
+(517, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-05-25 14:53:42'),
+(518, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-05-25 16:12:12'),
+(519, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-05-29 15:55:12'),
+(520, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión desde la aplicación móvil.', '2026-05-29 16:02:15'),
+(521, 1, 'Reportes', 'Lectura', 'El empleado Roberth consultó los reportes estadísticos consolidados desde la aplicación móvil.', '2026-05-29 16:02:46'),
+(522, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-05-29 18:13:54'),
+(523, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-06-01 19:14:58'),
+(524, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-06-01 19:34:08'),
+(525, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-06-02 18:00:58'),
+(526, 1, 'Reportes', 'Lectura', 'Generación de reporte general analizado con IA', '2026-06-02 19:03:15'),
+(527, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-06-02 19:25:54'),
+(528, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-06-03 16:13:22'),
+(529, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-06-03 16:13:46'),
+(530, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-06-03 16:15:34'),
+(531, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-06-03 16:26:41'),
+(532, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-06-03 16:48:50'),
+(533, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-06-03 16:48:56'),
+(534, 1, 'Login', 'Inicio de sesión', 'El empleado Roberth ha iniciado sesión.', '2026-06-03 17:51:28'),
+(535, 1, 'Login', 'Cierre de sesión', 'El empleado Roberth ha cerrado sesión.', '2026-06-03 17:59:10');
 
 -- --------------------------------------------------------
 
@@ -569,7 +607,7 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`id_empleado`, `nombre`, `apellido`, `tipo_cedula`, `cedula`, `correo`, `telefono`, `id_tipo_empleado`, `fecha_nacimiento`, `direccion`, `clave`, `estatus`, `fecha_creacion`) VALUES
-(1, 'Roberth', 'Matos', 'V', '28281433', 'admin@gmail.com', '04129298008', 6, '2002-04-05', 'Calle 53 y 54 con avenida 13', '$2y$10$I7kpYQ.Cju5KWqNkz.VdQ.Pg3PXIKmG./kuCiqMv78c516KPUd7Lq', 1, '2025-04-17'),
+(1, 'Roberth', 'Matos', 'V', '28281433', 'admin@gmail.com', '04129298008', 6, '2002-04-05', 'Calle 53 y 54 con carrera 14', '$2y$10$I7kpYQ.Cju5KWqNkz.VdQ.Pg3PXIKmG./kuCiqMv78c516KPUd7Lq', 1, '2025-04-17'),
 (2, 'Roberth', 'Matos', 'V', '00000000', 'superusuario@gmail.com', '04120000000', 10, '2000-01-01', 'Barquisimeto', '$2y$10$tGVkt2cNpsT6TzaoKeFQWOlI72P/EjuFWHc3bvWUNtUbdKi2etQKK', 1, '2025-11-11'),
 (3, 'Juan', 'Hernandez', 'V', '10999854', 'psicologo@gmail.com', '04161233211', 1, '1994-12-12', 'Barquisimeto', '$2y$10$0WPRA3Y2y.J7OeRAyjrSf.DJwDxo89bkJ21W13svn4FrBxt1ZtkJe', 1, '2025-11-12'),
 (4, 'Fernando', 'Batipsta', 'V', '9625664', 'chofer@gmail.com', '04169421243', 8, '1990-08-05', 'Calle 10 de pueblo nuevo', '$2y$10$ef0sexMYOmmRFhu0I0382.p60XRMargX3ggkdH1l179D9HgIkzDtG', 1, '2025-11-13'),
@@ -743,7 +781,10 @@ INSERT INTO `notificaciones` (`id_notificaciones`, `titulo`, `url`, `tipo`, `fec
 (97, 'Registro de exoneracion', 'consultar_ts', 'diagnostico', '2026-02-18 03:25:28'),
 (98, 'Registro de cita', 'consultar_citas', 'cita', '2026-02-19 01:01:01'),
 (99, 'Registro de exoneracion', 'consultar_ts', 'diagnostico', '2026-02-19 01:02:00'),
-(100, 'Registro de diagnóstico', 'consultar_medicina', 'diagnostico', '2026-02-19 01:10:47');
+(100, 'Registro de diagnóstico', 'consultar_medicina', 'diagnostico', '2026-02-19 01:10:47'),
+(101, 'Registro de insumo (móvil)', 'consultar_inventario_medico', 'inventario', '2026-05-19 15:40:54'),
+(102, 'Actualización de insumo (móvil)', 'consultar_inventario_medico', 'inventario', '2026-05-19 15:48:57'),
+(103, 'Actualización de beneficiario', 'consultar_beneficiarios', 'beneficiario', '2026-05-21 14:50:20');
 
 -- --------------------------------------------------------
 
@@ -783,7 +824,10 @@ INSERT INTO `notificaciones_empleados` (`id_notificaciones_empleados`, `id_notif
 (95, 97, 6, 1, 1),
 (96, 98, 1, 1, 1),
 (97, 99, 1, 1, 1),
-(98, 100, 5, 1, 1);
+(98, 100, 5, 1, 1),
+(99, 101, 1, 1, 0),
+(100, 102, 1, 1, 0),
+(101, 103, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -806,6 +850,19 @@ INSERT INTO `permiso` (`id_permiso`, `clave`, `descripcion`) VALUES
 (2, 'Leer', 'Leer registros'),
 (3, 'Editar', 'Editar registros'),
 (4, 'Eliminar', 'Eliminar registros');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rate_limits`
+--
+
+CREATE TABLE `rate_limits` (
+  `ip_address` varchar(45) NOT NULL,
+  `endpoint` varchar(100) NOT NULL,
+  `tokens_actuales` decimal(10,4) NOT NULL,
+  `ultima_peticion` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1141,6 +1198,12 @@ ALTER TABLE `permiso`
   ADD PRIMARY KEY (`id_permiso`);
 
 --
+-- Indices de la tabla `rate_limits`
+--
+ALTER TABLE `rate_limits`
+  ADD PRIMARY KEY (`ip_address`,`endpoint`);
+
+--
 -- Indices de la tabla `rol_modulo_permiso`
 --
 ALTER TABLE `rol_modulo_permiso`
@@ -1163,7 +1226,7 @@ ALTER TABLE `tipo_empleado`
 -- AUTO_INCREMENT de la tabla `bitacora`
 --
 ALTER TABLE `bitacora`
-  MODIFY `id_bitacora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=498;
+  MODIFY `id_bitacora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=536;
 
 --
 -- AUTO_INCREMENT de la tabla `empleado`
@@ -1181,13 +1244,13 @@ ALTER TABLE `modulo`
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id_notificaciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id_notificaciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT de la tabla `notificaciones_empleados`
 --
 ALTER TABLE `notificaciones_empleados`
-  MODIFY `id_notificaciones_empleados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id_notificaciones_empleados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT de la tabla `permiso`

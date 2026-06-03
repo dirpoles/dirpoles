@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-02-2026 a las 14:43:23
+-- Tiempo de generación: 03-06-2026 a las 20:33:51
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -96,9 +96,9 @@ CREATE TABLE `beneficiario` (
 --
 
 INSERT INTO `beneficiario` (`id_beneficiario`, `id_pnf`, `seccion`, `nombres`, `apellidos`, `tipo_cedula`, `cedula`, `fecha_nac`, `telefono`, `correo`, `genero`, `direccion`, `estatus`, `fecha_creacion`) VALUES
-(1, 6, '3102-B', 'Iris', 'Alvarez', 'V', '12023052', '1974-09-19', '04121234444', 'irisalva19@gmail.com', 'F', 'Carrera 13 con calle 54', 1, '2025-12-28 22:08:44'),
+(1, 6, '3102-B', 'Iris', 'Alvarez', 'V', '12023052', '1974-09-19', '04121234444', 'irisalva19@gmail.com', 'F', 'Carrera 13 con calle 54', 0, '2026-05-28 03:38:59'),
 (2, 1, '4102-B', 'Eustaquio', 'Ramirez', 'V', '12023051', '2000-01-01', '04162948888', 'eustaquio@gmail.com', 'M', 'Barquisimeto', 1, '2025-12-28 22:08:51'),
-(6, 7, '3104-B', 'Prueba', 'Prueba', 'V', '12999292', '2000-12-12', '04261234444', '123@gmail.es', 'M', 'Asdfg', 1, '2025-12-21 04:00:00');
+(6, 7, '3104-B', 'Prueba', 'Pruebas', 'V', '12999292', '2000-12-12', '04261234444', '123@gmail.es', 'M', 'Asdfg', 1, '2026-05-21 14:50:20');
 
 -- --------------------------------------------------------
 
@@ -569,7 +569,8 @@ CREATE TABLE `insumos` (
 
 INSERT INTO `insumos` (`id_insumo`, `id_presentacion`, `nombre_insumo`, `descripcion`, `tipo_insumo`, `fecha_vencimiento`, `fecha_creacion`, `cantidad`, `estatus`) VALUES
 (1, 1, 'Acetaminofén 500MG', 'Pastillas de acetaminofen', 'Medicamento', '2025-12-01', '2026-01-04', 2, 'Vencido'),
-(2, 1, 'Lozartan 800Mg', 'Nada', 'Medicamento', '2027-07-27', '2026-01-22', 13, 'Disponible');
+(2, 1, 'Lozartan 800Mg', 'Nada', 'Medicamento', '2027-07-27', '2026-01-22', 13, 'Disponible'),
+(4, 5, 'Confortex', 'Nada, probando otra vez', 'Material', '2026-05-31', '2026-05-19', 0, 'Agotado');
 
 -- --------------------------------------------------------
 
@@ -601,7 +602,8 @@ INSERT INTO `inventario_medico` (`id_inv_med`, `id_insumo`, `id_empleado`, `fech
 (7, 2, 1, '2026-01-22 21:27:32', 'Registro', 0, 'Nuevo registro'),
 (8, 2, 5, '2026-01-23 17:50:04', 'Entrada', 15, 'Compra'),
 (10, 2, 1, '2026-02-16 20:52:24', 'Salida per Jornada', 1, 'Uso en Jornada Médica (Diagnóstico #3)'),
-(11, 2, 1, '2026-02-16 21:02:33', 'Salida per Jornada', 1, 'Uso en Jornada Médica (Diagnóstico #4)');
+(11, 2, 1, '2026-02-16 21:02:33', 'Salida per Jornada', 1, 'Uso en Jornada Médica (Diagnóstico #4)'),
+(12, 4, 1, '2026-05-19 15:40:54', 'Registro', 0, 'Nuevo registro');
 
 -- --------------------------------------------------------
 
@@ -1654,13 +1656,13 @@ ALTER TABLE `horario`
 -- AUTO_INCREMENT de la tabla `insumos`
 --
 ALTER TABLE `insumos`
-  MODIFY `id_insumo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_insumo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_medico`
 --
 ALTER TABLE `inventario_medico`
-  MODIFY `id_inv_med` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_inv_med` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_mob`
