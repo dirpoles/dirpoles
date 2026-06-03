@@ -1,0 +1,265 @@
+<?php
+
+namespace App\Middlewares;
+
+use PDO;
+use Exception;
+use Throwable;
+
+class RateLimitMiddleware
+{
+    /**
+     * Reglas de Rate Limiting por endpoint.
+     * - capacity: capacidad máxima del balde (tokens máximos).
+     * - rate: tasa de relleno (tokens por segundo).
+     */
+    private static $rules = [
+        'iniciar_sesion' => [
+            'capacity' => 5.0,
+            'rate' => 5.0 / 60.0, // 5 peticiones por minuto (1 cada 12s)
+        ],
+        'login' => [
+            'capacity' => 10.0,
+            'rate' => 10.0 / 60.0, // 10 peticiones por minuto (1 cada 6s)
+        ],
+        'default' => [
+            'capacity' => 60.0,
+            'rate' => 60.0 / 60.0, // 60 peticiones por minuto (1 cada segundo)
+        ]
+    ];
+
+    /**
+     * Obtiene la conexión PDO a la base de datos de seguridad
+     */
+    private static function getPdo()
+    {
+        static $pdo = null;
+        if ($pdo === null) {
+            $db = new class extends \App\Models\SecurityModel {
+                public function getConn() {
+                    return $this->conn_security;
+                }
+            };
+            $pdo = $db->getConn();
+        }
+        return $pdo;
+    }
+
+    /**
+     * Helper para limpiar y normalizar el endpoint actual
+     */
+    private static function getCleanEndpoint()
+    {
+        $rutaSolicitada = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $rutaBase = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+        $rutaRelativa = substr($rutaSolicitada, strlen($rutaBase));
+        return trim($rutaRelativa, '/') ?: 'login';
+    }
+
+    /**
+     * Consulta el registro de rate limits de la IP y endpoint
+     */
+    private static function queryRateLimit($pdo, $ip, $endpoint)
+    {
+        $stmt = $pdo->prepare("SELECT tokens_actuales, ultima_peticion FROM dirpoles_security.rate_limits WHERE ip_address = :ip AND endpoint = :endpoint");
+        $stmt->execute(['ip' => $ip, 'endpoint' => $endpoint]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Maneja el rate limiting del Token Bucket
+     */
+    public static function handle()
+    {
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $endpoint = self::getCleanEndpoint();
+
+        // Obtener la regla aplicable o usar default
+        $rule = self::$rules[$endpoint] ?? self::$rules['default'];
+        $capacity = (float) $rule['capacity'];
+        $rate = (float) $rule['rate'];
+
+        $pdo = self::getPdo();
+        $record = self::queryRateLimit($pdo, $ip, $endpoint);
+
+        $currentTime = time();
+
+        if (!$record) {
+            // El cubo se inicializa lleno con la capacidad máxima, y restamos 1 para esta petición
+            $tokensCalculados = $capacity;
+            $ultimaPeticion = $currentTime;
+
+            $stmt = $pdo->prepare("INSERT INTO dirpoles_security.rate_limits (ip_address, endpoint, tokens_actuales, ultima_peticion) VALUES (:ip, :endpoint, :tokens, :time)");
+            $stmt->execute([
+                'ip' => $ip,
+                'endpoint' => $endpoint,
+                'tokens' => $tokensCalculados - 1.0,
+                'time' => $ultimaPeticion
+            ]);
+            return;
+        }
+
+        // Si existe el registro, calculamos tokens regenerados basándonos en el tiempo transcurrido
+        $tokensActuales = (float) $record['tokens_actuales'];
+        $ultimaPeticion = (int) $record['ultima_peticion'];
+
+        $tiempoTranscurrido = max(0, $currentTime - $ultimaPeticion);
+        $tokensRegenerados = $tiempoTranscurrido * $rate;
+        $tokensCalculados = min($capacity, $tokensActuales + $tokensRegenerados);
+
+        // Si los tokens calculados son menores a 1, bloquear la petición
+        if ($tokensCalculados < 1.0) {
+            $tokensNecesarios = 1.0 - $tokensCalculados;
+            $segundosEspera = (int) ceil($tokensNecesarios / $rate);
+
+            header('HTTP/1.1 429 Too Many Requests');
+            header('Retry-After: ' . $segundosEspera);
+
+            $expectsJson = (
+                (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ||
+                (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/json') !== false) ||
+                (isset($_SERVER['CONTENT_TYPE']) && strpos(strtolower($_SERVER['CONTENT_TYPE']), 'application/json') !== false)
+            );
+
+            if ($expectsJson) {
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'estado' => 'error',
+                    'mensaje' => 'Demasiadas peticiones. Por favor, intente de nuevo en ' . $segundosEspera . ' segundos.',
+                    'retry_after' => $segundosEspera
+                ]);
+                exit();
+            }
+
+            // Responder con un template HTML premium
+            self::renderBlockPage($segundosEspera);
+            exit();
+        }
+
+        // Si tiene tokens, restamos 1 y actualizamos en la base de datos
+        $nuevosTokens = $tokensCalculados - 1.0;
+        $stmt = $pdo->prepare("UPDATE dirpoles_security.rate_limits SET tokens_actuales = :tokens, ultima_peticion = :time WHERE ip_address = :ip AND endpoint = :endpoint");
+        $stmt->execute([
+            'tokens' => $nuevosTokens,
+            'time' => $currentTime,
+            'ip' => $ip,
+            'endpoint' => $endpoint
+        ]);
+    }
+
+    /**
+     * Renderiza una página HTML premium de límite de peticiones excedido
+     */
+    private static function renderBlockPage($retryAfter)
+    {
+        ?>
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Límite de peticiones excedido</title>
+            <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+            <style>
+                body {
+                    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+                    color: #f8fafc;
+                    font-family: 'Outfit', sans-serif;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                    overflow: hidden;
+                }
+                .container {
+                    text-align: center;
+                    background: rgba(255, 255, 255, 0.03);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    padding: 3rem;
+                    border-radius: 24px;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                    max-width: 450px;
+                    width: 90%;
+                    animation: fadeIn 0.6s ease-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .icon {
+                    font-size: 4rem;
+                    margin-bottom: 1rem;
+                    background: linear-gradient(to right, #f43f5e, #fb7185);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                h1 {
+                    font-size: 1.8rem;
+                    font-weight: 600;
+                    margin-bottom: 1rem;
+                    color: #f1f5f9;
+                }
+                p {
+                    color: #94a3b8;
+                    font-size: 1rem;
+                    line-height: 1.6;
+                    margin-bottom: 2rem;
+                }
+                .timer {
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                    color: #38bdf8;
+                    background: rgba(56, 189, 248, 0.1);
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 9999px;
+                    display: inline-block;
+                    margin-bottom: 2rem;
+                    border: 1px solid rgba(56, 189, 248, 0.2);
+                }
+                .btn-retry {
+                    display: inline-block;
+                    background: linear-gradient(to right, #6366f1, #4f46e5);
+                    color: white;
+                    text-decoration: none;
+                    padding: 0.75rem 2rem;
+                    border-radius: 12px;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+                }
+                .btn-retry:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="icon">⚠️</div>
+                <h1>Límite Excedido</h1>
+                <p>Has realizado demasiadas solicitudes en poco tiempo. Por favor, espera antes de continuar.</p>
+                <div class="timer">Reintentar en <span id="countdown"><?php echo $retryAfter; ?></span>s</div>
+                <div>
+                    <a href="" class="btn-retry" onclick="location.reload(); return false;">Actualizar</a>
+                </div>
+            </div>
+            <script>
+                let seconds = <?php echo $retryAfter; ?>;
+                const countdownEl = document.getElementById('countdown');
+                const interval = setInterval(() => {
+                    seconds--;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        location.reload();
+                    } else {
+                        countdownEl.textContent = seconds;
+                    }
+                }, 1000);
+            </script>
+        </body>
+        </html>
+        <?php
+    }
+}

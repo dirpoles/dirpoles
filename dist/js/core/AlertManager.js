@@ -85,3 +85,74 @@ class AlertManager {
         Swal.close();
     }
 }
+
+// ==================== INTERCEPTORES GLOBALES DE PETICIONES (fetch / jQuery) ====================
+
+// 1. Interceptor de fetch
+(function() {
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+        try {
+            const response = await originalFetch(...args);
+            if (response.status === 429) {
+                let errorMsg = 'Demasiadas peticiones. Por favor, intente de nuevo.';
+                try {
+                    const clone = response.clone();
+                    const contentType = clone.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = await clone.json();
+                        if (data && data.mensaje) {
+                            errorMsg = data.mensaje;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error al parsear el JSON de 429:', e);
+                }
+
+                if (typeof AlertManager !== 'undefined') {
+                    AlertManager.error('Límite de peticiones excedido', errorMsg);
+                } else if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Límite de peticiones excedido',
+                        text: errorMsg,
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            }
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    };
+})();
+
+// 2. Interceptor de jQuery AJAX (si existe jQuery)
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof jQuery !== 'undefined') {
+        $(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+            if (jqXHR.status === 429) {
+                let errorMsg = 'Demasiadas peticiones. Por favor, intente de nuevo.';
+                try {
+                    const data = JSON.parse(jqXHR.responseText);
+                    if (data && data.mensaje) {
+                        errorMsg = data.mensaje;
+                    }
+                } catch (e) {
+                    // No es JSON, usar default
+                }
+
+                if (typeof AlertManager !== 'undefined') {
+                    AlertManager.error('Límite de peticiones excedido', errorMsg);
+                } else if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Límite de peticiones excedido',
+                        text: errorMsg,
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            }
+        });
+    }
+});

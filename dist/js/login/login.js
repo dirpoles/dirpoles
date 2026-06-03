@@ -231,6 +231,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } catch (err) {
             console.error(err);
+            // Si el error fue por rate limit (429), el interceptor global ya lo manejó y mostró la alerta.
+            // Evitamos duplicar la alerta de error de conexión.
+            if (err.message && err.message.includes('429')) {
+                return;
+            }
             if (typeof Swal !== 'undefined' && Swal.fire) {
                 Swal.fire({
                     icon: 'error',

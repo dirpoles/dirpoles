@@ -1,105 +1,14 @@
 <?php
 
 use App\Core\Router;
-use App\Core\JwtHandler;
 
-// ==================== MIDDLEWARE GLOBAL ====================
-Router::antes('ALL', '.*', function () {
-    $rutasPublicas = ['', 'login', 'iniciar_sesion', 'error', 'logout', 'api/movil'];
 
-    // Obtener ruta solicitada
-    $rutaSolicitada = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// ==================== MIDDLEWARES GLOBALES ====================
+// 1° Escudo perimetral: Rate Limit (Token Bucket)
+Router::antes('ALL', '.*', [App\Middlewares\RateLimitMiddleware::class, 'handle']);
 
-    // Sincronizar con la lógica de limpieza del Router
-    $rutaBase = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
-    $rutaRelativa = substr($rutaSolicitada, strlen($rutaBase));
-    $rutaActual = trim($rutaRelativa, '/') ?: 'login';
-
-    // 1. SI ES RUTA PÚBLICA O EL ROOT, SALIR INMEDIATAMENTE
-    // El root vacío '' se trata como 'login' por el Router y por la línea anterior
-    if (in_array($rutaActual, $rutasPublicas) || $rutaRelativa === '' || $rutaRelativa === '/') {
-        return;
-    }
-
-    // 1.5 IGNORAR ARCHIVOS ESTÁTICOS FALTANTES (ej. sourcemaps .map, imágenes, etc.)
-    // Evita que peticiones del navegador a recursos que no existen gatillen la alerta de 
-    // "Acceso denegado" en la sesión antes de hacer el 404 normal de rutaNoEncontrada.
-    if (preg_match('/\.(js|css|map|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/i', $rutaActual)) {
-        return;
-    }
-
-    // 2. VALIDACIÓN DE SESIÓN
-    if (!isset($_SESSION['id_empleado'])) {
-        redirigirLogin('Debes iniciar sesión primero', 'Acceso denegado');
-    }
-
-    // 3. VALIDACIÓN DE ESTATUS (BLOQUEO)
-    if (isset($_SESSION['estatus']) && $_SESSION['estatus'] == 0) {
-        $msg = 'Tu cuenta ha sido desactivada. Contacta al administrador.';
-        // Solo limpiamos los datos de acceso, no destruimos la sesión
-        unset($_SESSION['id_empleado']);
-        unset($_SESSION['nombre']);
-        unset($_SESSION['estatus']);
-        redirigirLogin($msg, 'Cuenta bloqueada');
-    }
-
-    // 4. VERIFICACIÓN DUAL (JWT)
-    $jwtToken = JwtHandler::obtenerToken();
-    $jwtHandler = new JwtHandler();
-    $jwtHandler->__set('token', $jwtToken);
-    $validacion = $jwtHandler->manejarAccion('validar');
-
-    if ($validacion['estado'] !== 'exito') {
-        // Token inválido, expirado o no proporcionado
-        error_log("Fallo de validación JWT para ruta: " . $rutaActual . " - Razon: " . ($validacion['mensaje'] ?? 'Sin mensaje'));
-
-        // Limpiar acceso de sesión (mantenemos la sesión activa solo para mostrar el mensaje en el login)
-        unset($_SESSION['id_empleado']);
-        unset($_SESSION['nombre']);
-
-        // Limpiar cookie de JWT
-        setcookie('jwt_token', '', time() - 3600, '/');
-
-        redirigirLogin('Error de validación de seguridad (JWT). Por favor, inicie sesión de nuevo.', 'Error de Seguridad');
-    }
-
-    // 5. INTEGRIDAD DE DATOS (Sesión vs JWT)
-    if ($validacion['data']['id_empleado'] != $_SESSION['id_empleado']) {
-        error_log("Discrepancia detectada: JWT id_empleado (" . $validacion['data']['id_empleado'] . ") vs SESIÓN id_empleado (" . $_SESSION['id_empleado'] . ")");
-
-        // Limpiar acceso
-        unset($_SESSION['id_empleado']);
-        unset($_SESSION['nombre']);
-
-        setcookie('jwt_token', '', time() - 3600, '/');
-
-        redirigirLogin('Se ha detectado una inconsistencia en su sesión.', 'Fallo de Integridad');
-    }
-});
-
-/**
- * Redirección simple al login con mensaje
- */
-function redirigirLogin($mensaje, $titulo)
-{
-    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-        header('Content-Type: application/json');
-        echo json_encode([
-            'estado' => 'error',
-            'mensaje' => $mensaje,
-            'redireccion' => BASE_URL . 'login'
-        ]);
-        exit();
-    }
-
-    $_SESSION['mensaje_redireccion'] = json_encode([
-        'estado' => 'error',
-        'titulo' => $titulo,
-        'mensaje' => $mensaje
-    ]);
-    header('Location: ' . BASE_URL . 'login');
-    exit();
-}
+// 2° Escudo perimetral: Autenticación de sesión y JWT
+Router::antes('ALL', '.*', [App\Middlewares\SessionAuthMiddleware::class, 'handle']);
 
 // ==================== RUTAS ESENCIALES (login / inicio) ====================
 Router::get('', function () {
