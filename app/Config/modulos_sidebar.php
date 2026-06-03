@@ -92,7 +92,8 @@ return [
             ['url' => 'configuraciones', 'texto' => 'Crear', 'permiso' => 2],
             ['url' => 'consultar_configuraciones', 'texto' => 'Consultar', 'permiso' => 2],
             ['url' => 'consultar_bitacora', 'texto' => 'Bitacora', 'permiso' => 2],
-            ['url' => 'crear_permisos', 'texto' => 'Permisos Empleados', 'permiso' => 2]
+            ['url' => 'crear_permisos', 'texto' => 'Permisos Empleados', 'permiso' => 2],
+            ['url' => 'respaldo', 'texto' => 'Respaldo BD', 'permiso' => 2, 'solo_admin' => true]
         ]
     ],
     15 => [

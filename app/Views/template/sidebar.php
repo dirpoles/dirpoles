@@ -42,6 +42,15 @@ $modulosPermitidos ??= ($_SESSION['modulosPermitidos'] ?? []);
                     // 1. Si el módulo tiene un ID y el usuario tiene permiso.
                     // 2. O si es un módulo "público" (llave no numérica, ej: 'group_ayuda')
                     if (!is_int($key) || ($targetModuleId && isset($modulosPermitidos[$targetModuleId]))) {
+                        // Si es solo para administradores, verificar el rol en sesión
+                        if (isset($subitem['solo_admin']) && $subitem['solo_admin'] === true) {
+                            $esAdmin = (isset($_SESSION['tipo_empleado']) && 
+                                (strpos(strtolower($_SESSION['tipo_empleado']), 'administrador') !== false || 
+                                 strpos(strtolower($_SESSION['tipo_empleado']), 'superusuario') !== false));
+                            if (!$esAdmin) {
+                                continue;
+                            }
+                        }
                         $visibleSubitems[] = $subitem;
                     }
                 }

@@ -6,10 +6,12 @@ use Throwable;
 use InvalidArgumentException;
 use DateTime;
 
-class BitacoraModel extends SecurityModel {
+class BitacoraModel extends SecurityModel
+{
     private $atributos = [];
 
-    public function __set($nombre, $valor){
+    public function __set($nombre, $valor)
+    {
         switch ($nombre) {
             case 'id_empleado':
                 if (!filter_var($valor, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
@@ -25,7 +27,7 @@ class BitacoraModel extends SecurityModel {
                 break;
 
             case 'accion':
-                $acciones_validas = ['Registro', 'Lectura', 'Actualización', 'Eliminación','Desactivación','Activación', 'Inicio de sesión', 'Cierre de sesión'];
+                $acciones_validas = ['Registro', 'Lectura', 'Actualización', 'Eliminación', 'Desactivación', 'Activación', 'Inicio de sesión', 'Respaldo', 'Cierre de sesión'];
                 if (!in_array($valor, $acciones_validas)) {
                     throw new InvalidArgumentException("Acción inválida. Debe ser una de: " . implode(', ', $acciones_validas));
                 }
@@ -54,37 +56,40 @@ class BitacoraModel extends SecurityModel {
 
         $this->atributos[$nombre] = $valor;
     }
-    
-    public function __get($atributo){
+
+    public function __get($atributo)
+    {
         return $this->atributos[$atributo] ?? null;
     }
 
-    public function manejarAccion($action) {
+    public function manejarAccion($action)
+    {
         switch ($action) {
             case 'registrar_bitacora':
                 return $this->registrar_bitacora();
 
             case 'consultar_bitacora':
                 return $this->obtener_bitacora();
-            
+
             default:
                 return ['status' => false, 'mensaje' => 'Acción no implementada'];
         }
     }
 
-    private function registrar_bitacora(){
+    private function registrar_bitacora()
+    {
         try {
             $query = "INSERT INTO bitacora 
                      (id_empleado, modulo, accion, descripcion, fecha) 
                      VALUES 
                      (:id_empleado, :modulo, :accion, :descripcion, NOW())";
-            
+
             $stmt = $this->conn_security->prepare($query);
             $stmt->bindValue(':id_empleado', $this->__get('id_empleado'), PDO::PARAM_INT);
             $stmt->bindValue(':modulo', $this->__get('modulo'), PDO::PARAM_STR);
             $stmt->bindValue(':accion', $this->__get('accion'), PDO::PARAM_STR);
             $stmt->bindValue(':descripcion', $this->__get('descripcion'), PDO::PARAM_STR);
-    
+
             if ($stmt->execute()) {
                 return ['exito' => true, 'mensaje' => 'Bitácora registrada'];
             } else {
@@ -96,7 +101,8 @@ class BitacoraModel extends SecurityModel {
         }
     }
 
-    private function obtener_bitacora() {
+    private function obtener_bitacora()
+    {
         try {
             $query = "
                 SELECT 
