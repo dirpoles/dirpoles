@@ -9,24 +9,51 @@ use Throwable;
 class RateLimitMiddleware
 {
     /**
-     * Reglas de Rate Limiting por endpoint.
-     * - capacity: capacidad máxima del balde (tokens máximos).
-     * - rate: tasa de relleno (tokens por segundo).
+     * Resuelve dinámicamente la política de rate limit basada en el comportamiento (Macro-Categorías).
+     *
+     * @param string $method El método HTTP de la petición (GET, POST).
+     * @param string $endpoint El endpoint limpio.
+     * @return array Contiene ['capacity' => float, 'rate' => float]
      */
-    private static $rules = [
-        'iniciar_sesion' => [
-            'capacity' => 5.0,
-            'rate' => 5.0 / 60.0, // 5 peticiones por minuto (1 cada 12s)
-        ],
-        'login' => [
-            'capacity' => 10.0,
-            'rate' => 10.0 / 60.0, // 10 peticiones por minuto (1 cada 6s)
-        ],
-        'default' => [
-            'capacity' => 60.0,
-            'rate' => 60.0 / 60.0, // 60 peticiones por minuto (1 cada segundo)
-        ]
-    ];
+    private static function resolvePolicy(string $method, string $endpoint): array
+    {
+        $method = strtoupper($method);
+
+        // NIVEL 1: Excepciones de Seguridad (Máxima Estricción)
+        // Autenticación exacta ('iniciar_sesion') o actualización del perfil del empleado ('perfil_actualizar')
+        $nivel1Endpoints = ['iniciar_sesion', 'perfil_actualizar'];
+        if (in_array($endpoint, $nivel1Endpoints)) {
+            return [
+                'capacity' => 5.0,
+                'rate' => 5.0 / 300.0 // 5 intentos por cada 5 minutos (300 segundos)
+            ];
+        }
+
+        // NIVEL 2: Validaciones de Formulario Rápidas (Alta Tolerancia)
+        // Rutas que comiencen o contengan 'validar_' o 'verificar_', sin importar el método
+        if (strpos($endpoint, 'validar_') !== false || strpos($endpoint, 'verificar_') !== false) {
+            return [
+                'capacity' => 80.0,
+                'rate' => 80.0 / 60.0 // 80 peticiones por minuto (para evitar bloqueos falsos al escribir)
+            ];
+        }
+
+        // NIVEL 3: Mutaciones de Base de Datos (Escritura Estricta)
+        // Cualquier otra petición POST que no sea una validación (ej. registrar, editar, eliminar)
+        if ($method === 'POST') {
+            return [
+                'capacity' => 15.0,
+                'rate' => 15.0 / 60.0 // 15 peticiones por minuto
+            ];
+        }
+
+        // NIVEL 4: Navegación y Carga de Datos (Lectura General)
+        // Todas las peticiones GET (vistas HTML, carga de JSON de datos de tablas, etc.)
+        return [
+            'capacity' => 80.0,
+            'rate' => 80.0 / 60.0 // 80 peticiones por minuto
+        ];
+    }
 
     /**
      * Obtiene la conexión PDO a la base de datos de seguridad
@@ -73,11 +100,12 @@ class RateLimitMiddleware
     {
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
         $endpoint = self::getCleanEndpoint();
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-        // Obtener la regla aplicable o usar default
-        $rule = self::$rules[$endpoint] ?? self::$rules['default'];
-        $capacity = (float) $rule['capacity'];
-        $rate = (float) $rule['rate'];
+        // Obtener la política dinámica basada en comportamiento (Macro-Categorías)
+        $policy = self::resolvePolicy($method, $endpoint);
+        $capacity = (float) $policy['capacity'];
+        $rate = (float) $policy['rate'];
 
         $pdo = self::getPdo();
         $record = self::queryRateLimit($pdo, $ip, $endpoint);
