@@ -127,3 +127,17 @@ Router::get('reportes_transporte_data', function () {
     load_controller('reportesController.php');
     reportes_transporte_data();
 });
+
+//============================= RUTAS DEL MICROSERVICIO DE IA ================================
+Router::post('reportes_general_ia', function () {
+    load_controller('reportesIAController.php');
+    reporte_general_ia();
+});
+Router::get('reportes_general_ia', function () {
+    load_controller('reportesIAController.php');
+    reporte_general_ia();
+});
+Router::get('reportes_general_ia_health', function () {
+    load_controller('reportesIAController.php');
+    reporte_general_ia_health();
+});

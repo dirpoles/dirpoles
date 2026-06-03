@@ -14,8 +14,6 @@ class MicroservicioIA
     public function __construct()
     {
         $this->baseUrl = 'http://localhost:8000/api/v1';
-        // Leer la API Key desde el .env de DIRPOLES_4
-        // Esta clave debe coincidir con API_SECRET_KEY en dirpoles_ia/.env
         $this->apiKey = $_ENV['IA_API_KEY'] ?? '';
     }
 
@@ -40,19 +38,6 @@ class MicroservicioIA
         return $this->hacerPeticion('POST', '/analizar', $payload);
     }
 
-    /**
-     * Envía una pregunta sobre los datos al microservicio.
-     */
-    public function preguntar(string $pregunta, string $tipoReporte, array $datos): array
-    {
-        $payload = [
-            'pregunta' => $pregunta,
-            'tipo_reporte' => $tipoReporte,
-            'datos' => $datos
-        ];
-
-        return $this->hacerPeticion('POST', '/preguntar', $payload);
-    }
 
     /**
      * Verifica si el microservicio está activo.
