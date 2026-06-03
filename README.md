@@ -26,7 +26,7 @@ Sigue este orden estrictamente para preparar el sistema:
     ```bash
     composer install
     ```
-3.  **Dependencias JS:** Ejecuta el siguiente comando para instalar herramientas de soporte como **Driver.js**:
+3.  **Dependencias JS:** Ejecuta el siguiente comando para instalar las dependencias de la interfaz:
     ```bash
     npm install
     ```
@@ -35,12 +35,41 @@ Sigue este orden estrictamente para preparar el sistema:
     cp .env.example .env
     ```
 
-### 3. Configuración de Seguridad (Obligatorio)
-Abre tu archivo `.env` y genera claves únicas para garantizar una seguridad de nivel profesional en la gestión de tokens y comunicación entre servicios.
+> **No subas** el archivo `.env` al repositorio. Este archivo contiene secretos y credenciales sensibles.
 
-| Variable | Descripción | Comando de Generación (Terminal) |
+### 3. Generación de llaves RSA
+El sistema ahora utiliza cifrado asimétrico y JWT firmados con RSA. Debes generar cuatro archivos de llave en la carpeta `app/Config/Keys`:
+
+* `jwt_private.pem`
+* `jwt_public.pem`
+* `login_private.pem`
+* `login_public.pem`
+
+La carpeta `app/Config/Keys` ya incluye un `.gitignore` que evita subir los archivos `*.pem`, `*.key` y `*.pub` al repositorio.
+
+Ejemplo de generación usando OpenSSL:
+
+```bash
+mkdir -p app/Config/Keys
+openssl genpkey -algorithm RSA -out app/Config/Keys/jwt_private.pem -pkeyopt rsa_keygen_bits:4096
+openssl rsa -pubout -in app/Config/Keys/jwt_private.pem -out app/Config/Keys/jwt_public.pem
+openssl genpkey -algorithm RSA -out app/Config/Keys/login_private.pem -pkeyopt rsa_keygen_bits:4096
+openssl rsa -pubout -in app/Config/Keys/login_private.pem -out app/Config/Keys/login_public.pem
+```
+
+* `jwt_private.pem`: firma los tokens JWT del sistema.
+* `jwt_public.pem`: valida los tokens JWT en cada petición.
+* `login_private.pem`: descifra las contraseñas enviadas desde el cliente.
+* `login_public.pem`: se utiliza en el formulario de login para cifrar la contraseña del usuario en el navegador.
+
+> **Importante:** Mantén siempre privadas las llaves `*_private.pem`. Nunca las compartas ni las subas al repositorio.
+
+### 4. Configuración de Seguridad (Obligatorio)
+Abre tu archivo `.env` y genera valores únicos para proteger los tokens y la comunicación con el microservicio de IA.
+
+| Variable | Descripción | Comando de Generación |
 | :--- | :--- | :--- |
-| **`JWT_SECRET`** | Firma los tokens de acceso para el login. | `php -r "echo bin2hex(random_bytes(32));"` |
+| **`JWT_SECRET`** | Reserva adicional para compatibilidad interna. | `php -r "echo bin2hex(random_bytes(32));"` |
 | **`IA_API_KEY`** | Autentica la conexión con el microservicio Python. | `php -r "echo bin2hex(random_bytes(16));"` |
 
 > **Importante:** La `IA_API_KEY` debe ser idéntica en el `.env` de PHP y en el del microservicio FastAPI para que la sincronización sea exitosa.
