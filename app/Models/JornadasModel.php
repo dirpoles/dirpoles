@@ -257,7 +257,7 @@ class JornadasModel extends BusinessModel
                     $descripcion_insumo = "Insumo utilizado en jornada médica";
 
                     // a. Verificar Stock
-                    $stmtCheck = $this->conn->prepare("SELECT cantidad, nombre_insumo FROM insumos WHERE id_insumo = :id_insumo");
+                    $stmtCheck = $this->conn->prepare("SELECT cantidad, nombre_insumo FROM insumos WHERE id_insumo = :id_insumo FOR UPDATE");
                     $stmtCheck->bindValue(':id_insumo', $id_insumo, PDO::PARAM_INT);
                     $stmtCheck->execute();
                     $dataInsumo = $stmtCheck->fetch(PDO::FETCH_ASSOC);

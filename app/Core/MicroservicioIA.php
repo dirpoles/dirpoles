@@ -1,4 +1,6 @@
 <?php
+
+namespace App\Core;
 /**
  * Helper para comunicarse con el microservicio de IA.
  *

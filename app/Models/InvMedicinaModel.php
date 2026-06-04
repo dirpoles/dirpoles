@@ -5,16 +5,18 @@ use Exception;
 use Throwable;
 use PDO;
 
-class InvMedicinaModel extends BusinessModel {
+class InvMedicinaModel extends BusinessModel
+{
     private $atributos = [];
 
-    public function __set($nombre, $valor){
+    public function __set($nombre, $valor)
+    {
         $valor = \is_string($valor) ? trim($valor) : $valor;
 
         if ($nombre === 'nombre_insumo') {
             $valor = mb_convert_case($valor, MB_CASE_TITLE, "UTF-8");
         }
-        
+
         if ($nombre === 'descripcion') {
             $valor = ucfirst(mb_strtolower($valor, "UTF-8"));
         }
@@ -41,12 +43,14 @@ class InvMedicinaModel extends BusinessModel {
         $this->atributos[$nombre] = $valor;
     }
 
-    public function __get($name){
+    public function __get($name)
+    {
         return $this->atributos[$name];
     }
 
-    public function manejarAccion($action){
-        switch($action){
+    public function manejarAccion($action)
+    {
+        switch ($action) {
             case 'obtenerPresentaciones':
                 return $this->obtenerPresentaciones();
 
@@ -94,18 +98,20 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function obtenerPresentaciones(){
-        try{
+    private function obtenerPresentaciones()
+    {
+        try {
             $query = "SELECT * FROM presentacion_insumo";
             $stmt = $this->conn->query($query);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch(Throwable $e){
+        } catch (Throwable $e) {
             return [];
         }
     }
 
-    private function obtenerEstadisticas(){
-        try{
+    private function obtenerEstadisticas()
+    {
+        try {
             // Total insumos
             $queryTotal = "SELECT COUNT(*) as total FROM insumos";
             $stmtTotal = $this->conn->query($queryTotal);
@@ -133,7 +139,7 @@ class InvMedicinaModel extends BusinessModel {
                 'stock_critico' => $critico
             ];
 
-        } catch(Throwable $e){
+        } catch (Throwable $e) {
             return [
                 'total_insumos' => 0,
                 'insumos_activos' => 0,
@@ -143,7 +149,8 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function registrar_insumo(){
+    private function registrar_insumo()
+    {
         try {
             $this->conn->beginTransaction();
             // Verificar si el insumo ya existe
@@ -155,11 +162,11 @@ class InvMedicinaModel extends BusinessModel {
             $stmtCheck->bindValue(':fecha_vencimiento', $this->__get('fecha_vencimiento'), PDO::PARAM_STR);
             $stmtCheck->execute();
             $exists = $stmtCheck->fetchColumn();
-    
+
             if ($exists > 0) {
                 throw new Exception("Este insumo ya esta registrado en el inventario médico.");
             }
-    
+
             $query1 = "INSERT INTO insumos (id_presentacion, nombre_insumo, descripcion, tipo_insumo, fecha_vencimiento, fecha_creacion, cantidad, estatus)
                     VALUES (:id_presentacion, :nombre_insumo, :descripcion, :tipo_insumo, :fecha_vencimiento, CURDATE(), :cantidad, :estatus)";
             $stmt1 = $this->conn->prepare($query1);
@@ -184,9 +191,9 @@ class InvMedicinaModel extends BusinessModel {
             $stmt2->bindValue(':cantidad', $this->__get('cantidad'), PDO::PARAM_INT);
             $stmt2->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
             $stmt2->execute();
-    
+
             $this->conn->commit();
-    
+
             return [
                 'exito' => true,
                 'mensaje' => 'Insumo Médico registrado exitosamente.'
@@ -200,8 +207,9 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function actualizarInsumo(){
-        try{
+    private function actualizarInsumo()
+    {
+        try {
             $query = "UPDATE insumos SET 
                         nombre_insumo = :nombre_insumo,
                         tipo_insumo = :tipo_insumo,
@@ -223,7 +231,7 @@ class InvMedicinaModel extends BusinessModel {
                 'mensaje' => 'Insumo actualizado exitosamente.'
             ];
 
-        } catch(Throwable $e){
+        } catch (Throwable $e) {
             return [
                 'exito' => false,
                 'mensaje' => $e->getMessage()
@@ -231,43 +239,52 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function inventario_eliminar() {
+    private function inventario_eliminar()
+    {
         try {
-            if($this->validar_insumo_medicina($this->__get('id_insumo'))){
+            $id_insumo = $this->__get('id_insumo');
+
+            $this->conn->beginTransaction();
+
+            $sqlLock = "SELECT cantidad FROM insumos WHERE id_insumo = :id FOR UPDATE";
+            $stmtLock = $this->conn->prepare($sqlLock);
+            $stmtLock->bindValue(':id', $id_insumo, PDO::PARAM_INT);
+            $stmtLock->execute();
+
+            if ($this->validar_insumo_medicina($id_insumo)) {
+                $this->conn->rollBack();
                 return [
                     'exito' => false,
                     'mensaje' => 'No se puede eliminar el insumo porque está relacionado con un medicamento.'
                 ];
             }
 
-            if($this->validar_stock($this->__get('id_insumo'))){
+            if ($this->validar_stock($id_insumo)) {
+                $this->conn->rollBack();
                 return [
                     'exito' => false,
                     'mensaje' => 'No se puede eliminar el insumo porque tiene stock disponible.'
                 ];
             }
 
-            if ($this->tiene_movimientos_reales($this->__get('id_insumo'))) {
+            if ($this->tiene_movimientos_reales($id_insumo)) {
+                $this->conn->rollBack();
                 return [
                     'exito' => false,
                     'mensaje' => 'No se puede eliminar el insumo porque ya tiene movimientos de entrada o salida.'
                 ];
             }
 
-            $this->conn->beginTransaction();
-    
-            // 1. Eliminar registros relacionados en inventario_medico
             $query1 = "DELETE FROM inventario_medico WHERE id_insumo = :id_insumo";
             $stmt1 = $this->conn->prepare($query1);
-            $stmt1->bindValue(':id_insumo', $this->__get('id_insumo'), PDO::PARAM_INT);
+            $stmt1->bindValue(':id_insumo', $id_insumo, PDO::PARAM_INT);
             $stmt1->execute();
-    
-            // 2. Eliminar el insumo
+
             $query2 = "DELETE FROM insumos WHERE id_insumo = :id_insumo";
             $stmt2 = $this->conn->prepare($query2);
-            $stmt2->bindValue(':id_insumo', $this->__get('id_insumo'), PDO::PARAM_INT);
+            $stmt2->bindValue(':id_insumo', $id_insumo, PDO::PARAM_INT);
             $stmt2->execute();
-    
+
             $this->conn->commit();
             return [
                 'exito' => true,
@@ -283,26 +300,29 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function validar_stock($id_insumo) {
+    private function validar_stock($id_insumo)
+    {
         $query = "SELECT cantidad FROM insumos WHERE id_insumo = :id_insumo";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':id_insumo', $id_insumo, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         $cantidad = $stmt->fetchColumn();
         return ($cantidad !== false && $cantidad > 0);
     }
 
-    private function validar_insumo_medicina($id_insumo) {
+    private function validar_insumo_medicina($id_insumo)
+    {
         $query = "SELECT COUNT(*) FROM detalle_insumo WHERE id_insumo = :id_insumo";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':id_insumo', $id_insumo, PDO::PARAM_INT);
         $stmt->execute();
-        
+
         return ($stmt->fetchColumn() > 0);
     }
 
-    private function tiene_movimientos_reales($id_insumo) {
+    private function tiene_movimientos_reales($id_insumo)
+    {
         $query = "SELECT COUNT(*) FROM inventario_medico 
                 WHERE id_insumo = :id_insumo AND tipo_movimiento != 'Registro'";
         $stmt = $this->conn->prepare($query);
@@ -311,21 +331,23 @@ class InvMedicinaModel extends BusinessModel {
 
         return $stmt->fetchColumn() > 0;
     }
-    private function consultar_inventario(){
-        try{
+    private function consultar_inventario()
+    {
+        try {
             $query = "SELECT insumos.*, presentacion_insumo.nombre_presentacion AS presentacion 
                       FROM insumos 
                       JOIN presentacion_insumo ON insumos.id_presentacion = presentacion_insumo.id_presentacion";
             $stmt = $this->conn->query($query);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        } catch(Throwable $e){
+        } catch (Throwable $e) {
             return [];
         }
     }
 
-    private function inventario_detalle(){
-        try{
+    private function inventario_detalle()
+    {
+        try {
             $query = "SELECT 
                         i.id_insumo,
                         i.nombre_insumo,
@@ -345,7 +367,7 @@ class InvMedicinaModel extends BusinessModel {
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
 
-        } catch(Throwable $e){
+        } catch (Throwable $e) {
             return [
                 'exito' => false,
                 'mensaje' => $e->getMessage()
@@ -353,8 +375,9 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function consultar_movimientos(){
-        try{
+    private function consultar_movimientos()
+    {
+        try {
             $query = "SELECT 
                         im.id_inv_med,
                         i.nombre_insumo,
@@ -369,12 +392,13 @@ class InvMedicinaModel extends BusinessModel {
                     ORDER BY im.fecha_movimiento DESC";
             $stmt = $this->conn->query($query);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch(Throwable $e){
+        } catch (Throwable $e) {
             return [];
         }
     }
 
-    private function obtenerInsumosValidos() {
+    private function obtenerInsumosValidos()
+    {
         try {
             // Insumos no vencidos y activos
             $query = "SELECT id_insumo, nombre_insumo, cantidad, fecha_vencimiento 
@@ -389,7 +413,8 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function registrar_entrada() {
+    private function registrar_entrada()
+    {
         try {
             $this->conn->beginTransaction();
 
@@ -399,7 +424,7 @@ class InvMedicinaModel extends BusinessModel {
             $id_empleado = $this->__get('id_empleado');
 
             // 1. Verificar insumo actual
-            $stmtInfo = $this->conn->prepare("SELECT cantidad FROM insumos WHERE id_insumo = :id");
+            $stmtInfo = $this->conn->prepare("SELECT cantidad FROM insumos WHERE id_insumo = :id FOR UPDATE");
             $stmtInfo->bindValue(':id', $id_insumo, PDO::PARAM_INT);
             $stmtInfo->execute();
             $insumo = $stmtInfo->fetch(PDO::FETCH_ASSOC);
@@ -441,8 +466,9 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function obtener_insumo_entrada(){
-        try{
+    private function obtener_insumo_entrada()
+    {
+        try {
             $query = "SELECT nombre_insumo FROM insumos WHERE id_insumo = :id_insumo";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':id_insumo', $this->__get('id_insumo'), PDO::PARAM_INT);
@@ -450,12 +476,13 @@ class InvMedicinaModel extends BusinessModel {
             $insumo = $stmt->fetch(PDO::FETCH_ASSOC);
             return $insumo['nombre_insumo'];
 
-        } catch(Throwable $e){
+        } catch (Throwable $e) {
             return [];
         }
     }
 
-    private function obtenerInsumosParaSalida() {
+    private function obtenerInsumosParaSalida()
+    {
         try {
             // Insumos con cantidad > 0 (No importa si están vencidos, se pueden dar de baja por vencimiento)
             $query = "SELECT id_insumo, nombre_insumo, cantidad, fecha_vencimiento, estatus 
@@ -469,7 +496,8 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function obtenerInsumosParaSalidaDiagnosticos() {
+    private function obtenerInsumosParaSalidaDiagnosticos()
+    {
         try {
             $query = "SELECT id_insumo, nombre_insumo, cantidad, fecha_vencimiento, estatus 
                       FROM insumos 
@@ -482,7 +510,8 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    private function registrar_salida() {
+    private function registrar_salida()
+    {
         try {
             $this->conn->beginTransaction();
 
@@ -493,7 +522,7 @@ class InvMedicinaModel extends BusinessModel {
             $id_empleado = $this->__get('id_empleado');
 
             // 1. Verificar insumo actual
-            $stmtInfo = $this->conn->prepare("SELECT cantidad FROM insumos WHERE id_insumo = :id");
+            $stmtInfo = $this->conn->prepare("SELECT cantidad FROM insumos WHERE id_insumo = :id FOR UPDATE");
             $stmtInfo->bindValue(':id', $id_insumo, PDO::PARAM_INT);
             $stmtInfo->execute();
             $insumo = $stmtInfo->fetch(PDO::FETCH_ASSOC);
@@ -511,12 +540,12 @@ class InvMedicinaModel extends BusinessModel {
             // Si llega a 0, estatus = 'Agotado'. Si sigue > 0, mantenemos estatus (puede ser 'Disponible' o 'Vencido')
             // Nota: El usuario pidió manejar estados: 'Disponible', 'Agotado', 'Vencido'.
             // Al restar, si es 0 -> Agotado.
-            
+
             $estatus_sql = "estatus"; // Default keep same
             if ($nuevo_stock == 0) {
                 $estatus_sql = "'Agotado'";
             }
-            
+
             $stmtUpdate = $this->conn->prepare("UPDATE insumos SET cantidad = :cantidad, estatus = CASE WHEN cantidad = 0 THEN 'Agotado' ELSE estatus END WHERE id_insumo = :id");
             $stmtUpdate->bindValue(':cantidad', $nuevo_stock, PDO::PARAM_INT);
             $stmtUpdate->bindValue(':id', $id_insumo, PDO::PARAM_INT);
@@ -552,5 +581,5 @@ class InvMedicinaModel extends BusinessModel {
         }
     }
 
-    
+
 }
