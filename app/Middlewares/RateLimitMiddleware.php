@@ -19,6 +19,19 @@ class RateLimitMiddleware
     {
         $method = strtoupper($method);
 
+        // CASO ESPECIAL: Login desde la App Móvil
+        // Aunque api/movil es público, si la acción del JSON es "login", aplicamos el Nivel 1
+        if ($endpoint === 'api/movil' && $method === 'POST') {
+            $input = file_get_contents('php://input');
+            $decoded = json_decode($input, true);
+            if (json_last_error() === JSON_ERROR_NONE && isset($decoded['accion']) && $decoded['accion'] === 'login') {
+                return [
+                    'capacity' => 5.0,
+                    'rate' => 5.0 / 300.0 // Nivel 1: 5 intentos por cada 5 minutos
+                ];
+            }
+        }
+
         // NIVEL 1: Excepciones de Seguridad (Máxima Estricción)
         // Autenticación exacta ('iniciar_sesion') o actualización del perfil del empleado ('perfil_actualizar')
         $nivel1Endpoints = ['iniciar_sesion', 'perfil_actualizar'];
@@ -50,8 +63,8 @@ class RateLimitMiddleware
         // NIVEL 4: Navegación y Carga de Datos (Lectura General)
         // Todas las peticiones GET (vistas HTML, carga de JSON de datos de tablas, etc.)
         return [
-            'capacity' => 80.0,
-            'rate' => 80.0 / 60.0 // 80 peticiones por minuto
+            'capacity' => 30.0,
+            'rate' => 30.0 / 60.0 // 30 peticiones por minuto (ajustado de 80 a 30 por recomendación de seguridad)
         ];
     }
 
@@ -63,7 +76,8 @@ class RateLimitMiddleware
         static $pdo = null;
         if ($pdo === null) {
             $db = new class extends \App\Models\SecurityModel {
-                public function getConn() {
+                public function getConn()
+                {
                     return $this->conn_security;
                 }
             };
@@ -80,7 +94,11 @@ class RateLimitMiddleware
         $rutaSolicitada = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $rutaBase = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
         $rutaRelativa = substr($rutaSolicitada, strlen($rutaBase));
-        return trim($rutaRelativa, '/') ?: 'login';
+        $endpoint = trim($rutaRelativa, '/') ?: 'login';
+
+        // Normalizar IDs numéricos dinámicos en la ruta para evitar evasión de rate limit
+        // Ejemplo: 'beneficiario/ver/25' se convierte en 'beneficiario/ver/{id}'
+        return preg_replace('/\/\d+/', '/{id}', $endpoint);
     }
 
     /**
@@ -183,6 +201,7 @@ class RateLimitMiddleware
         ?>
         <!DOCTYPE html>
         <html lang="es">
+
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -200,6 +219,7 @@ class RateLimitMiddleware
                     margin: 0;
                     overflow: hidden;
                 }
+
                 .container {
                     text-align: center;
                     background: rgba(255, 255, 255, 0.03);
@@ -212,10 +232,19 @@ class RateLimitMiddleware
                     width: 90%;
                     animation: fadeIn 0.6s ease-out;
                 }
+
                 @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
                 }
+
                 .icon {
                     font-size: 4rem;
                     margin-bottom: 1rem;
@@ -223,18 +252,21 @@ class RateLimitMiddleware
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                 }
+
                 h1 {
                     font-size: 1.8rem;
                     font-weight: 600;
                     margin-bottom: 1rem;
                     color: #f1f5f9;
                 }
+
                 p {
                     color: #94a3b8;
                     font-size: 1rem;
                     line-height: 1.6;
                     margin-bottom: 2rem;
                 }
+
                 .timer {
                     font-size: 1.2rem;
                     font-weight: 600;
@@ -246,6 +278,7 @@ class RateLimitMiddleware
                     margin-bottom: 2rem;
                     border: 1px solid rgba(56, 189, 248, 0.2);
                 }
+
                 .btn-retry {
                     display: inline-block;
                     background: linear-gradient(to right, #6366f1, #4f46e5);
@@ -257,12 +290,14 @@ class RateLimitMiddleware
                     transition: all 0.3s ease;
                     box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
                 }
+
                 .btn-retry:hover {
                     transform: translateY(-2px);
                     box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
                 }
             </style>
         </head>
+
         <body>
             <div class="container">
                 <div class="icon">⚠️</div>
@@ -287,6 +322,7 @@ class RateLimitMiddleware
                 }, 1000);
             </script>
         </body>
+
         </html>
         <?php
     }
