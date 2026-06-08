@@ -20,23 +20,17 @@ class MicroservicioIA
     }
 
     /**
-     * Envía datos de un reporte al microservicio para análisis
+     * Envía la solicitud de análisis de reporte al microservicio con sus filtros.
      * 
-     * @param string $tipoReporte Tipo de reporte
-     * @param array $datos Datos del reporte
-     * @param string|null $fechaInicio Fecha de inicio (opcional)
-     * @param string|null $fechaFin Fecha fin (opcional)
+     * @param string $tipoReporte Tipo de reporte (ej: 'general')
+     * @param array $filtros Filtros opcionales (fecha_inicio, fecha_fin, genero, pnf, area)
      * @return array  Resultado del análisis
      */
-    public function analizar($tipoReporte, $datos, $fechaInicio = null, $fechaFin = null)
+    public function analizar(string $tipoReporte, array $filtros = []): array
     {
-        $payload = [
-            'tipo_reporte' => $tipoReporte,
-            'datos' => $datos,
-            'fecha_inicio' => $fechaInicio,
-            'fecha_fin' => $fechaFin
-        ];
-
+        $payload = array_merge([
+            'tipo_reporte' => $tipoReporte
+        ], $filtros);
         return $this->hacerPeticion('POST', '/analizar', $payload);
     }
 
@@ -47,7 +41,8 @@ class MicroservicioIA
     public function estaActivo(): bool
     {
         try {
-            $resultado = $this->hacerPeticion('GET', '/../health');
+            // Se realiza la petición a /api/v1/health
+            $resultado = $this->hacerPeticion('GET', '/health');
             return isset($resultado['estado']) && $resultado['estado'] === 'activo';
         } catch (\Exception $e) {
             return false;
