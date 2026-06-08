@@ -504,7 +504,7 @@ CREATE TABLE `historial_inventario` (
   `id_servicio_anterior` int(11) DEFAULT NULL,
   `id_servicio_nuevo` int(11) DEFAULT NULL,
   `descripcion` text DEFAULT NULL,
-  `fecha_movimiento` date NOT NULL DEFAULT current_timestamp()
+  `fecha_movimiento` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 --
