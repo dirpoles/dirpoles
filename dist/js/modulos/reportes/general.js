@@ -1,65 +1,65 @@
 document.addEventListener("DOMContentLoaded", function () {
-  document.addEventListener("click", function (e) {
-    const btnAyuda = e.target.closest("#btn-ayuda");
-    if (btnAyuda) {
-      try {
-        const driverObj = window.driver.js.driver({
-          showProgress: true,
-          nextBtnText: "Siguiente",
-          prevBtnText: "Anterior",
-          doneBtnText: "Finalizar",
-          popoverClass: "mi-popover",
-          // popoverOffset: 30,
+    document.addEventListener("click", function (e) {
+        const btnAyuda = e.target.closest("#btn-ayuda");
+        if (btnAyuda) {
+            try {
+                const driverObj = window.driver.js.driver({
+                    showProgress: true,
+                    nextBtnText: "Siguiente",
+                    prevBtnText: "Anterior",
+                    doneBtnText: "Finalizar",
+                    popoverClass: "mi-popover",
+                    // popoverOffset: 30,
 
-          steps: [
-            {
-              element: "#fecha_inicio",
-              popover: {
-                title: "Fecha Inicio",
-                description: "Seleccione la fecha inicial para filtrar el reporte.",
-                align: "center",
-              },
-            },
-            {
-              element: "#fecha_fin",
-              popover: {
-                title: "Fecha Fin",
-                description: "Seleccione la fecha final para filtrar el reporte.",
-                align: "center",
-              },
-            },
-            {
-              element: "#genero",
-              popover: {
-                title: "Género",
-                description: "Filtre los resultados especificando un género.",
-                align: "center",
-              },
-            },
-            {
-              element: "#pnfd",
-              popover: {
-                title: "PNF",
-                description: "Filtre los resultados por Programa Nacional de Formación.",
-                align: "center",
-              },
-            },
-            {
-              element: "#aread",
-              popover: {
-                title: "Área",
-                description: "Filtre los resultados por el área o departamento involucrado.",
-                align: "center",
-              },
+                    steps: [
+                        {
+                            element: "#fecha_inicio",
+                            popover: {
+                                title: "Fecha Inicio",
+                                description: "Seleccione la fecha inicial para filtrar el reporte.",
+                                align: "center",
+                            },
+                        },
+                        {
+                            element: "#fecha_fin",
+                            popover: {
+                                title: "Fecha Fin",
+                                description: "Seleccione la fecha final para filtrar el reporte.",
+                                align: "center",
+                            },
+                        },
+                        {
+                            element: "#genero",
+                            popover: {
+                                title: "Género",
+                                description: "Filtre los resultados especificando un género.",
+                                align: "center",
+                            },
+                        },
+                        {
+                            element: "#pnfd",
+                            popover: {
+                                title: "PNF",
+                                description: "Filtre los resultados por Programa Nacional de Formación.",
+                                align: "center",
+                            },
+                        },
+                        {
+                            element: "#aread",
+                            popover: {
+                                title: "Área",
+                                description: "Filtre los resultados por el área o departamento involucrado.",
+                                align: "center",
+                            },
+                        }
+                    ],
+                });
+                driverObj.drive();
+            } catch (error) {
+                console.error("Error al inicializar driver:", error);
             }
-          ],
-        });
-        driverObj.drive();
-      } catch (error) {
-        console.error("Error al inicializar driver:", error);
-      }
-    }
-  });
+        }
+    });
 });
 
 //-------------------------------------------- VALIDACIONES
@@ -219,21 +219,21 @@ document.addEventListener("DOMContentLoaded", () => {
                                 method: "POST",
                                 body: formData
                             })
-                            .then(res => res.json())
-                            .then(resData => {
-                                if (resData.exito) {
-                                    Swal.close();
+                                .then(res => res.json())
+                                .then(resData => {
+                                    if (resData.exito) {
+                                        Swal.close();
 
-                                    // Rellenar las estadísticas resumidas de la muestra en el modal
-                                    const statsContainer = document.getElementById("ia-resumen-stats");
-                                    
-                                    // Determinar cantidad de registros filtrados o totales
-                                    const totalReg = (resData.analisis && resData.analisis.datos_analizados) 
-                                        ? resData.analisis.datos_analizados.total_registros 
-                                        : (lastFilteredData.length || completeData.length || 0);
-                                    
-                                    // Armamos el HTML del resumen
-                                    statsContainer.innerHTML = `
+                                        // Rellenar las estadísticas resumidas de la muestra en el modal
+                                        const statsContainer = document.getElementById("ia-resumen-stats");
+
+                                        // Determinar cantidad de registros filtrados o totales
+                                        const totalReg = (resData.analisis && resData.analisis.datos_analizados)
+                                            ? resData.analisis.datos_analizados.total_registros
+                                            : (lastFilteredData.length || completeData.length || 0);
+
+                                        // Armamos el HTML del resumen
+                                        statsContainer.innerHTML = `
                                         <div class="col-md-3 mb-2 mb-md-0 border-right">
                                             <h4 class="font-weight-bold text-primary mb-0">${totalReg}</h4>
                                             <small class="text-muted font-weight-bold">Registros Analizados</small>
@@ -252,47 +252,47 @@ document.addEventListener("DOMContentLoaded", () => {
                                         </div>
                                     `;
 
-                                    // Llenar el texto generado por la IA
-                                    const contentDiv = document.getElementById("ia-reporte-contenido");
-                                    let fullReportText = "";
-                                    
-                                    if (resData.analisis) {
-                                        if (typeof resData.analisis === 'string') {
-                                            fullReportText = resData.analisis;
-                                        } else if (resData.analisis.analisis) {
-                                            fullReportText = resData.analisis.analisis;
-                                        } else if (resData.analisis.resultado) {
-                                            fullReportText = resData.analisis.resultado;
-                                        } else if (resData.analisis.reporte) {
-                                            fullReportText = resData.analisis.reporte;
-                                        } else {
-                                            fullReportText = JSON.stringify(resData.analisis, null, 2);
+                                        // Llenar el texto generado por la IA
+                                        const contentDiv = document.getElementById("ia-reporte-contenido");
+                                        let fullReportText = "";
+
+                                        if (resData.analisis) {
+                                            if (typeof resData.analisis === 'string') {
+                                                fullReportText = resData.analisis;
+                                            } else if (resData.analisis.analisis) {
+                                                fullReportText = resData.analisis.analisis;
+                                            } else if (resData.analisis.resultado) {
+                                                fullReportText = resData.analisis.resultado;
+                                            } else if (resData.analisis.reporte) {
+                                                fullReportText = resData.analisis.reporte;
+                                            } else {
+                                                fullReportText = JSON.stringify(resData.analisis, null, 2);
+                                            }
                                         }
+
+                                        contentDiv.textContent = fullReportText;
+
+                                        // Mostrar el modal
+                                        const modalElement = document.getElementById("modal-reporte-ia");
+                                        const modalInstance = new bootstrap.Modal(modalElement);
+                                        modalInstance.show();
+
+                                    } else {
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Error al generar reporte",
+                                            text: resData.mensaje || "Ocurrió un error inesperado al procesar con la IA."
+                                        });
                                     }
-
-                                    contentDiv.textContent = fullReportText;
-
-                                    // Mostrar el modal
-                                    const modalElement = document.getElementById("modal-reporte-ia");
-                                    const modalInstance = new bootstrap.Modal(modalElement);
-                                    modalInstance.show();
-
-                                } else {
+                                })
+                                .catch(err => {
+                                    console.error("Error al llamar a reportes_general_ia:", err);
                                     Swal.fire({
                                         icon: "error",
-                                        title: "Error al generar reporte",
-                                        text: resData.mensaje || "Ocurrió un error inesperado al procesar con la IA."
+                                        title: "Error de Servidor",
+                                        text: "No se pudo establecer comunicación con el backend para la IA."
                                     });
-                                }
-                            })
-                            .catch(err => {
-                                console.error("Error al llamar a reportes_general_ia:", err);
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Error de Servidor",
-                                    text: "No se pudo establecer comunicación con el backend para la IA."
                                 });
-                            });
                         }
                     });
                 } else {
