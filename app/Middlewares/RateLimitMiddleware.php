@@ -32,6 +32,16 @@ class RateLimitMiddleware
             }
         }
 
+        // Nivel Especial: Peticiones a los Microservicios de IA
+        // Aplica a cualquier endpoint que termine en '_ia' (ej. reportes_general_ia, reportes_psicologia_ia)
+        // tanto para GET como para POST. Excluye endpoints de salud que terminan en '_health'.
+        if (preg_match('/_ia$/', $endpoint)) {
+            return [
+                'capacity' => 3.0,
+                'rate' => 3.0 / 300.0 // 3 intentos por cada 5 minutos (300 segundos)
+            ];
+        }
+
         // NIVEL 1: Excepciones de Seguridad (Máxima Estricción)
         // Autenticación exacta ('iniciar_sesion') o actualización del perfil del empleado ('perfil_actualizar')
         $nivel1Endpoints = ['iniciar_sesion', 'perfil_actualizar'];
@@ -164,7 +174,8 @@ class RateLimitMiddleware
             $expectsJson = (
                 (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ||
                 (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/json') !== false) ||
-                (isset($_SERVER['CONTENT_TYPE']) && strpos(strtolower($_SERVER['CONTENT_TYPE']), 'application/json') !== false)
+                (isset($_SERVER['CONTENT_TYPE']) && strpos(strtolower($_SERVER['CONTENT_TYPE']), 'application/json') !== false) ||
+                preg_match('/(_ia|_data)$/', $endpoint)
             );
 
             if ($expectsJson) {

@@ -100,7 +100,6 @@ function reporte_general_ia_health()
             throw new Exception('No tienes permiso para realizar esta acción');
         }
 
-        require_once BASE_PATH . 'app/Core/MicroservicioIA.php';
         $ia = new MicroservicioIA();
         $activo = $ia->estaActivo();
 

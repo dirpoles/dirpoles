@@ -159,6 +159,21 @@ include BASE_PATH . '/app/Views/template/head.php';
                         </div>
                     </div>
 
+                    <!-- Estilos personalizados para Reporte IA -->
+                    <style>
+                        @keyframes pulse-brain {
+                            0% { transform: scale(1); }
+                            50% { transform: scale(1.18); }
+                            100% { transform: scale(1); }
+                        }
+                        .animate-pulse {
+                            animation: pulse-brain 2s infinite ease-in-out;
+                        }
+                        #ia-reporte-contenido p:last-child {
+                            margin-bottom: 0 !important;
+                        }
+                    </style>
+
                     <!-- Modal Reporte IA -->
                     <div class="modal fade" id="modal-reporte-ia" tabindex="-1" aria-labelledby="modalReporteIALabel" data-bs-backdrop="static" data-bs-keyboard="false">
                         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -197,7 +212,7 @@ include BASE_PATH . '/app/Views/template/head.php';
                                             <span class="badge badge-success px-3 py-2" id="ia-status-badge"><i class="fas fa-check-circle mr-1"></i>Listo</span>
                                         </div>
                                         <div class="card-body bg-white p-4">
-                                            <div id="ia-reporte-contenido" class="text-gray-800 lead-sm" style="line-height: 1.7; font-size: 0.95rem; white-space: pre-wrap;">
+                                            <div id="ia-reporte-contenido" class="text-gray-800 lead-sm" style="line-height: 1.7; font-size: 0.95rem;">
                                                 <!-- Contenido del reporte generado por la IA -->
                                             </div>
                                         </div>
@@ -234,6 +249,7 @@ include BASE_PATH . '/app/Views/template/head.php';
     <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
     <script src="<?= BASE_URL ?>dist/js/dashboard/Chart.min.js"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/reportes/general.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/reportes/reportes_ia/general.js"></script>
 </body>
 
 </html>
