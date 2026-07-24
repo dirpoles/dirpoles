@@ -4,7 +4,8 @@
 # Dependencias (se regeneran)
 /vendor/
 /node_modules/
-/dist/
+# /dist/ — Se removió del .gitignore porque contiene assets manuales (login.js, login.css, etc.)
+# Si en el futuro se implementa un build step (webpack/vite), se puede volver a agregar.
 /.vscode/
 
 # Archivos generados y temporales

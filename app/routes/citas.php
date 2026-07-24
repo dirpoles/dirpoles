@@ -39,31 +39,31 @@ Router::post('validar_fecha_cita', function(){
 });
 
 Router::post('validar_hora_cita', function() {
-    load_controller('CitasController.php');
+    load_controller('citasController.php');
     validar_hora_cita();
 });
 
 Router::post('actualizar_cita', function() {
-    load_controller('CitasController.php');
+    load_controller('citasController.php');
     actualizar_cita();
 });
 
 Router::post('eliminar_cita', function() {
-    load_controller('CitasController.php');
+    load_controller('citasController.php');
     eliminar_cita();
 });
 
 Router::post('obtener_estados_cita', function() {
-    load_controller('CitasController.php');
+    load_controller('citasController.php');
     obtener_estados_cita();
 });
 
 Router::post('actualizar_estado_cita', function() {
-    load_controller('CitasController.php');
+    load_controller('citasController.php');
     actualizar_estado_cita();
 });
 
 Router::get('citas_calendario_json', function() {
-    load_controller('CitasController.php');
+    load_controller('citasController.php');
     citas_calendario_json();
 });

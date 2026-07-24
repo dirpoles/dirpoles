@@ -1,103 +1,157 @@
-# 📂 DIRPOLES 4 | Sistema de Gestión Integral
+# DIRPOLES 4 — Sistema de Gestión Integral
 
-Este repositorio contiene el **Backend (PHP)** y la lógica de integración para el sistema **DIRPOLES 4**, diseñado con una arquitectura modular y conexión a microservicios de Inteligencia Artificial.
-
----
-
-## ⚠️ NOTA CRÍTICA DE INSTALACIÓN
-Para que el enrutamiento y los estilos carguen correctamente, **la carpeta del proyecto en tu servidor local (htdocs) DEBE llamarse exactamente `DIRPOLES_4`**.
-
-> **¿Por qué?** El sistema utiliza la constante `const BASE_URL = '/DIRPOLES_4/';` para gestionar las rutas internas y la carga de assets. Si clonaste el repositorio con el nombre por defecto (`dirpoles`), **renómbralo** antes de continuar.
+Sistema de gestión administrativa con arquitectura MVC personalizada (PHP 8+), frontend Bootstrap 5 y microservicio de IA en Python/FastAPI.
 
 ---
 
-## 🚀 Pasos para la Puesta en Marcha
+## Requisitos previos
 
-### 1. Requisitos Previos
-* **Servidor:** PHP 8.1+ y MySQL (XAMPP o Laragon recomendado).
-* **Gestores:** [Composer](https://getcomposer.org/) y [Node.js/NPM](https://nodejs.org/) instalados globalmente.
-* **Entorno Python:** Python 3.11+ para el soporte del microservicio de IA.
+| Componente | Versión |
+|------------|---------|
+| PHP | 8.1+ (con `openssl`, `pdo_mysql`, `mbstring`, `curl`) |
+| MySQL / MariaDB | 10.4+ |
+| Apache | 2.4+ (con `mod_rewrite`) |
+| Composer | 2.x |
+| OpenSSL | CLI (`openssl` en terminal) |
 
-### 2. Configuración del Entorno
-Sigue este orden estrictamente para preparar el sistema:
+---
 
-1.  **Clonación:** Clona el proyecto y renombra la carpeta a `DIRPOLES_4` dentro de tu directorio de servidor local.
-2.  **Dependencias PHP:** Ejecuta el siguiente comando en la raíz para generar la carpeta `vendor`:
-    ```bash
-    composer install
-    ```
-3.  **Dependencias JS:** Ejecuta el siguiente comando para instalar las dependencias de la interfaz:
-    ```bash
-    npm install
-    ```
-4.  **Variables de Entorno:** Copia la plantilla de configuración:
-    ```bash
-    cp .env.example .env
-    ```
+## Instalación
 
-> **No subas** el archivo `.env` al repositorio. Este archivo contiene secretos y credenciales sensibles.
+### 1. Clonar
 
-### 3. Generación de llaves RSA
-El sistema ahora utiliza cifrado asimétrico y JWT firmados con RSA. Debes generar cuatro archivos de llave en la carpeta `app/Config/Keys`:
+```bash
+git clone <url-del-repo> DIRPOLES_4
+cd DIRPOLES_4
+```
 
-* `jwt_private.pem`
-* `jwt_public.pem`
-* `login_private.pem`
-* `login_public.pem`
+> El nombre de la carpeta puede ser cualquiera. El sistema detecta la URL base automáticamente.
 
-La carpeta `app/Config/Keys` ya incluye un `.gitignore` que evita subir los archivos `*.pem`, `*.key` y `*.pub` al repositorio.
+### 2. Variables de entorno
 
-Ejemplo de generación usando OpenSSL:
+```bash
+cp .env.example .env
+```
+
+Edita `.env` y cambia los valores por defecto:
+
+| Variable | Descripción |
+|----------|-------------|
+| `JWT_SECRET` | Clave secreta para compatibilidad interna |
+| `JWT_EXPIRATION` | Duración del token en segundos (28800 = 8 h) |
+| `IA_API_KEY` | API Key para conectar con el microservicio Python |
+
+### 3. Dependencias
+
+```bash
+composer install
+```
+
+### 4. Generar llaves RSA
+
+El sistema usa cifrado asimétrico RSA-2048 para el login y JWT:
 
 ```bash
 mkdir -p app/Config/Keys
-openssl genpkey -algorithm RSA -out app/Config/Keys/jwt_private.pem -pkeyopt rsa_keygen_bits:4096
-openssl rsa -pubout -in app/Config/Keys/jwt_private.pem -out app/Config/Keys/jwt_public.pem
-openssl genpkey -algorithm RSA -out app/Config/Keys/login_private.pem -pkeyopt rsa_keygen_bits:4096
-openssl rsa -pubout -in app/Config/Keys/login_private.pem -out app/Config/Keys/login_public.pem
+
+# Llaves para login (cifrado de contraseñas)
+openssl genrsa -out app/Config/Keys/login_private.pem 2048
+openssl rsa -in app/Config/Keys/login_private.pem -pubout -out app/Config/Keys/login_public.pem
+
+# Llaves para JWT (firma y validación de tokens)
+openssl genrsa -out app/Config/Keys/jwt_private.pem 2048
+openssl rsa -in app/Config/Keys/jwt_private.pem -pubout -out app/Config/Keys/jwt_public.pem
+
+chmod 644 app/Config/Keys/*.pem
 ```
 
-* `jwt_private.pem`: firma los tokens JWT del sistema.
-* `jwt_public.pem`: valida los tokens JWT en cada petición.
-* `login_private.pem`: descifra las contraseñas enviadas desde el cliente.
-* `login_public.pem`: se utiliza en el formulario de login para cifrar la contraseña del usuario en el navegador.
+> Las llaves `*_private.pem` NO se suben al repositorio (`.gitignore`).
 
-> **Importante:** Mantén siempre privadas las llaves `*_private.pem`. Nunca las compartas ni las subas al repositorio.
+### 5. Base de datos
 
-### 4. Configuración de Seguridad (Obligatorio)
-Abre tu archivo `.env` y genera valores únicos para proteger los tokens y la comunicación con el microservicio de IA.
+Crea las bases de datos e importa los esquemas:
 
-| Variable | Descripción | Comando de Generación |
-| :--- | :--- | :--- |
-| **`JWT_SECRET`** | Reserva adicional para compatibilidad interna. | `php -r "echo bin2hex(random_bytes(32));"` |
-| **`IA_API_KEY`** | Autentica la conexión con el microservicio Python. | `php -r "echo bin2hex(random_bytes(16));"` |
+```bash
+mysql -u root -p < bd/dirpoles_security.sql
+mysql -u root -p < bd/dirpoles_business.sql
+```
 
-> **Importante:** La `IA_API_KEY` debe ser idéntica en el `.env` de PHP y en el del microservicio FastAPI para que la sincronización sea exitosa.
+O desde phpMyAdmin: crea `dirpoles_security` y `dirpoles_business`, luego importa los archivos de `/bd/`.
 
----
+### 6. Permisos de directorios
 
-### 4. Base de Datos
-El sistema utiliza un esquema de bases de datos separadas para optimizar la seguridad y el rendimiento:
-
-1.  Crea dos bases de datos en tu gestor (phpMyAdmin/MySQL):
-    * `dirpoles_business`
-    * `dirpoles_security`
-2.  Importa los archivos `.sql` correspondientes ubicados en la carpeta `/bd/`.
+```bash
+mkdir -p logs uploads
+chmod 777 logs
+chmod -R 777 uploads
+chmod 644 app/Config/Keys/*.pem
+```
 
 ---
 
-### 5. Microservicio de IA
-El sistema requiere que el microservicio de Python esté ejecutándose (usualmente en el **puerto 8000**) para habilitar las funciones de análisis estadístico y lógica predictiva.
-* El microservicio aun esta en fase de implementacion.
+## Configuración del servidor web
+
+### 🐧 Linux (Apache nativo)
+
+Ejecuta el script de configuración:
+
+```bash
+chmod +x setup_linux.sh
+./setup_linux.sh
+```
+
+Esto crea un `Alias` en Apache para que `http://localhost/DIRPOLES_4` apunte a la carpeta del proyecto, habilita `mod_rewrite` e importa las bases de datos automáticamente.
+
+Si prefieres hacerlo manual:
+
+```apache
+# Crea /etc/apache2/conf-available/dirpoles.conf
+Alias /DIRPOLES_4 "/ruta/a/DIRPOLES_4"
+
+<Directory "/ruta/a/DIRPOLES_4">
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Require all granted
+</Directory>
+```
+
+```bash
+sudo a2enconf dirpoles
+sudo a2enmod rewrite
+sudo systemctl restart apache2
+```
+
+### 🪟 Windows (XAMPP)
+
+Copia la carpeta `DIRPOLES_4` dentro de `C:\xampp\htdocs\`.
+
+Accede a: `http://localhost/DIRPOLES_4`
+
+XAMPP incluye Apache con `mod_rewrite` habilitado por defecto.
 
 ---
 
-## 🛠️ Arquitectura y Core
-Este proyecto implementa un **patrón MVC Personalizado** con una arquitectura orientada a microservicios para los procesos de IA. 
+## Verificar instalación
 
-Para documentación técnica avanzada sobre:
-* Funcionamiento del **Router** personalizado.
-* Seguridad mediante **JWT HttpOnly**.
-* Estructura del **Core** del sistema.
+Abre `http://localhost/DIRPOLES_4/login` en tu navegador. Deberías ver el formulario de inicio de sesión.
 
-📖 Lee la [Guía de Arquitectura de DIRPOLES](guia_arquitectura_dirpoles.md).
+---
+
+## Solución de problemas
+
+| Error | Causa | Solución |
+|-------|-------|----------|
+| `404 Not Found` al acceder | Apache no encuentra el proyecto | Configurar Alias o copiar a htdocs |
+| `500 Internal Server Error` | Permisos de archivos o BD no existe | Revisar `logs/php_errors.log` |
+| `Fallo al descifrar la contraseña` | Llave privada ilegible por Apache | `chmod 644 app/Config/Keys/*.pem` |
+| `Unknown database 'dirpoles_...'` | BD no creada | Importar archivos `.sql` de `/bd/` |
+| Clase no encontrada | `vendor/` no existe | Ejecutar `composer install` |
+| 404 en `jquery.min.js` | jQuery no está en plugins | Debería estar en el repo; si no, descargar manualmente |
+
+---
+
+## Arquitectura
+
+Para documentación técnica detallada (Router, JWT, Middleware, Microservicio IA):
+
+➡️ [Guía de Arquitectura](guia_arquitectura_dirpoles.md)

@@ -1,6 +1,6 @@
 <?php
 const BASE_PATH = __DIR__ . '/';
-const BASE_URL = '/DIRPOLES_4/';
+define('BASE_URL', str_replace('\\', '/', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')) . '/');
 
 // ==================== CORS MIDDLEWARE GLOBAL ====================
 $origenSolicitado = $_SERVER['HTTP_ORIGIN'] ?? '';
