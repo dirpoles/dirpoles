@@ -1,80 +1,75 @@
 <?php
-require('pdf/fpdf/fpdf.php');
+require_once BASE_PATH . '/PDF/fpdf/fpdf.php';
 
-// Verificar que las variables necesarias estén definidas
-if (!isset($beneficiario) || !isset($cedula) || !isset($fecha)) {
-    die("Error: Datos insuficientes para generar la constancia.");
+// ============================================================
+// CONSTANCIA DE ATENCIÓN — PDF generado por DIRPOLES 4
+// ============================================================
+// Variables esperadas del controller:
+//   $beneficiario  → Nombre completo del beneficiario
+//   $cedula        → Cédula del beneficiario
+//   $fecha         → Fecha de atención
+//   $data          → Array con datos del diagnóstico/consulta (opcional)
+// ============================================================
+
+if (empty($beneficiario) || empty($cedula)) {
+    die("Faltan datos obligatorios para generar la constancia.");
 }
 
-// Alternativa para fechas en español sin intl
-$dias = [
-    'Monday' => 'Lunes',
-    'Tuesday' => 'Martes',
-    'Wednesday' => 'Miércoles',
-    'Thursday' => 'Jueves',
-    'Friday' => 'Viernes',
-    'Saturday' => 'Sábado',
-    'Sunday' => 'Domingo'
-];
+// Formatear la fecha
+if (!empty($fecha)) {
+    $fechaObj = DateTime::createFromFormat('Y-m-d', substr($fecha, 0, 10));
+    if ($fechaObj) {
+        $dia  = $fechaObj->format('d');
+        $anio = $fechaObj->format('y');
+        // Mes en español
+        $meses = ['01'=>'enero','02'=>'febrero','03'=>'marzo','04'=>'abril','05'=>'mayo','06'=>'junio','07'=>'julio','08'=>'agosto','09'=>'septiembre','10'=>'octubre','11'=>'noviembre','12'=>'diciembre'];
+        $mes = $meses[$fechaObj->format('m')] ?? $fechaObj->format('m');
+    } else {
+        $dia  = date('d');
+        $anio = date('y');
+        $meses = ['01'=>'enero','02'=>'febrero','03'=>'marzo','04'=>'abril','05'=>'mayo','06'=>'junio','07'=>'julio','08'=>'agosto','09'=>'septiembre','10'=>'octubre','11'=>'noviembre','12'=>'diciembre'];
+        $mes = $meses[date('m')] ?? date('m');
+    }
+} else {
+    $dia  = date('d');
+    $mes  = date('m');
+    $anio = date('Y');
+}
 
-$meses = [
-    'January' => 'Enero',
-    'February' => 'Febrero',
-    'March' => 'Marzo',
-    'April' => 'Abril',
-    'May' => 'Mayo',
-    'June' => 'Junio',
-    'July' => 'Julio',
-    'August' => 'Agosto',
-    'September' => 'Septiembre',
-    'October' => 'Octubre',
-    'November' => 'Noviembre',
-    'December' => 'Diciembre'
-];
-
-$date = new DateTime();
-$diaIngles = $date->format('l');
-$mesIngles = $date->format('F');
-
-$diaTexto = $dias[$diaIngles] ?? $diaIngles;
-$mesTexto = $meses[$mesIngles] ?? $mesIngles;
-$numeroDia = $date->format('d');
-$anio = $date->format('y');
-
-// Generar PDF
+// Crear el PDF
 $pdf = new FPDF();
 $pdf->AddPage();
 
-$pdf->Image('pdf/constancia/constancia.png', 0, 0, 210, 297);
+// Imagen de fondo (template) — 1063x1418 px → 210x297 mm
+$pdf->Image(BASE_PATH . '/PDF/constancia/constancia.png', 0, 0, 210, 297);
 
-// Añadir los datos
-$pdf->SetFont('arial', '', 18);
+// --- CAMPOS SUPERPUESTOS SOBRE LA IMAGEN ---
+// Coordenadas convertidas de pixels a mm:
+//   Escala X: 210mm / 1063px = 0.1975 mm/px
+//   Escala Y: 297mm / 1418px = 0.2095 mm/px
 
-// Beneficiario
-$pdf->SetXY(25, 64.5);
-$pdf->Cell(100, 10, $beneficiario);
+$pdf->SetFont('Arial', '', 14);
 
-// Cédula
-$pdf->SetXY(113, 75.5);
-$pdf->Cell(100, 10, $cedula);
+// Nombre del beneficiario
+$pdf->SetXY(20.7, 63.6);
+$pdf->Cell(185, 10, utf8_decode($beneficiario));
 
-$pdf->SetFont('arial', '', 18);
+// Cédula — subido 1.7mm
+$pdf->SetXY(126.2, 75.5);
+$pdf->Cell(75, 10, utf8_decode($cedula));
 
-// Día de la semana
-$pdf->SetXY(25, 119.8);
-$pdf->Cell(100, 10, $diaTexto);
+// Fecha — Días — subido 3mm
+$pdf->SetXY(20.7, 167.0);
+$pdf->Cell(25, 8, $dia);
 
-// Día del mes
-$pdf->SetXY(25, 167);
-$pdf->Cell(100, 10, $numeroDia);
+// Fecha — Mes
+$pdf->SetXY(72.3, 167.0);
+$pdf->Cell(60, 8, utf8_decode($mes));
 
-// Mes
-$pdf->SetXY(70, 167);
-$pdf->Cell(100, 10, $mesTexto);
+// Fecha — Año — movido a la izquierda
+$pdf->SetXY(130.0, 167.0);
+$pdf->Cell(25, 8, $anio);
 
-// Año
-$pdf->SetXY(128, 167.3);
-$pdf->Cell(100, 9, $anio);
-
-$pdf->Output('I', 'Constancia.pdf');
-?>
+// Salida del PDF
+$pdf->Output('I', 'constancia_atencion.pdf');
+exit();

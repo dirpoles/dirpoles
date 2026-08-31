@@ -541,5 +541,6 @@ function generar_referencia_medicina()
         die("No se encontró la consulta médica.");
     }
 
+    $data = $medicina;
     require_once BASE_PATH . 'PDF/referencia/procesar.php';
 }

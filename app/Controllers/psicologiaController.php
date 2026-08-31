@@ -670,5 +670,6 @@ function generar_referencia_psicologia()
         die("No se encontró el diagnóstico de psicología.");
     }
 
+    $data = $psicologia;
     require_once BASE_PATH . 'PDF/referencia/procesar.php';
 }

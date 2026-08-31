@@ -426,5 +426,6 @@ function generar_referencia_orientacion()
         die("No se encontró el diagnóstico de orientación.");
     }
 
+    $data = $orientacion;
     require_once BASE_PATH . 'PDF/referencia/procesar.php';
 }

@@ -1,169 +1,107 @@
 <?php
-require('pdf/fpdf/fpdf.php');
+require_once BASE_PATH . '/PDF/fpdf/fpdf.php';
 
-if (isset($id_discapacidad)) {
-    $beneficiario = $discapacidad['nombre_beneficiario'] . ' ' . $discapacidad['apellido_beneficiario'];
-    $empleado = $discapacidad['nombres_empleado'];
-    $cargo = $discapacidad['tipo'];
-    $telefono = $discapacidad['telefono'];
-    $cedula = $discapacidad['cedula'];
-    $fecha = $discapacidad['fecha_creacion'];
+// ============================================================
+// REFERENCIA — PDF generado por DIRPOLES 4
+// ============================================================
+// Variables esperadas del controller:
+//   $data → Array con los datos de la consulta/diagnóstico
+// ============================================================
+
+if (empty($data)) {
+    die("No se encontraron datos para generar la referencia.");
 }
 
-if (isset($id_consulta_med)) {
-    $beneficiario = $medicina['nombre_beneficiario'];
-    $empleado = $medicina['nombres_empleado'];
-    $cargo = $medicina['tipo'];
-    $telefono = $medicina['telefono'];
-    $cedula = $medicina['cedula'];
-    $fecha = $medicina['fecha_creacion'];
+// Extraer datos con soporte para diferentes nombres de columnas
+$nombre   = $data['nombre_beneficiario'] ?? $data['nombres'] ?? '';
+$apellido = $data['apellido_beneficiario'] ?? $data['apellidos'] ?? '';
+$cedula   = $data['cedula'] ?? '';
+$empleado = $data['nombres_empleado'] ?? $data['empleado'] ?? '';
+$diagnostico      = $data['diagnostico'] ?? '';
+$tratamiento      = $data['tratamiento_gen'] ?? $data['tratamiento'] ?? '';
+$observaciones    = $data['observaciones'] ?? '';
+$tipo_consulta    = $data['tipo_consulta'] ?? '';
+$patologia        = $data['patologia'] ?? '';
+$fecha_raw        = $data['fecha_creacion'] ?? $data['fecha_psicologia'] ?? '';
+$telefono         = $data['telefono'] ?? '';
+
+// Nombre completo
+$nombreCompleto = trim($nombre . ' ' . $apellido);
+
+// Formatear la fecha
+if (!empty($fecha_raw)) {
+    $fechaObj = DateTime::createFromFormat('Y-m-d', substr($fecha_raw, 0, 10));
+    $fechaFormateada = $fechaObj ? $fechaObj->format('d/m/Y') : $fecha_raw;
+} else {
+    $fechaFormateada = date('d/m/Y');
 }
 
-if (isset($id_orientacion)) {
-    $beneficiario = $orientacion['nombre_beneficiario']. ' '. $orientacion['apellido_beneficiario'];
-    $empleado = $orientacion['nombres_empleado'];
-    $cargo = $orientacion['tipo'];
-    $telefono = $orientacion['telefono'];
-    $cedula = $orientacion['cedula'];
-    $fecha = $orientacion['fecha_creacion'];
-}
-
-if(isset($id_psicologia)){
-    $beneficiario = $psicologia['nombre_beneficiario']. ' '. $psicologia['apellido_beneficiario'];
-    $empleado = $psicologia['nombres_empleado'];
-    $cargo = $psicologia['tipo'];
-    $telefono = $psicologia['telefono'];
-    $cedula = $psicologia['cedula_beneficiario'];
-    $fecha = $psicologia['fecha_psicologia'];
-}
-
-if(isset($id)){
-    $beneficiario = $bd['nombres']. ' '. $bd['apellidos'];
-    $empleado = $bd['nombres_empleado'];
-    $cargo = $bd['tipo'];
-    $telefono = $bd['telefono'];
-    $cedula = $bd['cedula'];
-    $fecha = $bd['fecha_creacion'];
-}
-
-if(isset($id_beca)){
-    $beneficiario = $bd['nombres']. ' '. $bd['apellidos'];
-    $empleado = $bd['nombres_empleado'];
-    $cargo = $bd['tipo'];
-    $telefono = $bd['telefono'];
-    $cedula = $bd['cedula'];
-    $fecha = $bd['fecha_creacion'];
-}
-
-if(isset($id_ex)){
-    $beneficiario = $bd['nombres']. ' '. $bd['apellidos'];
-    $empleado = $bd['nombres_empleado'];
-    $cargo = $bd['tipo'];
-    $telefono = $bd['telefono'];
-    $cedula = $bd['cedula'];
-    $fecha = $bd['fecha_creacion'];
-}
-
-$beneficiario = mb_convert_encoding($beneficiario, 'ISO-8859-1', 'UTF-8');
-$empleado = mb_convert_encoding($empleado, 'ISO-8859-1', 'UTF-8');
-
-
-
-$date = new DateTime();
-
-// Alternativa para fechas en español sin intl
-$dias = [
-    'Monday' => 'Lunes',
-    'Tuesday' => 'Martes',
-    'Wednesday' => 'Miércoles',
-    'Thursday' => 'Jueves',
-    'Friday' => 'Viernes',
-    'Saturday' => 'Sábado',
-    'Sunday' => 'Domingo'
-];
-
-$meses = [
-    'January' => 'Enero',
-    'February' => 'Febrero',
-    'March' => 'Marzo',
-    'April' => 'Abril',
-    'May' => 'Mayo',
-    'June' => 'Junio',
-    'July' => 'Julio',
-    'August' => 'Agosto',
-    'September' => 'Septiembre',
-    'October' => 'Octubre',
-    'November' => 'Noviembre',
-    'December' => 'Diciembre'
-];
-
-$diaIngles = $date->format('l');
-$mesIngles = $date->format('F');
-
-$diaTexto = $dias[$diaIngles] ?? $diaIngles;
-$mesTexto = $meses[$mesIngles] ?? $mesIngles;
-$numeroDia = $date->format('d');
-$anio = $date->format('y');
-
+// Crear el PDF
 $pdf = new FPDF();
 $pdf->AddPage();
 
-$pdf->Image('pdf/referencia/referencia.png', 0, 0, 210, 297); // Ajusta las coordenadas y dimensiones según la imagen y tamaño de página (A4 en mm)
-// Añadir los datos en las posiciones correspondientes
-$pdf->SetFont('arial', '', 18);
+// Imagen de fondo (template)
+$pdf->Image(BASE_PATH . '/PDF/referencia/referencia.png', 0, 0, 210, 297);
 
-// PARA AJUSTAR LA POSICION EN X y Y: PARA X ENTRE MENOR SEA EL NRO, EL ELEMENTO DE POSICIONARA MAS  A LA IZQUIERDA, PARA Y ENTRE MENOR SEA EL NUMERO , EL ELEMENTO SE POSICIONARA MAS ARRIBA
+// --- CAMPOS SUPERPUESTOS SOBRE LA IMAGEN ---
+// Ajustar coordenadas (X, Y) según la plantilla referencia.png
 
-if ($beneficiario) {
-    $pdf->SetXY(25, 64.5);
-    $pdf->Cell(100, 10, "$beneficiario");
+$pdf->SetFont('Arial', '', 12);
+
+// Nombre del beneficiario
+$pdf->SetXY(55, 72);
+$pdf->Cell(120, 8, utf8_decode($nombreCompleto));
+
+// Cédula
+$pdf->SetXY(55, 80);
+$pdf->Cell(60, 8, utf8_decode($cedula));
+
+// Teléfono (si existe)
+if (!empty($telefono)) {
+    $pdf->SetXY(55, 88);
+    $pdf->Cell(60, 8, utf8_decode($telefono));
 }
 
-if ($cedula) {
-    $pdf->SetXY(113, 75.5);
-    $pdf->Cell(100, 10, "$cedula");
+// Fecha
+$pdf->SetXY(140, 88);
+$pdf->Cell(40, 8, $fechaFormateada);
+
+// Profesional de salud
+if (!empty($empleado)) {
+    $pdf->SetXY(55, 96);
+    $pdf->Cell(120, 8, utf8_decode($empleado));
 }
 
-$pdf->SetFont('arial', '', 18);
-
-
-if ($diaTexto) {
-    $pdf->SetXY(25, 119.8);
-    $pdf->Cell(100, 10, $diaTexto);
+// Tipo de consulta
+if (!empty($tipo_consulta)) {
+    $pdf->SetXY(55, 104);
+    $pdf->Cell(120, 8, utf8_decode($tipo_consulta));
 }
 
-if ($numeroDia) {
-    $pdf->SetXY(25, 201.5);
-    $pdf->Cell(100, 10, "$numeroDia");
+// Patología
+if (!empty($patologia)) {
+    $pdf->SetXY(55, 112);
+    $pdf->Cell(120, 8, utf8_decode($patologia));
 }
 
-if ($mesTexto) {
-    $pdf->SetXY(70, 201.5);
-    $pdf->Cell(100, 10, "$mesTexto");
+// Diagnóstico (multicell para texto largo)
+if (!empty($diagnostico)) {
+    $pdf->SetXY(15, 130);
+    $pdf->MultiCell(180, 7, utf8_decode($diagnostico));
 }
 
-if ($anio) {
-    $pdf->SetXY(128, 202);
-    $pdf->Cell(100, 9, "$anio");
+// Tratamiento (multicell para texto largo)
+if (!empty($tratamiento)) {
+    $pdf->SetXY(15, 170);
+    $pdf->MultiCell(180, 7, utf8_decode($tratamiento));
 }
 
-if ($empleado) {
-    $pdf->SetXY(95, 240);
-    $pdf->Cell(100, 9, "$empleado");
+// Observaciones (multicell para texto largo)
+if (!empty($observaciones)) {
+    $pdf->SetXY(15, 210);
+    $pdf->MultiCell(180, 7, utf8_decode($observaciones));
 }
 
-if ($cargo) {
-    $pdf->SetXY(40, 253);
-    $pdf->Cell(100, 9, "$cargo");
-}
-
-if ($telefono) {
-    $pdf->SetXY(48, 265);
-    $pdf->Cell(100, 9, "$telefono");
-}
-
-$pdf->Output('I', 'Referencia.pdf');
-
-        // 'I' para que el PDF se muestre en el navegador, 'D' para descargar, 'F' Guardar el archivo en un archivo local en el servidor, 'S' Devolver el documento como una cadena de caracteres (string), 'FI' Guardar en el servidor y enviar en línea al navegador, 'FD' Guardar en el servidor y forzar la descarga, 'E' Enviar el archivo por correo electrónico (como archivo adjunto).
-//     }
-// }
+// Salida del PDF
+$pdf->Output('I', 'referencia.pdf');
+exit();

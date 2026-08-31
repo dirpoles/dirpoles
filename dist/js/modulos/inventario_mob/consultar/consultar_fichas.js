@@ -48,7 +48,7 @@ $(function () {
                                 id: 'btn-crearf'
                             },
                             action: function () {
-                                window.location.href = 'crear_ficha_tecnica';
+                                abrirModalCrearFichaTecnica();
                             }
                         }
                     ]
@@ -164,40 +164,23 @@ $(function () {
      * Usa delegación de eventos para manejar elementos dinámicos
      */
     function asignarEventosBotones() {
-        // Eliminar eventos anteriores para evitar duplicados
-        $(document).off('click', '.btn-ver');
-        $(document).off('click', '.btn-editar');
-        $(document).off('click', '.btn-eliminar');
+        $('#tabla_fichas').off('click', '.btn-ver');
+        $('#tabla_fichas').off('click', '.btn-editar');
+        $('#tabla_fichas').off('click', '.btn-eliminar');
 
-        // Asignar nuevos eventos con delegación
-        $(document).on('click', '.btn-ver', function () {
+        $('#tabla_fichas').on('click', '.btn-ver', function () {
             const id = $(this).data('id');
-            if (typeof verFichaTecnica !== 'undefined') {
-                verFichaTecnica(id);
-            } else {
-                console.error('Función verFichaTecnica no está definida');
-                alert('Función de visualización no disponible');
-            }
+            verFichaTecnica(id);
         });
 
-        $(document).on('click', '.btn-editar', function () {
+        $('#tabla_fichas').on('click', '.btn-editar', function () {
             const id = $(this).data('id');
-            if (typeof editarFichaTecnica !== 'undefined') {
-                editarFichaTecnica(id);
-            } else {
-                console.error('Función editarFichaTecnica no está definida');
-                alert('Función de edición no disponible');
-            }
+            editarFichaTecnica(id);
         });
 
-        $(document).on('click', '.btn-eliminar', function () {
+        $('#tabla_fichas').on('click', '.btn-eliminar', function () {
             const id = $(this).data('id');
-            if (typeof eliminarFichaTecnica !== 'undefined') {
-                eliminarFichaTecnica(id);
-            } else {
-                console.error('Función eliminarFichaTecnica no está definida');
-                alert('Función de eliminación no disponible');
-            }
+            eliminarFichaTecnica(id);
         });
     }
 

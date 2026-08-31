@@ -1487,5 +1487,6 @@ function generar_referencia_ts()
         die("No se encontró el registro de $tipo.");
     }
 
+    $data = $bd;
     require_once BASE_PATH . 'PDF/referencia/procesar.php';
 }

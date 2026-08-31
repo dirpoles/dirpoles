@@ -196,40 +196,23 @@ $(function () {
      * Usa delegación de eventos para manejar elementos dinámicos
      */
     function asignarEventosBotones() {
-        // Eliminar eventos anteriores para evitar duplicados
-        $(document).off('click', '.btn-ver');
-        $(document).off('click', '.btn-editar');
-        $(document).off('click', '.btn-eliminar');
+        $('#tabla_equipos').off('click', '.btn-ver');
+        $('#tabla_equipos').off('click', '.btn-editar');
+        $('#tabla_equipos').off('click', '.btn-eliminar');
 
-        // Asignar nuevos eventos con delegación
-        $(document).on('click', '.btn-ver', function () {
+        $('#tabla_equipos').on('click', '.btn-ver', function () {
             const id = $(this).data('id');
-            if (typeof verMobiliario !== 'undefined') {
-                verMobiliario(id);
-            } else {
-                console.error('Función verMobiliario no está definida');
-                alert('Función de visualización no disponible');
-            }
+            verEquipo(id);
         });
 
-        $(document).on('click', '.btn-editar', function () {
+        $('#tabla_equipos').on('click', '.btn-editar', function () {
             const id = $(this).data('id');
-            if (typeof editarMobiliario !== 'undefined') {
-                editarMobiliario(id);
-            } else {
-                console.error('Función editarMobiliario no está definida');
-                alert('Función de edición no disponible');
-            }
+            editarEquipo(id);
         });
 
-        $(document).on('click', '.btn-eliminar', function () {
+        $('#tabla_equipos').on('click', '.btn-eliminar', function () {
             const id = $(this).data('id');
-            if (typeof eliminarMobiliario !== 'undefined') {
-                eliminarMobiliario(id);
-            } else {
-                console.error('Función eliminarMobiliario no está definida');
-                alert('Función de eliminación no disponible');
-            }
+            eliminarEquipo(id);
         });
     }
 

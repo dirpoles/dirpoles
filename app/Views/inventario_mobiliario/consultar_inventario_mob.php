@@ -132,10 +132,20 @@ include BASE_PATH . '/app/Views/template/head.php';
     <!-- End of Page Wrapper -->
 
     <?php include BASE_PATH . '/app/Views/template/script.php'; ?>
-    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_mobiliario.js"></script>
-    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_equipos.js"></script>
-    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_fichas.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_mobiliario.js?v=3"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_equipos.js?v=3"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_fichas.js?v=3"></script>
     <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/consultar_driver.js"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/verMobiliario.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/editarMobiliario.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/eliminarMobiliario.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/verEquipo.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/editarEquipo.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/eliminarEquipo.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/verFichaTecnica.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/editarFichaTecnica.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/consultar/eliminarFichaTecnica.js?v=1"></script>
+    <script src="<?= BASE_URL ?>dist/js/modulos/inventario_mob/crear_ficha_tecnica.js?v=1"></script>
 
     <!-- Modal Genérico -->
     <div class="modal fade" id="modalGenerico" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -147,6 +157,9 @@ include BASE_PATH . '/app/Views/template/head.php';
                 </div>
                 <div class="modal-body" id="modalContenido">
                     <!-- Contenido dinámico aquí -->
+                </div>
+                <div class="modal-footer">
+                    <!-- Botones dinámicos aquí -->
                 </div>
             </div>
         </div>

@@ -445,5 +445,6 @@ function generar_referencia_discapacidad()
         die("No se encontró el diagnóstico de discapacidad.");
     }
 
+    $data = $discapacidad;
     require_once BASE_PATH . 'PDF/referencia/procesar.php';
 }
