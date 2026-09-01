@@ -200,7 +200,7 @@ class GenerarPDF
 
         // Opcional: Colocar la imagen del formulario de fondo
         // Usar ruta absoluta para la imagen de fondo
-        $pdf->Image(BASE_PATH . '/PDF/EstudioSE/EstudioSocioEconomico.png', 0, 0, 210, 297); 
+        $pdf->Image(BASE_PATH . '/PDF/EstudioSE/EstudioSocioeconomico.png', 0, 0, 210, 297); 
         $pdf->AddFont('arial', '', 'arial.php');
         // Añadir los datos en las posiciones correspondientes
         $pdf->SetFont('arial', '', 10);

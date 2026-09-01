@@ -136,10 +136,10 @@ $('#tabla_repuestos').DataTable({
             }
         },
         {
-            data: 'stock_minimo',
+            data: null,
             deferRender: true,
-            render: function (data) {
-                return data || '5';
+            render: function () {
+                return '5';
             }
         },
         {

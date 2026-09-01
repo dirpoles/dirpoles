@@ -227,8 +227,8 @@ class TransporteModel extends BusinessModel
             $stmt->execute();
             $estadisticas['en_mantenimiento'] = $stmt->fetchColumn();
 
-            // 4. Repuestos Críticos (Dinámico según stock_minimo)
-            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM repuestos_vehiculos WHERE cantidad <= stock_minimo");
+            // 4. Repuestos Críticos (Usa valor fijo de 5 como mínimo)
+            $stmt = $this->conn->prepare("SELECT COUNT(*) as total FROM repuestos_vehiculos WHERE cantidad <= 5");
             $stmt->execute();
             $estadisticas['repuestos_criticos'] = $stmt->fetchColumn();
 
@@ -680,15 +680,14 @@ class TransporteModel extends BusinessModel
                 ];
             }
 
-            $query = "INSERT INTO repuestos_vehiculos (nombre, descripcion, id_proveedor, fecha_creacion, estatus, stock_minimo) 
-                VALUES (:nombre_repuesto, :descripcion, :id_proveedor, :fecha_creacion, :estatus_repuesto, :stock_minimo)";
+            $query = "INSERT INTO repuestos_vehiculos (nombre, descripcion, id_proveedor, fecha_creacion, estatus) 
+                VALUES (:nombre_repuesto, :descripcion, :id_proveedor, :fecha_creacion, :estatus_repuesto)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':nombre_repuesto', $this->__get('nombre_repuesto'));
             $stmt->bindValue(':descripcion', $this->__get('descripcion'));
             $stmt->bindValue(':id_proveedor', $this->__get('id_proveedor'));
             $stmt->bindValue(':fecha_creacion', $this->__get('fecha_creacion'));
             $stmt->bindValue(':estatus_repuesto', $this->__get('estatus_repuesto'));
-            $stmt->bindValue(':stock_minimo', $this->__get('stock_minimo') ?? 5);
             $stmt->execute();
 
             return [
@@ -1371,8 +1370,7 @@ class TransporteModel extends BusinessModel
                     nombre = :nombre,
                     estatus = :estatus,
                     id_proveedor = :id_proveedor,
-                    descripcion = :descripcion,
-                    stock_minimo = :stock_minimo
+                    descripcion = :descripcion
                 WHERE id_repuesto = :id_repuesto
             ";
 
@@ -1381,7 +1379,6 @@ class TransporteModel extends BusinessModel
             $stmt->bindValue(':estatus', $this->__get('estatus'), PDO::PARAM_STR);
             $stmt->bindValue(':id_proveedor', $this->__get('id_proveedor'), PDO::PARAM_INT);
             $stmt->bindValue(':descripcion', $this->__get('descripcion'), PDO::PARAM_STR);
-            $stmt->bindValue(':stock_minimo', $this->__get('stock_minimo'), PDO::PARAM_INT);
             $stmt->bindValue(':id_repuesto', $this->__get('id_repuesto'), PDO::PARAM_INT);
             $stmt->execute();
 
@@ -1453,14 +1450,14 @@ class TransporteModel extends BusinessModel
     private function verificarNotificacionStock($id_repuesto)
     {
         try {
-            // 1. Obtener cantidad actual y stock mínimo
-            $query = "SELECT nombre, cantidad, stock_minimo FROM repuestos_vehiculos WHERE id_repuesto = :id_repuesto";
+            // 1. Obtener cantidad actual (usa 5 como stock mínimo fijo)
+            $query = "SELECT nombre, cantidad FROM repuestos_vehiculos WHERE id_repuesto = :id_repuesto";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':id_repuesto', $id_repuesto, PDO::PARAM_INT);
             $stmt->execute();
             $repuesto = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($repuesto && $repuesto['cantidad'] <= $repuesto['stock_minimo']) {
+            if ($repuesto && $repuesto['cantidad'] <= 5) {
                 // 2. Crear notificación
                 $notifModel = new NotificacionesModel();
                 $notifModel->__set('titulo', "Stock Bajo: " . $repuesto['nombre']);
