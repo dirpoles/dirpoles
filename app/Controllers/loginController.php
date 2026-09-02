@@ -125,7 +125,7 @@ function iniciar_sesion()
                 error_log("Error al registrar en la bitácora: " . $bitacora_result['mensaje']);
             }
 
-            // --- GENERAR JWT PARA SISTEMA DE SEGURIDAD DUAL ---
+            // --- GENERAR JWT + REFRESH TOKEN ---
             $jwtHandler = new JwtHandler();
             $jwtData = [
                 'id_empleado' => $_SESSION['id_empleado'],
@@ -137,12 +137,26 @@ function iniciar_sesion()
             $jwtResult = $jwtHandler->manejarAccion('generar');
 
             if ($jwtResult['estado'] === 'exito') {
+                // Cookie del JWT (1 hora)
                 setcookie('jwt_token', $jwtResult['token'], [
                     'expires' => $jwtResult['expiracion'],
                     'path' => '/',
                     'httponly' => true,
                     'samesite' => 'Lax'
                 ]);
+
+                // Generar Refresh Token (30 días)
+                $jwtHandler->__set('id_empleado', $_SESSION['id_empleado']);
+                $refreshResult = $jwtHandler->manejarAccion('generar_refresh');
+
+                if ($refreshResult['estado'] === 'exito') {
+                    setcookie('refresh_token', $refreshResult['token'], [
+                        'expires' => $refreshResult['expiracion'],
+                        'path' => '/',
+                        'httponly' => true,
+                        'samesite' => 'Lax'
+                    ]);
+                }
             }
 
             //Mostrar mensaje de exito en la vista
@@ -150,7 +164,7 @@ function iniciar_sesion()
                 'estado' => 'exito',
                 'titulo' => '¡Bienvenido!',
                 'mensaje' => 'Has iniciado sesión correctamente.',
-                // 'token' => $jwtResult['token'] ?? null // Ya no es estrictamente necesario en JSON por las cookies
+                'jwt_exp' => JWT_EXP // Enviar tiempo de expiración al frontend
             ];
 
             header('Content-Type: application/json; charset=utf-8');
@@ -259,7 +273,54 @@ function cerrar_sesion()
     // Eliminar cookie de JWT
     setcookie('jwt_token', '', time() - 3600, '/');
 
+    // Revocar Refresh Token
+    if (isset($_COOKIE['refresh_token'])) {
+        $jwtHandler = new JwtHandler();
+        $jwtHandler->__set('refresh_token', $_COOKIE['refresh_token']);
+        $jwtHandler->manejarAccion('revocar_refresh');
+    }
+
+    // Eliminar cookie de Refresh Token
+    setcookie('refresh_token', '', time() - 3600, '/');
+
     // Redirigir
     header('Location: ' . BASE_URL . 'login?logout=true');
     exit();
+}
+
+/**
+ * Renueva el JWT usando el refresh token
+ */
+function refresh_token()
+{
+    header('Content-Type: application/json; charset=utf-8');
+
+    $refreshToken = $_COOKIE['refresh_token'] ?? null;
+    if (!$refreshToken) {
+        echo json_encode(['estado' => 'error', 'mensaje' => 'No hay refresh token']);
+        exit;
+    }
+
+    $jwtHandler = new JwtHandler();
+    $jwtHandler->__set('refresh_token', $refreshToken);
+    $resultado = $jwtHandler->manejarAccion('renovar_jwt');
+
+    if ($resultado['estado'] === 'exito') {
+        // Actualizar cookie del JWT
+        setcookie('jwt_token', $resultado['token'], [
+            'expires' => $resultado['expiracion'],
+            'path' => '/',
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
+
+        echo json_encode([
+            'estado' => 'exito',
+            'mensaje' => 'Token renovado exitosamente',
+            'jwt_exp' => JWT_EXP
+        ]);
+    } else {
+        echo json_encode($resultado);
+    }
+    exit;
 }

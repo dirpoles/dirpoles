@@ -32,6 +32,11 @@ Router::get('logout', function () {
     cerrar_sesion();
 });
 
+Router::post('refresh_token', function () {
+    load_controller('loginController.php');
+    refresh_token();
+});
+
 
 // ==================== RUTA DE INICIO (protegida) ====================
 Router::get('inicio', function () {

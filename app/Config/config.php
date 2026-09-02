@@ -15,4 +15,5 @@ const DB_SECURITY_PASS = '';
 const PRELOAD_CONTROLLERS = false;
 // Configuración de JWT
 define('JWT_SECRET', $_ENV['JWT_SECRET'] ?? 'default_secret_key');
-define('JWT_EXP', $_ENV['JWT_EXPIRATION'] ?? 28800); // 8 horas por defecto
+define('JWT_EXP', $_ENV['JWT_EXPIRATION'] ?? 3600); // 1 hora por defecto (se renueva con refresh token)
+define('REFRESH_EXP', $_ENV['REFRESH_EXPIRATION'] ?? 2592000); // 30 días por defecto

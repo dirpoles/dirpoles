@@ -36,6 +36,9 @@
 
     <!-- Driver.js -->
     <script src="<?= BASE_URL ?>plugins/driver.js/driver.js.iife.js" defer></script>
+
+    <!-- JWT Auto-Renewal -->
+    <script src="<?= BASE_URL ?>dist/js/jwt-refresh.js" defer></script>
 <?php endif; ?>
 
 <!-- Plugins esenciales para el Login y alertas -->
@@ -48,6 +51,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         if (typeof $ !== 'undefined' && $.fn.tooltip) {
             $('[data-toggle="tooltip"]').tooltip();
+        }
+
+        // Inicializar JWT Auto-Renewal (excepto en login)
+        if (typeof JWTRefresh !== 'undefined' && typeof Swal !== 'undefined') {
+            var jwtExp = Math.floor(Date.now() / 1000) + parseInt('<?= JWT_EXP ?>') || 3600;
+            JWTRefresh.init(jwtExp);
         }
     });
 </script>

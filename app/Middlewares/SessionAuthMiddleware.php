@@ -45,6 +45,13 @@ class SessionAuthMiddleware
             self::redirigirLogin($msg, 'Cuenta bloqueada');
         }
 
+        // 3.5 RUTAS QUE SOLO REQUIEREN SESIÓN (no validación JWT)
+        // refresh_token necesita funcionar cuando el JWT ya expiró
+        $rutasSoloSesion = ['refresh_token'];
+        if (in_array($rutaActual, $rutasSoloSesion)) {
+            return;
+        }
+
         // 4. VERIFICACIÓN DUAL (JWT)
         $jwtToken = JwtHandler::obtenerToken();
         $jwtHandler = new JwtHandler();
