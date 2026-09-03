@@ -89,7 +89,7 @@ Se utiliza una arquitectura de *interceptores* a nivel de enrutamiento. En `rout
 ### 4.2 Emisión y Transporte JWT (JSON Web Token)
 El ciclo de autenticación en `loginController.php` opera bajo las siguientes fases:
 1.  **Capa 1:** Instanciación de la sesión en el servidor (`$_SESSION`).
-2.  **Capa 2:** El servicio `JwtHandler` firma digitalmente un payload (identidad del usuario) utilizando el algoritmo HS256 y la `JWT_SECRET`.
+2.  **Capa 2:** El servicio `JwtHandler` firma digitalmente un payload (identidad del usuario) utilizando el algoritmo **RS256** (cifrado asimétrico) con la llave privada `app/Config/Keys/jwt_private.pem`. La validación del token se realiza con la llave pública `jwt_public.pem`.
 3.  **Transporte Seguro:** El token se despacha al cliente exclusivamente a través de una **Cookie `HttpOnly`**. Esta directiva mitiga ataques de Cross-Site Scripting (XSS), ya que imposibilita la lectura del token a través de JavaScript del lado del cliente (`document.cookie`).
 
 ### 4.3 Verificación de Identidad Dual
@@ -126,7 +126,7 @@ El acceso al puerto `8000` está restringido por autorización de cabeceras. Las
 ## 6. 📁 Estrategia de Despliegue y Versionado
 
 ### 6.1 Aislamiento de Credenciales (`.env`)
-Las variables de entorno críticas (cadenas DSN de bases de datos, llaves de firma JWT, API Keys) se inyectan en tiempo de ejecución a través del archivo `.env` para evitar *hardcoding* de credenciales. El acceso lógico se realiza a través de la superglobal `$_ENV`.
+Las variables de entorno críticas (cadenas DSN de bases de datos, API Keys, duración de tokens) se inyectan en tiempo de ejecución a través del archivo `.env` para evitar *hardcoding* de credenciales. El acceso lógico se realiza a través de la superglobal `$_ENV`. Las llaves RSA (login y JWT) se gestionan como archivos PEM en `app/Config/Keys/` y no viajan en el `.env`.
 
 ### 6.2 Control de Versiones (`.gitignore`)
 El repositorio mantiene un estado limpio mediante la exclusión estricta de artefactos generados y dependencias binarias en el `.gitignore`:

@@ -37,8 +37,7 @@ Edita `.env` y cambia los valores por defecto:
 
 | Variable | Descripción |
 |----------|-------------|
-| `JWT_SECRET` | Clave secreta para compatibilidad interna |
-| `JWT_EXPIRATION` | Duración del token en segundos (28800 = 8 h) |
+| `JWT_EXPIRATION` | Duración del JWT en segundos (3600 = 1 h; se renueva automáticamente con refresh token) |
 | `IA_API_KEY` | API Key para conectar con el microservicio Python |
 
 ### 3. Dependencias
