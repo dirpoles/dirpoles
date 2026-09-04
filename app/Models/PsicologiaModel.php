@@ -97,10 +97,6 @@ class PsicologiaModel extends BusinessModel{
 
             $stmt3->execute();
 
-            if ($this->__get('tipo_consulta') === 'Retiro temporal') {
-                $this->actualizarStatusBeneficiario();
-            }
-
             $this->conn->commit();
 
             return match ($this->__get('tipo_consulta')) {
@@ -150,13 +146,6 @@ class PsicologiaModel extends BusinessModel{
             // En caso de error, retornamos un mensaje genérico o vacío para evitar romper el flujo
             return "Beneficiario desconocido"; 
         }
-    }
-
-    private function actualizarStatusBeneficiario(){
-        $query = "UPDATE beneficiario SET estatus = 0 WHERE id_beneficiario = :id_beneficiario";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindValue(':id_beneficiario', $this->__get('id_beneficiario'), PDO::PARAM_INT);
-        $stmt->execute();
     }
 
     private function obtenerDiagnosticos(){

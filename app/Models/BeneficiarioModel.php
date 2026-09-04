@@ -175,8 +175,8 @@ class BeneficiarioModel extends BusinessModel
     private function obtenerBeneficiario()
     {
         try {
-            $query = "SELECT CONCAT(nombres, ' ', apellidos, ' (', tipo_cedula, ' - ', cedula, ')') as nombre_completo 
-                      FROM beneficiario 
+            $query = "SELECT identificacion_formateada as nombre_completo 
+                      FROM vw_beneficiarios_completos 
                       WHERE id_beneficiario = :id_beneficiario";
 
             $stmt = $this->conn->prepare($query);
@@ -303,29 +303,7 @@ class BeneficiarioModel extends BusinessModel
     private function consultarBeneficiarios()
     {
         try {
-            $query = "
-            SELECT 
-                b.id_beneficiario,
-                b.nombres,
-                b.apellidos,
-                CONCAT(b.nombres, ' ', COALESCE(b.apellidos, '')) AS nombre_completo,
-                b.tipo_cedula,
-                b.cedula,
-                CONCAT(b.tipo_cedula, '-', b.cedula) AS cedula_completa,
-                b.fecha_nac,
-                b.telefono,
-                b.correo,
-                IF(b.genero = 'M', 'Masculino', 'Femenino') AS genero,
-                b.direccion,
-                b.estatus,
-                DATE_FORMAT(b.fecha_creacion, '%d/%m/%Y %H:%i') AS fecha_registro,
-                b.seccion,
-                pnf.nombre_pnf,
-                pnf.id_pnf
-            FROM beneficiario b
-            LEFT JOIN pnf ON b.id_pnf = pnf.id_pnf
-            ORDER BY b.fecha_creacion DESC
-            ";
+            $query = "CALL sp_consultar_beneficiarios();";
 
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
