@@ -34,8 +34,7 @@ if [ ! -f "$PROJECT_DIR/.env" ]; then
         cp "$PROJECT_DIR/.env.example" "$PROJECT_DIR/.env"
     else
         cat > "$PROJECT_DIR/.env" << 'ENVEOF'
-JWT_SECRET=cambia_esto_por_un_valor_seguro_aleatorio
-JWT_EXPIRATION=28800
+JWT_EXPIRATION=3600
 IA_API_KEY=cambia_esto_por_una_api_key_unica
 ENVEOF
     fi
